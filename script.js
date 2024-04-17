@@ -1,4 +1,5 @@
 import * as THREE from './node_modules/three/build/three.module.js';
+
 const windowSize = 0.95;
 
 // Configuração da cena, câmera e renderizador

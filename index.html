@@ -11,9 +11,28 @@
       http-equiv="X-Content-Security-Policy"
       content="default-src 'self'; script-src 'self'"
     />
-    <title>Electron App</title>
+    <link rel="stylesheet" href="assets/style.css">
+    <title>3Tower</title>
   </head>
+
   <body>
-    <script type="module" src="script.js"></script>
+
+    <div id="tower-container">
+      <div id="tower">
+        <script type="module" src="script.js"></script>
+      </div>
+    </div>
+  
+    <!-- Formulário -->
+    <div id="form">
+      <form action="/processar-formulario" method="post">
+        <div class="input-box">
+          <label for="base">Base</label>
+          <input id="base" type="number" name="base" required>
+        </div>
+        <button type="submit">Enviar</button>
+      </form>
+    </div>
+  
   </body>
 </html>
