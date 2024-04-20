@@ -1,11 +1,11 @@
-const { app, BrowserWindow } = require('electron')
-const path = require('path');
+import { app, BrowserWindow } from 'electron';
+import { join } from 'path';
 
 const createWindow = () => {
   const win = new BrowserWindow({
     width: 800,
     height: 600,
-    icon: path.join('./assets/icon.png'),
+    icon: join('./assets/icon.png'),
   });
 
   win.loadFile('index.html');
