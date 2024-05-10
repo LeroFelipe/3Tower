@@ -27,9 +27,32 @@
     <div id="form">
       <form action="/processar-formulario" method="post">
         <div class="input-box">
-          <label for="base">Base</label>
-          <input id="base" type="number" name="base" required>
+          <label for="base">Largura da base</label>
+          <input id="base" type="text" name="base" pattern="[0-9]+([,.][0-9]+)?" title="Digite um número válido" required>
         </div>
+        <div class="input-box">
+          <label for="inclinada">Altura Inclinada</label>
+          <input id="inclinada" type="number" name="inclinada" required>
+        </div>
+        <div class="input-box">
+          <label for="reta">Altura Reta</label>
+          <input id="reta" type="number" name="reta" required>
+        </div>
+        <div class="input-box">
+          <label for="topo">Largura do topo</label>
+          <input id="topo" type="number" name="topo" required>
+        </div>
+        <div class="input-box">
+          <label for="tipoTorre">Tipo de Torre</label>
+          <select id="tipoTorre" name="tipoTorre" required>
+              <option value="">Selecione...</option>
+              <option value="Quadrada">Quadrada</option>
+              <option value="Triangular">Triangular</option>
+              <option value="Poste">Poste</option>
+              <option value="Estaiada">Estaiada</option>
+              <option value="Mastro">Mastro</option>
+          </select>
+       </div>
         <button type="submit">Enviar</button>
       </form>
     </div>
