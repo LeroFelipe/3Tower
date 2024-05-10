@@ -1,6 +1,6 @@
 import * as THREE from './node_modules/three/build/three.module.js';
 
-const windowSize = 0.9;
+const windowSize = 0.95;
 
 // Configuração da cena, câmera e renderizador
 const scene = new THREE.Scene();
@@ -8,7 +8,7 @@ const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerH
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 
 renderer.setSize(window.innerWidth * windowSize, window.innerHeight * windowSize);
-renderer.setClearColor(0xffffff);
+renderer.setClearColor(0x1e1e1e);
 renderer.shadowMap.enabled = true; // Habilitar mapeamento de sombras
 renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Tipo de sombra suave
 document.body.appendChild(renderer.domElement);
@@ -208,7 +208,7 @@ function cilindro(start, end, raioFinal, raio){
     var edgeVector = end.clone().sub(start);
     var edgeLength = edgeVector.length();
 
-    var cylinderMaterial = new THREE.MeshPhongMaterial({ color: 0xd3d3d3 });
+    var cylinderMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff });
     var edgeGeometry = new THREE.CylinderGeometry(raio, raioFinal, edgeLength, 16);
     var edge = new THREE.Mesh(edgeGeometry, cylinderMaterial);
 
@@ -281,8 +281,7 @@ scene.add(torre);
 //planeXY();
 
 // Posicionamento da câmera para visualizar o cubo
-camera.position.z = 3.1;
-scene.position.y = 2.5;
+camera.position.z = 7;
 
 // Adicionar uma luz direcional para gerar sombras
 const light = new THREE.DirectionalLight(0xffffff, 1);

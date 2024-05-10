@@ -28,19 +28,19 @@
       <form action="/processar-formulario" method="post">
         <div class="input-box">
           <label for="base">Largura da base</label>
-          <input id="base" type="text" name="base" pattern="[0-9]+([,.][0-9]+)?" title="Digite um número válido" required>
+          <input id="base" type="text" pattern="[0-9]+([,.][0-9]+)?" title="Digite um número válido" placeholder=" Metros" required>
         </div>
         <div class="input-box">
           <label for="inclinada">Altura Inclinada</label>
-          <input id="inclinada" type="number" name="inclinada" required>
+          <input id="inclinada" type="text" pattern="[0-9]+([,.][0-9]+)?" title="Digite um número válido" placeholder=" Metros" required>
         </div>
         <div class="input-box">
           <label for="reta">Altura Reta</label>
-          <input id="reta" type="number" name="reta" required>
+          <input id="reta" type="text" pattern="[0-9]+([,.][0-9]+)?" title="Digite um número válido" placeholder=" Metros" required>
         </div>
         <div class="input-box">
           <label for="topo">Largura do topo</label>
-          <input id="topo" type="number" name="topo" required>
+          <input id="topo" type="text" pattern="[0-9]+([,.][0-9]+)?" title="Digite um número válido" placeholder=" Metros" required>
         </div>
         <div class="input-box">
           <label for="tipoTorre">Tipo de Torre</label>
@@ -53,9 +53,8 @@
               <option value="Mastro">Mastro</option>
           </select>
        </div>
-        <button type="submit">Enviar</button>
+        <button type="submit">Carregar</button>
       </form>
     </div>
-  
   </body>
 </html>
