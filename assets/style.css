@@ -49,4 +49,30 @@ input{
 
 #tipoTorre{
     margin-top: 5px;
+    background-color: #1e1e1e;
+    color: #8f8f8f;
+    border-radius: 5px;
+    border: none;
+    height: 25px;
 }
+
+#buttonCarregar{
+
+    width: 40%;
+    border: none;
+    background-color: #292929;
+    padding: 0.62rem;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 0.93rem;
+    font-weight: 400;
+    color: #8f8f8f;
+}
+
+#buttonCarregar:hover{
+
+    box-shadow: 1px 1px 6px #000000;
+
+}
+
