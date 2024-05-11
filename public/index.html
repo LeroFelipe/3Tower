@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="/assets/style.css">
+    <title>3Tower</title>
+  </head>
+
+  <body>
+
+    <div id="tower-container">
+      <div id="tower">
+        <script type="module" src="script.js"></script>
+      </div>
+    </div>
+  
+    <!-- Formulário -->
+    <div id="form">
+      <form action="#" method="post">
+        <div class="input-box">
+          <label for="base">Largura da base</label>
+          <input id="base" type="text" pattern="[0-9]+([,.][0-9]+)?" title="Digite um número válido" placeholder=" Metros" required>
+        </div>
+        <div class="input-box">
+          <label for="inclinada">Altura Inclinada</label>
+          <input id="inclinada" type="text" pattern="[0-9]+([,.][0-9]+)?" title="Digite um número válido" placeholder=" Metros" required>
+        </div>
+        <div class="input-box">
+          <label for="reta">Altura Reta</label>
+          <input id="reta" type="text" pattern="[0-9]+([,.][0-9]+)?" title="Digite um número válido" placeholder=" Metros" required>
+        </div>
+        <div class="input-box">
+          <label for="topo">Largura do topo</label>
+          <input id="topo" type="text" pattern="[0-9]+([,.][0-9]+)?" title="Digite um número válido" placeholder=" Metros" required>
+        </div>
+        <div class="input-box">
+          <label for="tipoTorre">Tipo de Torre</label>
+          <select id="tipoTorre" name="tipoTorre" required>
+              <option value="">Selecione...</option>
+              <option value="Quadrada">Quadrada</option>
+              <option value="Triangular">Triangular</option>
+              <option value="Poste">Poste</option>
+              <option value="Estaiada">Estaiada</option>
+              <option value="Mastro">Mastro</option>
+          </select>
+       </div>
+        <button id="buttonCarregar" type="submit" >Carregar</button>
+      </form>
+    </div>
+  </body>
+</html>
