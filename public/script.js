@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import * as THREE from './three.module.js';
 
 const windowSize = 0.95;
 
