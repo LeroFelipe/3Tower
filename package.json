@@ -2,13 +2,15 @@
   "name": "3tower",
   "version": "1.0.0",
   "description": "App para desenhar torre de Telecom",
+  "type": "module",
   "scripts": {
     "build": "echo 'Nenhuma ação de construção necessária'"
   },
   "author": "lérisson",
   "license": "ISC",
   "dependencies": {
-    "three": "^0.163.0"
+    "debug": "^4.3.4",
+    "three": "^0.163.0",
+    "uuid": "^9.0.1"
   }
 }
-
