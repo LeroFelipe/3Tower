@@ -1,5 +1,5 @@
-import * as THREE from '../lib/three.module.js';
-import * as OBJLoader from '../lib/OBJLoader.js';
+import * as THREE from './three.module.js';
+import * as OBJLoader from './OBJLoader.js';
 
 const windowSize = 0.95;
 
@@ -275,26 +275,7 @@ function xyzLines(){
 
         torre.add(dashedLine);
     };
-}objLoader.load(
-    // URL do arquivo .OBJ
-    './antenas/MWantena.obj',
-    // Função de callback chamada quando o objeto é carregado
-    function (object) {
-        // Defina a nova posição do objeto
-        object.position.set(0, 0, 0); // Substitua x, y e z pelas coordenadas desejadas
-
-        // Adicione o objeto à sua cena existente
-        torre.add(object);
-    },
-    // Função de progresso (opcional)
-    function (xhr) {
-        console.log((xhr.loaded / xhr.total * 100) + '% carregado');
-    },
-    // Função de erro (opcional)
-    function (error) {
-        console.error('Erro ao carregar o objeto', error);
-    }
-);
+}
 
 createSqrTower();
 scene.add(torre);
@@ -306,11 +287,28 @@ objLoader.load(
     './antenas/MWantena.obj',
     // Função de callback chamada quando o objeto é carregado
     function (object) {
-        // Defina a nova posição do objeto
-        object.position.set(0, 0, 0); // Substitua x, y e z pelas coordenadas desejadas
+        // Definir as novas posições, rotações e escalas dos objetos
+        var transforms = [
+            { position: { x: 0, y: 3.5, z: 0.6 }, rotation: { x: 0, y: 0, z: 0 }, scale: { x: 1, y: 1, z: 0.5 } },
+            { position: { x: 0.6, y: 2, z: 0 }, rotation: { x: 0, y: 90, z: 0 }, scale: { x: 1, y: 1, z: 0.5 } },
+            { position: { x: -0.4, y: 2.5, z: 0.4 }, rotation: { x: 0, y: -45, z: 0 }, scale: { x: 0.6, y: 0.6, z: 0.3 } }
+            // Adicionar mais transformações conforme necessário
+        ];
 
-        // Adicione o objeto à sua cena existente
-        torre.add(object);
+        // Converter os graus para radianos e iterar sobre as transformações
+        transforms.forEach(function (transform) {
+            var newObj = object.clone(); // Clonar o objeto para evitar referências compartilhadas
+            newObj.position.set(transform.position.x, transform.position.y, transform.position.z);
+            // Converter os graus para radianos
+            var rotationInRadians = {
+                x: transform.rotation.x * Math.PI / 180,
+                y: transform.rotation.y * Math.PI / 180,
+                z: transform.rotation.z * Math.PI / 180
+            };
+            newObj.rotation.set(rotationInRadians.x, rotationInRadians.y, rotationInRadians.z);
+            newObj.scale.set(transform.scale.x, transform.scale.y, transform.scale.z);
+            torre.add(newObj);
+        });
     },
     // Função de progresso (opcional)
     function (xhr) {
@@ -321,6 +319,8 @@ objLoader.load(
         console.error('Erro ao carregar o objeto', error);
     }
 );
+
+
 
 // Posicionamento da câmera para visualizar o cubo
 camera.position.z = 7;
