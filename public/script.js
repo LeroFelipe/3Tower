@@ -1,4 +1,5 @@
 import * as THREE from './three.module.js';
+import * as OBJLoader from './OBJLoader.js';
 
 const windowSize = 0.95;
 
@@ -6,6 +7,7 @@ const windowSize = 0.95;
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer({ antialias: true });
+const objLoader = new OBJLoader.OBJLoader();
 
 renderer.setSize(window.innerWidth * windowSize, window.innerHeight * windowSize);
 renderer.setClearColor(0x1e1e1e);
@@ -280,6 +282,27 @@ scene.add(torre);
 //xyzLines();
 //planeXY();
 
+objLoader.load(
+    // URL do arquivo .OBJ
+    './antenas/MWantena',
+    // Função de callback chamada quando o objeto é carregado
+    function (object) {
+        // Defina a nova posição do objeto
+        object.position.set(0, 0, 0); // Substitua x, y e z pelas coordenadas desejadas
+
+        // Adicione o objeto à sua cena existente
+        scene.add(object);
+    },
+    // Função de progresso (opcional)
+    function (xhr) {
+        console.log((xhr.loaded / xhr.total * 100) + '% carregado');
+    },
+    // Função de erro (opcional)
+    function (error) {
+        console.error('Erro ao carregar o objeto', error);
+    }
+);
+
 // Posicionamento da câmera para visualizar o cubo
 camera.position.z = 7;
 
@@ -292,7 +315,7 @@ scene.add(light);
 // Configurar as propriedades de sombra da luz
 light.shadow.mapSize.width = 1024; // Largura do mapa de sombras
 light.shadow.mapSize.height = 1024; // Altura do mapa de sombras
-light.shadow.camera.near = 0.5; // Distância próxima para renderização de sombra
+light.shadow.camera.near = 1; // Distância próxima para renderização de sombra
 light.shadow.camera.far = 50; // Distância distante para renderização de sombra
 
 // Função para lidar com eventos de pressionar o botão do mouse
