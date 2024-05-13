@@ -284,7 +284,7 @@ scene.add(torre);
 
 objLoader.load(
     // URL do arquivo .OBJ
-    './antenas/MWantena',
+    './antenas/MWantena.obj',
     // Função de callback chamada quando o objeto é carregado
     function (object) {
         // Defina a nova posição do objeto
