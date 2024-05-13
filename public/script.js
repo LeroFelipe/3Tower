@@ -1,5 +1,5 @@
-import * as THREE from './three.module.js';
-import * as OBJLoader from './OBJLoader.js';
+import * as THREE from '../lib/three.module.js';
+import * as OBJLoader from '../lib/OBJLoader.js';
 
 const windowSize = 0.95;
 
@@ -275,7 +275,26 @@ function xyzLines(){
 
         torre.add(dashedLine);
     };
-}
+}objLoader.load(
+    // URL do arquivo .OBJ
+    './antenas/MWantena.obj',
+    // Função de callback chamada quando o objeto é carregado
+    function (object) {
+        // Defina a nova posição do objeto
+        object.position.set(0, 0, 0); // Substitua x, y e z pelas coordenadas desejadas
+
+        // Adicione o objeto à sua cena existente
+        torre.add(object);
+    },
+    // Função de progresso (opcional)
+    function (xhr) {
+        console.log((xhr.loaded / xhr.total * 100) + '% carregado');
+    },
+    // Função de erro (opcional)
+    function (error) {
+        console.error('Erro ao carregar o objeto', error);
+    }
+);
 
 createSqrTower();
 scene.add(torre);
@@ -291,7 +310,7 @@ objLoader.load(
         object.position.set(0, 0, 0); // Substitua x, y e z pelas coordenadas desejadas
 
         // Adicione o objeto à sua cena existente
-        scene.add(object);
+        torre.add(object);
     },
     // Função de progresso (opcional)
     function (xhr) {
