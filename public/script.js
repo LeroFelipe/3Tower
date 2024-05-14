@@ -283,24 +283,26 @@ scene.add(torre);
 //planeXY();
 
 objLoader.load(
-    // URL do arquivo .OBJ
     './antenas/MWantena.obj',
-    // Função de callback chamada quando o objeto é carregado
     function (object) {
-        // Definir as novas posições, rotações e escalas dos objetos
+        object.traverse(function (child) {
+            if (child instanceof THREE.Mesh) {
+                child.castShadow = true; // Permitir que a malha emita sombras
+                child.receiveShadow = true; // Permitir que a malha receba sombras
+            }
+        });
+
         var transforms = [
             { position: { x: 0, y: 3.5, z: 0.6 }, rotation: { x: 0, y: 0, z: 0 }, scale: { x: 1, y: 1, z: 0.5 } },
             { position: { x: 0, y: 3, z: -0.6 }, rotation: { x: 0, y: 180, z: 0 }, scale: { x: 0.9, y: 0.9, z: 0.5 } },
             { position: { x: 0.6, y: 2, z: 0 }, rotation: { x: 0, y: 90, z: 0 }, scale: { x: 1, y: 1, z: 0.5 } },
             { position: { x: -0.4, y: 2.5, z: 0.4 }, rotation: { x: 0, y: -45, z: 0 }, scale: { x: 0.6, y: 0.6, z: 0.3 } }
-            // Adicionar mais transformações conforme necessário
         ];
 
-        // Converter os graus para radianos e iterar sobre as transformações
         transforms.forEach(function (transform) {
-            var newObj = object.clone(); // Clonar o objeto para evitar referências compartilhadas
+            var newObj = object.clone();
             newObj.position.set(transform.position.x, transform.position.y, transform.position.z);
-            // Converter os graus para radianos
+
             var rotationInRadians = {
                 x: transform.rotation.x * Math.PI / 180,
                 y: transform.rotation.y * Math.PI / 180,
@@ -308,14 +310,13 @@ objLoader.load(
             };
             newObj.rotation.set(rotationInRadians.x, rotationInRadians.y, rotationInRadians.z);
             newObj.scale.set(transform.scale.x, transform.scale.y, transform.scale.z);
+
             torre.add(newObj);
         });
     },
-    // Função de progresso (opcional)
     function (xhr) {
         console.log((xhr.loaded / xhr.total * 100) + '% carregado');
     },
-    // Função de erro (opcional)
     function (error) {
         console.error('Erro ao carregar o objeto', error);
     }
