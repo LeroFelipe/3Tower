@@ -1,5 +1,5 @@
-import * as THREE from './three.module.js';
-import * as OBJLoader from './OBJLoader.js';
+import * as THREE from './lib/three.module.js';
+import * as OBJLoader from './lib/OBJLoader.js';
 
 const windowSize = 0.95;
 
@@ -290,6 +290,7 @@ objLoader.load(
         // Definir as novas posições, rotações e escalas dos objetos
         var transforms = [
             { position: { x: 0, y: 3.5, z: 0.6 }, rotation: { x: 0, y: 0, z: 0 }, scale: { x: 1, y: 1, z: 0.5 } },
+            { position: { x: 0, y: 3, z: -0.6 }, rotation: { x: 0, y: 180, z: 0 }, scale: { x: 0.9, y: 0.9, z: 0.5 } },
             { position: { x: 0.6, y: 2, z: 0 }, rotation: { x: 0, y: 90, z: 0 }, scale: { x: 1, y: 1, z: 0.5 } },
             { position: { x: -0.4, y: 2.5, z: 0.4 }, rotation: { x: 0, y: -45, z: 0 }, scale: { x: 0.6, y: 0.6, z: 0.3 } }
             // Adicionar mais transformações conforme necessário
