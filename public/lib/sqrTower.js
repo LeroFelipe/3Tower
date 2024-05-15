@@ -183,7 +183,6 @@ export function createSqrTower(b, c, h, h1, raioCanto, raioFace, raioCantoFinal)
     }; 
 
     return torre;
-
 }
 
 function cilindro(start, end, raioFinal, raio){

@@ -114,10 +114,10 @@ objLoader.load(
         });
     },
     function (xhr) {
-        console.log((xhr.loaded / xhr.total * 100) + '% carregado');
+        console.log('Antenas de MW',(xhr.loaded / xhr.total * 100) + '% carregadas');
     },
     function (error) {
-        console.error('Erro ao carregar o objeto', error);
+        console.error('Erro ao carregar antenas!', error);
     }
 );
 
@@ -156,10 +156,10 @@ objLoader.load(
         });
     },
     function (xhr) {
-        console.log((xhr.loaded / xhr.total * 100) + '% carregado');
+        console.log('Antenas de RF',(xhr.loaded / xhr.total * 100) + '% carregadas');
     },
     function (error) {
-        console.error('Erro ao carregar o objeto', error);
+        console.error('Erro ao carregar antenas!', error);
     }
 );
 
