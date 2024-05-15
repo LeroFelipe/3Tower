@@ -1,5 +1,6 @@
 import * as THREE from './lib/three.module.js';
 import * as OBJLoader from './lib/OBJLoader.js';
+import * as GLTFLoader from './lib/GLTFLoader.js';
 import { createSqrTower } from './lib/sqrTower.js';
 
 const windowSize = 0.95;
@@ -9,6 +10,7 @@ const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 const objLoader = new OBJLoader.OBJLoader();
+const gltfLoader = new GLTFLoader.GLTFLoader();
 
 renderer.setSize(window.innerWidth * windowSize, window.innerHeight * windowSize);
 renderer.setClearColor(0x1e1e1e);
@@ -80,11 +82,11 @@ scene.add(torre);
 //xyzLines();
 //planeXY();
 
-objLoader.load(
-    './antenas/MWantena.obj',
-    function (object) {
-        object.traverse(function (child) {
-            if (child instanceof THREE.Mesh) {
+gltfLoader.load(
+    './antenas/MWantena.glb',
+    function (gltf) {
+        gltf.scene.traverse(function (child) {
+            if (child.isMesh) {
                 child.castShadow = true; // Permitir que a malha emita sombras
                 child.receiveShadow = true; // Permitir que a malha receba sombras
                 //child.material = new THREE.MeshStandardMaterial({ color: 0xff0000 });
@@ -99,7 +101,7 @@ objLoader.load(
         ];
 
         transforms.forEach(function (transform) {
-            var newObj = object.clone();
+            var newObj = gltf.scene.clone();
             newObj.position.set(transform.position.x, transform.position.y, transform.position.z);
 
             var rotationInRadians = {
