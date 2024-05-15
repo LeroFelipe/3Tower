@@ -89,7 +89,7 @@ gltfLoader.load(
             if (child.isMesh) {
                 child.castShadow = true; // Permitir que a malha emita sombras
                 child.receiveShadow = true; // Permitir que a malha receba sombras
-                //child.material = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+                child.material = new THREE.MeshStandardMaterial({ color: 0xffffff });
             }
         });
 
@@ -123,10 +123,10 @@ gltfLoader.load(
     }
 );
 
-objLoader.load(
-    './antenas/RFantena.obj',
-    function (object) {
-        object.traverse(function (child) {
+gltfLoader.load(
+    './antenas/RFantena.glb',
+    function (gltf) {
+        gltf.scene.traverse(function (child) {
             if (child instanceof THREE.Mesh) {
                 child.castShadow = true; // Permitir que a malha emita sombras
                 child.receiveShadow = true; // Permitir que a malha receba sombras
@@ -143,7 +143,7 @@ objLoader.load(
         ];
 
         transforms.forEach(function (transform) {
-            var newObj = object.clone();
+            var newObj = gltf.scene.clone();
             newObj.position.set(transform.position.x, transform.position.y, transform.position.z);
 
             var rotationInRadians = {
@@ -222,7 +222,7 @@ function onMouseWheel(event) {
     }
     // Verifica se "Shift" está pressionado para rotacionar em relação ao eixo Y
     else if (event.altKey) {
-        rotateY += event.deltaY * 0.02; // Ajuste conforme necessário para a velocidade de rotação
+        rotateY += event.deltaY * 0.05; // Ajuste conforme necessário para a velocidade de rotação
         torre.rotation.y = toRadians(rotateY);
     }else{
         camera.position.z += event.deltaY * 0.005;
