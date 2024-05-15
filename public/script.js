@@ -29,7 +29,7 @@ function createSqrTower() {
     var b = 1.8;
     var c = 0.5;
     h = 8.5;
-    var h1 = 6;
+    var h1 = 6.5;
 
     var y = -h/2;
     var y2 = h1 - (h/2);
@@ -177,7 +177,7 @@ function createSqrTower() {
 
     };
 
-    while (y2 + ((h - h1) / Math.floor(h - h1)) <=  h/2){
+    while (y2 + ((h - h1) / Math.floor(h - h1)) <=  h/2){ // Trecho reto 
 
         //FACE A
         cilindro(new THREE.Vector3(-c/2, y2, c/2), new THREE.Vector3(c/2, y2 +((h - h1) / Math.floor(h - h1)), c/2), raioFace, raioFace);
@@ -364,8 +364,6 @@ objLoader.load(
         console.error('Erro ao carregar o objeto', error);
     }
 );
-
-
 
 // Posicionamento da câmera para visualizar o cubo
 camera.position.z = 7;

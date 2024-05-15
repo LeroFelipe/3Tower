@@ -4,26 +4,39 @@
     font-family: 'Inter', sans-serif;
 }
 
-body{
+body {
     background-color: #1e1e1e;
 }
 
 #tower-container {
     position: relative;
-    display: inline-block; /* Para garantir que o formulário fique ao lado do objeto */
+    display: inline-block;
 }
 
-#form {
-    position: absolute;
-    top: 15px; /* Ajuste a posição vertical conforme necessário */
-    left: 15px; /* Ajuste a posição horizontal conforme necessário */
-    z-index: 1000; /* Certifique-se de que o formulário apareça na frente do canvas */
-    box-shadow: 1px 1px 6px #000000;
-    padding: 15px;
-    border-radius: 10px;
-    background-color: #363636;
-    color: #8f8f8f;
+#form1 {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  z-index: 1000;
+  box-shadow: 1px 1px 6px #000000;
+  padding: 15px;
+  border-radius: 10px;
+  background-color: #363636;
+  color: #8f8f8f;
 }
+
+#form2 {
+  position: absolute;
+  top: 400px;
+  left: 15px;
+  z-index: 1000;
+  box-shadow: 1px 1px 6px #000000;
+  padding: 15px;
+  border-radius: 10px;
+  background-color: #363636;
+  color: #8f8f8f;
+}
+
 
 .input-box{
     display: flex;
