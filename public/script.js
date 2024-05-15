@@ -210,7 +210,7 @@ function cilindro(start, end, raioFinal, raio){
     var edgeVector = end.clone().sub(start);
     var edgeLength = edgeVector.length();
 
-    var cylinderMaterial = new THREE.MeshPhongMaterial({ color: 0xffa500 });
+    var cylinderMaterial = new THREE.MeshStandardMaterial({ color: 0xffa500 });
     var edgeGeometry = new THREE.CylinderGeometry(raio, raioFinal, edgeLength, 16);
     var edge = new THREE.Mesh(edgeGeometry, cylinderMaterial);
 
@@ -289,7 +289,7 @@ objLoader.load(
             if (child instanceof THREE.Mesh) {
                 child.castShadow = true; // Permitir que a malha emita sombras
                 child.receiveShadow = true; // Permitir que a malha receba sombras
-                
+                //child.material = new THREE.MeshStandardMaterial({ color: 0xff0000 });
             }
         });
 
