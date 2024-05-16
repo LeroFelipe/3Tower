@@ -3,6 +3,7 @@ import * as GLTFLoader from './lib/GLTFLoader.js';
 import { createSqrTower } from './lib/Towers.js';
 
 const windowSize = 0.95;
+var torre;
 
 // Configuração da cena, câmera e renderizador
 const scene = new THREE.Scene();
@@ -75,13 +76,12 @@ function xyzLines(){
     };
 }
 
-var torre = createSqrTower(1.8, 0.5, h, 6, 0.06, 0.02, 0.03);
-
-scene.add(torre);
+//var torre = createSqrTower(1.8, 0.5, h, 6, 0.06, 0.02, 0.03);
+//scene.add(torre);
 //xyzLines();
 //planeXY();
 
-gltfLoader.load(
+/*gltfLoader.load(
     './antenas/MWantena.glb',
     function (gltf) {
         gltf.scene.traverse(function (child) {
@@ -162,7 +162,7 @@ gltfLoader.load(
     function (error) {
         console.error('Erro ao carregar antenas!', error);
     }
-);
+);*/
 
 // Posicionamento da câmera para visualizar o cubo
 camera.position.z = 7;
@@ -248,14 +248,17 @@ document.getElementById("buttonCarregar").addEventListener("click", carregarTorr
 function carregarTorre() {
     // Obter os valores dos campos de entrada
     var base = parseFloat(document.getElementById("base").value);
-    var inclinada = parseFloat(document.getElementById("inclinada").value);
-    var reta = parseFloat(document.getElementById("reta").value);
+    var altura = parseFloat(document.getElementById("altura").value);
+    var inclinado = parseFloat(document.getElementById("inclinado").value);
     var topo = parseFloat(document.getElementById("topo").value);
     var tipoTorre = document.getElementById("tipoTorre").value;
 
+    torre = createSqrTower(base, topo, altura, inclinado, 0.06, 0.02, 0.03);
+    scene.add(torre);
+
     // Verificar se os campos não estão vazios e se são números positivos
-    if (base > 0 && inclinada > 0 && reta > 0 && topo > 0 &&
-        !isNaN(base) && !isNaN(inclinada) && !isNaN(reta) && !isNaN(topo) &&
+    if (base > 0 && topo > 0 && altura > 0 && inclinado > 0 &&
+        !isNaN(base) && !isNaN(topo) && !isNaN(altura) && !isNaN(inclinado) &&
         tipoTorre !== '') {
         console.log('TESTE');
     } else {
