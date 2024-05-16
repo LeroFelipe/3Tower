@@ -1,6 +1,6 @@
 import * as THREE from './three.module.js';
+import { torre } from '../script.js';
 
-var torre = new THREE.Group();
 // Função para criar torre quadrada
 export function createSqrTower(b, c, h, h1, raioCanto, raioFace, raioCantoFinal) {
 

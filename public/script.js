@@ -1,9 +1,9 @@
 import * as THREE from './lib/three.module.js';
 import * as GLTFLoader from './lib/GLTFLoader.js';
-import { createSqrTower } from './lib/Towers.js';
+import { createSqrTower} from './lib/Towers.js';
 
 const windowSize = 0.95;
-var torre;
+export var torre = new THREE.Group();
 
 // Configuração da cena, câmera e renderizador
 const scene = new THREE.Scene();
@@ -245,6 +245,7 @@ function animate() {
 animate();
 
 document.getElementById("buttonCarregar").addEventListener("click", carregarTorre);
+
 function carregarTorre() {
     // Obter os valores dos campos de entrada
     var base = parseFloat(document.getElementById("base").value);
@@ -253,7 +254,12 @@ function carregarTorre() {
     var topo = parseFloat(document.getElementById("topo").value);
     var tipoTorre = document.getElementById("tipoTorre").value;
 
-    torre = createSqrTower(base, topo, altura, inclinado, 0.06, 0.02, 0.03);
+    // Limpar a torre anterior, se houver
+    if (torre.children.length > 0) {
+        torre.remove(...torre.children);
+    }
+    
+    torre = createSqrTower( base, topo, altura, inclinado, 0.06, 0.02, 0.03);
     scene.add(torre);
 
     // Verificar se os campos não estão vazios e se são números positivos
