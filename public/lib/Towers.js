@@ -4,11 +4,6 @@ var torre = new THREE.Group();
 // Função para criar torre quadrada
 export function createSqrTower(b, c, h, h1, raioCanto, raioFace, raioCantoFinal) {
 
-    /*var b = 1.8;
-    var c = 0.5;
-    h = 8.5;
-    var h1 = 6.5;*/
-
     var y = -h/2;
     var y2 = h1 - (h/2);
     

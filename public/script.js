@@ -75,7 +75,7 @@ function xyzLines(){
     };
 }
 
-var torre = createSqrTower(1.8, 0.5, h, 6.5, 0.06, 0.02, 0.03);
+var torre = createSqrTower(1.8, 0.5, h, 6, 0.06, 0.02, 0.03);
 
 scene.add(torre);
 //xyzLines();
