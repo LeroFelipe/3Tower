@@ -1,5 +1,4 @@
 import * as THREE from './lib/three.module.js';
-import * as OBJLoader from './lib/OBJLoader.js';
 import * as GLTFLoader from './lib/GLTFLoader.js';
 import { createSqrTower } from './lib/sqrTower.js';
 
@@ -9,7 +8,6 @@ const windowSize = 0.95;
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer({ antialias: true });
-const objLoader = new OBJLoader.OBJLoader();
 const gltfLoader = new GLTFLoader.GLTFLoader();
 
 renderer.setSize(window.innerWidth * windowSize, window.innerHeight * windowSize);
