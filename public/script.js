@@ -1,13 +1,14 @@
 import * as THREE from './lib/three.module.js';
 import * as GLTFLoader from './lib/GLTFLoader.js';
-import { createSqrTower } from './lib/sqrTower.js';
+import { createSqrTower } from './lib/Towers.js';
 
 const windowSize = 0.95;
 
 // Configuração da cena, câmera e renderizador
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-const renderer = new THREE.WebGLRenderer({ antialias: true });
+const canvas = document.querySelector("canvas.webgl");
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
 const gltfLoader = new GLTFLoader.GLTFLoader();
 
 renderer.setSize(window.innerWidth * windowSize, window.innerHeight * windowSize);
@@ -87,7 +88,7 @@ gltfLoader.load(
             if (child.isMesh) {
                 child.castShadow = true; // Permitir que a malha emita sombras
                 child.receiveShadow = true; // Permitir que a malha receba sombras
-                child.material = new THREE.MeshStandardMaterial({ color: 0xffffff });
+                child.material = new THREE.MeshStandardMaterial({ color: 0xffffff});
             }
         });
 
