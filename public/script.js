@@ -81,7 +81,9 @@ function xyzLines(){
 //xyzLines();
 //planeXY();
 
-/*gltfLoader.load(
+function carregarAntenas(){
+
+    gltfLoader.load(
     './antenas/MWantena.glb',
     function (gltf) {
         gltf.scene.traverse(function (child) {
@@ -162,7 +164,9 @@ gltfLoader.load(
     function (error) {
         console.error('Erro ao carregar antenas!', error);
     }
-);*/
+);
+
+}
 
 // Posicionamento da câmera para visualizar o cubo
 camera.position.z = 7;
@@ -257,16 +261,13 @@ function carregarTorre() {
     // Limpar a torre anterior, se houver
     if (torre.children.length > 0) {
         torre.remove(...torre.children);
-    }
-    
-    torre = createSqrTower( base, topo, altura, inclinado, 0.06, 0.02, 0.03);
-    scene.add(torre);
+    }    
 
     // Verificar se os campos não estão vazios e se são números positivos
-    if (base > 0 && topo > 0 && altura > 0 && inclinado > 0 &&
-        !isNaN(base) && !isNaN(topo) && !isNaN(altura) && !isNaN(inclinado) &&
-        tipoTorre !== '') {
-        console.log('TESTE');
+    if (base > 0 && topo > 0 && altura > 0 && inclinado > 0 && tipoTorre !== '') {
+        torre = createSqrTower( base, topo, altura, inclinado, 0.06, 0.02, 0.03);
+        scene.add(torre);
+        carregarAntenas();
     } else {
         console.log('Preencha todos os campos com números positivos.');
     }
