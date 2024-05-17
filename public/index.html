@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/assets/style.css">
-    <link rel="icon" type="image/x-icon" href="/assets/icon.png"> <!-- "Icon created by Freepik - Flaticon" -->
+    <link rel="icon" type="image/x-icon" href="/assets/icon.png">
     <title>3Tower</title>
   </head>
 
@@ -48,7 +48,17 @@
                 <option value="Mastro">Mastro</option>
             </select>
         </div>
-          <button id="buttonCarregar" type="button" >Carregar</button>
+
+        <div class="input-box">
+          <!-- Rótulo personalizado para o botão de arquivo -->
+          <label for="excelFile" class="custom-file-upload">
+            <span>Carregamento *xls, xlsx</span>
+          </label>
+          <!-- Botão de arquivo oculto -->
+          <input type="file" id="excelFile" name="excelFile" accept=".xls, .xlsx">
+        </div>
+
+        <button id="buttonCarregar" type="button" >Carregar</button>
         </form>
       </div>
 

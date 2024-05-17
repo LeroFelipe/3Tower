@@ -5,6 +5,12 @@ import { createSqrTower} from './lib/Towers.js';
 const windowSize = 0.95;
 export var torre = new THREE.Group();
 
+// Variáveis para controlar a rotação da cena em relação aos eixos X e Y
+let rotateX = 0;
+let rotateY = 0;
+
+var h = 8.5; // para adicionar o terreno em relação a altura da torre 
+
 // Configuração da cena, câmera e renderizador
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -18,11 +24,24 @@ renderer.shadowMap.enabled = true; // Habilitar mapeamento de sombras
 renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Tipo de sombra suave
 document.body.appendChild(renderer.domElement);
 
-// Variáveis para controlar a rotação da cena em relação aos eixos X e Y
-let rotateX = 0;
-let rotateY = 0;
+// Adicionar uma luz direcional para gerar sombras
+const light = new THREE.DirectionalLight(0xffffff, 1);
+light.position.set(8, 10, 10); // Posição da luz
+light.castShadow = true; // Permitir que a luz gere sombras
+scene.add(light);
 
-var h = 8.5; // para adicionar o terreno em relação a altura da torre 
+// Configurar as propriedades de sombra da luz
+light.shadow.mapSize.width = 1024; // Largura do mapa de sombras
+light.shadow.mapSize.height = 1024; // Altura do mapa de sombras
+light.shadow.camera.near = 1; // Distância próxima para renderização de sombra
+light.shadow.camera.far = 50; // Distância distante para renderização de sombra
+
+// Para lidar com eventos de pressionar o botão do mouse
+let isDragging = false;
+let previousMousePosition = { x: 0, y: 0 };
+
+// Posicionamento da câmera
+camera.position.z = 7;
 
 function planeXY(){
     // Definir as dimensões do plano
@@ -75,11 +94,6 @@ function xyzLines(){
         torre.add(dashedLine);
     };
 }
-
-//var torre = createSqrTower(1.8, 0.5, h, 6, 0.06, 0.02, 0.03);
-//scene.add(torre);
-//xyzLines();
-//planeXY();
 
 function carregarAntenas(){
 
@@ -168,24 +182,6 @@ gltfLoader.load(
 
 }
 
-// Posicionamento da câmera para visualizar o cubo
-camera.position.z = 7;
-
-// Adicionar uma luz direcional para gerar sombras
-const light = new THREE.DirectionalLight(0xffffff, 1);
-light.position.set(8, 10, 10); // Posição da luz
-light.castShadow = true; // Permitir que a luz gere sombras
-scene.add(light);
-
-// Configurar as propriedades de sombra da luz
-light.shadow.mapSize.width = 1024; // Largura do mapa de sombras
-light.shadow.mapSize.height = 1024; // Altura do mapa de sombras
-light.shadow.camera.near = 1; // Distância próxima para renderização de sombra
-light.shadow.camera.far = 50; // Distância distante para renderização de sombra
-
-// Função para lidar com eventos de pressionar o botão do mouse
-let isDragging = false;
-let previousMousePosition = { x: 0, y: 0 };
 
 function onMouseDown(event) {
     isDragging = true;
@@ -241,14 +237,11 @@ document.addEventListener('mousedown', onMouseDown);
 document.addEventListener('mouseup', onMouseUp);
 document.addEventListener('mousemove', onMouseMove);
 
-// Renderização da cena
-function animate() {
-    requestAnimationFrame(animate);
-    renderer.render(scene, camera);
-}
-animate();
-
 document.getElementById("buttonCarregar").addEventListener("click", carregarTorre);
+
+torre = createSqrTower( 1.8, 0.5, 9, 6.5, 0.06, 0.02, 0.03);
+scene.add(torre);
+carregarAntenas();
 
 function carregarTorre() {
     // Obter os valores dos campos de entrada
@@ -272,3 +265,10 @@ function carregarTorre() {
         console.log('Preencha todos os campos com números positivos.');
     }
 }
+
+// Renderização da cena
+function animate() {
+    requestAnimationFrame(animate);
+    renderer.render(scene, camera);
+}
+animate();
