@@ -14,27 +14,28 @@ body {
 }
 
 #form1 {
-  position: absolute;
-  top: 15px;
-  left: 15px;
-  z-index: 1000;
-  box-shadow: 1px 1px 6px #000000;
-  padding: 15px;
-  border-radius: 10px;
-  background-color: #363636;
-  color: #8f8f8f;
+    width: 200px;
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    z-index: 1000;
+    box-shadow: 1px 1px 6px #000000;
+    padding: 15px;
+    border-radius: 10px;
+    background-color: #363636;
+    color: #8f8f8f;
 }
 
 #form2 {
-  position: absolute;
-  top: 400px;
-  left: 15px;
-  z-index: 1000;
-  box-shadow: 1px 1px 6px #000000;
-  padding: 15px;
-  border-radius: 10px;
-  background-color: #363636;
-  color: #8f8f8f;
+    position: absolute;
+    top: 400px;
+    left: 15px;
+    z-index: 1000;
+    box-shadow: 1px 1px 6px #000000;
+    padding: 15px;
+    border-radius: 10px;
+    background-color: #363636;
+    color: #8f8f8f;
 }
 
 
