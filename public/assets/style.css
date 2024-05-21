@@ -17,30 +17,31 @@ body {
 #forms {
     position: absolute;
     width: 220px;
-    left: 15px;
-    top: 15px;
+    left: 10px;
+    top: 6px;
     overflow-y: auto;
     z-index: 2;
 }
 
 #form1, #form2, #form3 {
+    margin-top: 6px;
     border: 2px solid #141414;
-    padding: 15px;
+    padding: 0 10px 10px 10px;
     border-radius: 10px;
     background-color: #363636;
     color: #8f8f8f;
 }
 
-#shop {
+#receita {
     position: absolute;
-    margin-left: 77vw;
+    margin-left: 79vw;
     height: 90%;
-    top: 15px;
+    top: 10px;
 }
 
 #gads {
-    height: 50%;
-    width: 300px;
+    height: 70%;
+    width: 18vw;
     border: 2px solid #141414;
     padding: 15px;
     border-radius: 10px;
@@ -49,8 +50,9 @@ body {
 }
 
 #doarcafe {
-    height: 40%;
-    width: 300px;
+    margin-top: 6px;
+    height: 25%;
+    width: 18vw;
     border: 2px solid #141414;
     padding: 15px;
     border-radius: 10px;
