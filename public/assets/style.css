@@ -13,31 +13,23 @@ body {
     display: inline-block;
 }
 
-#form1 {
-    width: 200px;
+#forms {
+
     position: absolute;
+    width: 220px;
+    left: 15px;
     top: 15px;
-    left: 15px;
+    overflow-y: auto;
+}
+
+#form1, #form2, #form3 {
+    border: 2px solid #141414;
     z-index: 1000;
-    box-shadow: 1px 1px 6px #000000;
     padding: 15px;
     border-radius: 10px;
     background-color: #363636;
     color: #8f8f8f;
 }
-
-#form2 {
-    position: absolute;
-    top: 400px;
-    left: 15px;
-    z-index: 1000;
-    box-shadow: 1px 1px 6px #000000;
-    padding: 15px;
-    border-radius: 10px;
-    background-color: #363636;
-    color: #8f8f8f;
-}
-
 
 .input-box{
     display: flex;
@@ -62,6 +54,7 @@ input{
 }
 
 #tipoTorre{
+    width: 62%;
     margin-top: 5px;
     background-color: #1e1e1e;
     color: #8f8f8f;

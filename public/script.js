@@ -182,7 +182,6 @@ gltfLoader.load(
 
 }
 
-
 function onMouseDown(event) {
     isDragging = true;
     previousMousePosition = { x: event.clientX, y: event.clientY };
@@ -242,6 +241,8 @@ document.getElementById("buttonCarregar").addEventListener("click", carregarTorr
 torre = createSqrTower( 1.8, 0.5, 9, 6.5, 0.06, 0.02, 0.03);
 scene.add(torre);
 carregarAntenas();
+//planeXY();
+//xyzLines(); 
 
 function carregarTorre() {
     // Obter os valores dos campos de entrada
@@ -260,7 +261,7 @@ function carregarTorre() {
     if (base > 0 && topo > 0 && altura > 0 && inclinado > 0 && tipoTorre !== '') {
         torre = createSqrTower( base, topo, altura, inclinado, 0.06, 0.02, 0.03);
         scene.add(torre);
-        carregarAntenas();
+       //carregarAntenas();
     } else {
         console.log('Preencha todos os campos com números positivos.');
     }
