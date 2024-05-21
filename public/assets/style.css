@@ -5,30 +5,57 @@
 }
 
 body {
+    display: flex;
     background-color: #1e1e1e;
 }
 
 #tower-container {
     position: relative;
-    display: inline-block;
+    z-index: 1;
 }
 
 #forms {
-
     position: absolute;
     width: 220px;
     left: 15px;
     top: 15px;
     overflow-y: auto;
+    z-index: 2;
 }
 
 #form1, #form2, #form3 {
     border: 2px solid #141414;
-    z-index: 1000;
     padding: 15px;
     border-radius: 10px;
     background-color: #363636;
     color: #8f8f8f;
+}
+
+#shop {
+    position: absolute;
+    margin-left: 77vw;
+    height: 90%;
+    top: 15px;
+}
+
+#gads {
+    height: 50%;
+    width: 300px;
+    border: 2px solid #141414;
+    padding: 15px;
+    border-radius: 10px;
+    background-color: #363636;
+    color: #8f8f8f;    
+}
+
+#doarcafe {
+    height: 40%;
+    width: 300px;
+    border: 2px solid #141414;
+    padding: 15px;
+    border-radius: 10px;
+    background-color: #363636;
+    color: #8f8f8f;    
 }
 
 .input-box{
