@@ -12,6 +12,7 @@ export function createSqrTower(b, c, h, h1, raioCanto, raioFace, raioCantoFinal)
     var raioCantoFinal = 0.03
 
     var incremento = b;
+    var dif;
 
     // Definir as posições dos vértices da torre
     var vertices = [
@@ -68,8 +69,22 @@ export function createSqrTower(b, c, h, h1, raioCanto, raioFace, raioCantoFinal)
         };     
     };
 
+    for (var n = 0; y + incremento <= (h1 - (h/2)) + 0.01; n++ ){
+
+        var dist = (b/2) + (((y+incremento)+(h/2))/h1)*((c-b)/2);
+
+        y = y + incremento;
+
+        incremento = dist * 2;
+    }
+
+    console.log(n, y, h1 - (h/2));
+    dif = ((h1-(h/2)) - y) / n;
+    incremento = b + dif;
+    y = -h/2;
+
     // Adicionar os cilindros das faces à cena
-    while (y + incremento <= (h1 - (h/2))){
+    while (y + incremento <= (h1 - (h/2)) + 0.01){
 
         var x = (b/2) + ((y+(h/2))/h1)*((c-b)/2);
         var z = x;
@@ -146,11 +161,12 @@ export function createSqrTower(b, c, h, h1, raioCanto, raioFace, raioCantoFinal)
 
         y = y + incremento;
 
-        incremento = x1 * 2;
+        incremento = (x1 * 2) + dif;
 
     };
+    console.log(y);
 
-    while (y2 + ((h - h1) / Math.floor(h - h1)) <=  h/2){ // Trecho reto 
+    while (y2 + ((h - h1) / Math.floor(h - h1)) <=  h/2 + 0.01){ // Trecho reto '0.01' de tolerância
 
         //FACE A
         cilindro(new THREE.Vector3(-c/2, y2, c/2), new THREE.Vector3(c/2, y2 +((h - h1) / Math.floor(h - h1)), c/2), raioFace, raioFace);

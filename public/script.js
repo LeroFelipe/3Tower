@@ -51,7 +51,7 @@ function planeXY(){
     // Criar a geometria do plano
     const planeGeometry = new THREE.PlaneGeometry(larguraPlano, alturaPlano);
 
-    // Criar um material branco
+    // Criar um material
     const whiteMaterial = new THREE.MeshPhongMaterial({ color: 0x7CFC00 });
 
     // Criar o plano usando a geometria e o material
@@ -87,7 +87,7 @@ function xyzLines(){
 
         var dashedLineGeometry = new THREE.BufferGeometry().setFromPoints([dashedLineStart, dashedLineEnd]);
 
-        var dashedLineMaterial = new THREE.LineDashedMaterial({ color: 0x000000, dashSize: 0.1, gapSize: 0.05 });
+        var dashedLineMaterial = new THREE.LineDashedMaterial({ color: 0xffffff, dashSize: 0.1, gapSize: 0.05 });
         var dashedLine = new THREE.Line(dashedLineGeometry, dashedLineMaterial);
         dashedLine.computeLineDistances(); // Computar distâncias para definir o padrão tracejado
 
@@ -240,9 +240,9 @@ document.getElementById("buttonCarregar").addEventListener("click", carregarTorr
 
 torre = createSqrTower( 1.8, 0.5, 9, 6.5, 0.06, 0.02, 0.03);
 scene.add(torre);
-carregarAntenas();
+//carregarAntenas();
 //planeXY();
-//xyzLines(); 
+xyzLines(); 
 
 function carregarTorre() {
     // Obter os valores dos campos de entrada
