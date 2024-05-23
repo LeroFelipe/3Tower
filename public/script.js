@@ -240,9 +240,9 @@ document.getElementById("buttonCarregar").addEventListener("click", carregarTorr
 
 torre = createSqrTower( 1.8, 0.5, 9, 6.5, 0.06, 0.02, 0.03);
 scene.add(torre);
-//carregarAntenas();
+carregarAntenas();
 //planeXY();
-xyzLines(); 
+//xyzLines(); 
 
 function carregarTorre() {
     // Obter os valores dos campos de entrada

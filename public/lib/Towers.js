@@ -2,7 +2,7 @@ import * as THREE from './three.module.js';
 import { torre } from '../script.js';
 
 // Função para criar torre quadrada
-export function createSqrTower(b, c, h, h1, raioCanto, raioFace, raioCantoFinal) {
+export function createSqrTower(b, c, h, h1, raioCanto, raioFace, raioCantoFinal){
 
     var y = -h/2;
     var y2 = h1 - (h/2);
@@ -164,7 +164,6 @@ export function createSqrTower(b, c, h, h1, raioCanto, raioFace, raioCantoFinal)
         incremento = (x1 * 2) + dif;
 
     };
-    console.log(y);
 
     while (y2 + ((h - h1) / Math.floor(h - h1)) <=  h/2 + 0.01){ // Trecho reto '0.01' de tolerância
 
@@ -194,6 +193,21 @@ export function createSqrTower(b, c, h, h1, raioCanto, raioFace, raioCantoFinal)
     }; 
 
     return torre;
+}
+
+export function createTriTower(b, c, h, h1, raioCanto, raioFace, raioCantoFinal){
+
+
+}
+
+export function createMastro(raio, h){
+
+
+}
+
+export function createPoste(b, c, h){
+
+
 }
 
 function cilindro(start, end, raioFinal, raio){
