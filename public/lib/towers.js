@@ -207,23 +207,25 @@ export function createTriTower(b, c, h, h1, raioCanto, raioFace, raioCantoFinal)
     var incremento = b;
     var dif;
 
+    const raiz3 = Math.sqrt(3);
+
     // Definir as posições dos vértices da torre
     var vertices = [
 
         // BASE
-        new THREE.Vector3(b/2, (-h/2), (b * Math.sqrt(3)) / 6), // A
-        new THREE.Vector3(-b/2, (-h/2), (b * Math.sqrt(3)) / 6), // B
-        new THREE.Vector3(0, (-h/2), -((b * Math.sqrt(3)) / 3)), // C
+        new THREE.Vector3(b/2, (-h/2), (b * raiz3) / 6), // A
+        new THREE.Vector3(-b/2, (-h/2), (b * raiz3) / 6), // B
+        new THREE.Vector3(0, (-h/2), -((b * raiz3) / 3)), // C
 
         // MEIO 
-        new THREE.Vector3(c/2, (h1-(h/2)), (c * Math.sqrt(3)) / 6), // A
-        new THREE.Vector3(-c/2, (h1-(h/2)), (c * Math.sqrt(3)) / 6), // B
-        new THREE.Vector3(0, (h1-(h/2)), -((c * Math.sqrt(3)) / 3)), // C      
+        new THREE.Vector3(c/2, (h1-(h/2)), (c * raiz3) / 6), // A
+        new THREE.Vector3(-c/2, (h1-(h/2)), (c * raiz3) / 6), // B
+        new THREE.Vector3(0, (h1-(h/2)), -((c * raiz3) / 3)), // C      
 
         // TOPO
-        new THREE.Vector3(c/2, (h-(h/2)), (c * Math.sqrt(3)) / 6), // A
-        new THREE.Vector3(-c/2, (h-(h/2)), (c * Math.sqrt(3)) / 6), // B
-        new THREE.Vector3(0, (h-(h/2)), -((c * Math.sqrt(3)) / 3)) // C             
+        new THREE.Vector3(c/2, (h-(h/2)), (c * raiz3) / 6), // A
+        new THREE.Vector3(-c/2, (h-(h/2)), (c * raiz3) / 6), // B
+        new THREE.Vector3(0, (h-(h/2)), -((c * raiz3) / 3)) // C             
 
     ];
 
@@ -275,10 +277,10 @@ export function createTriTower(b, c, h, h1, raioCanto, raioFace, raioCantoFinal)
     while (y + incremento <= (h1 - (h/2)) + 0.01){
 
         var x = (b/2) + ((((2*y) + h)*(c-b))/(4*h1));
-        var z = x;
+        var z = ((b*raiz3*h1) + (y*(c-b)*raiz3) + ((h*(c-b)*raiz3)/2)) / ( 6 * h1);
 
         var x1 = (b/2) + ((((2*(y + incremento)) + h)*(c-b))/(4*h1));
-        var z1 = x1;
+        var z1 = ((b*raiz3*h1) + ((y + incremento)*(c-b)*raiz3) + ((h*(c-b)*raiz3)/2)) / ( 6 * h1);
 
         var start = new THREE.Vector3(x1, y + incremento, z1);
         var end = new THREE.Vector3(-x1, y + incremento, z1);
