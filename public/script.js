@@ -1,6 +1,6 @@
 import * as THREE from './lib/three.module.js';
 import * as GLTFLoader from './lib/GLTFLoader.js';
-import { createSqrTower} from './lib/Towers.js';
+import { createSqrTower, createTriTower} from './lib/towers.js';
 
 const windowSize = 0.95;
 export var torre = new THREE.Group();
@@ -238,11 +238,13 @@ document.addEventListener('mousemove', onMouseMove);
 
 document.getElementById("buttonCarregar").addEventListener("click", carregarTorre);
 
-torre = createSqrTower( 1.8, 0.5, 9, 6.5, 0.06, 0.02, 0.03);
+//torre = createSqrTower( 1.8, 0.5, 10, 6.5, 0.06, 0.02, 0.03);
+torre = createTriTower( 1.8, 0.5, 9, 6.5, 0.06, 0.02, 0.03);
+
 scene.add(torre);
-carregarAntenas();
+//carregarAntenas();
 //planeXY();
-//xyzLines(); 
+xyzLines(); 
 
 function carregarTorre() {
     // Obter os valores dos campos de entrada
