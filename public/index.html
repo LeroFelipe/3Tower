@@ -17,35 +17,46 @@
     </div>
   
     <div id="forms">
-
       <div id="form1">
         <form action="#" method="post">
           <div class="input-box">
+            <label for="tipoTorre">Tipo de Torre</label>
+            <select id="tipoTorre" name="tipoTorre" required onchange="updateForm()">
+              <option value="">Selecione...</option>
+              <option value="Quadrada">Quadrada</option>
+              <option value="Triangular">Triangular</option>
+              <option value="Poste">Poste</option>
+              <option value="Estaiada">Estaiada</option>
+              <option value="Mastro">Mastro</option>
+            </select>
+          </div>
+          <div id="baseGroup" class="input-box">
             <label for="base">Base</label>
             <input id="base" type="text" pattern="[0-9]+([,.][0-9]+)?" title="Digite um número válido" placeholder=" Metros" required>
           </div>
-          <div class="input-box">
+          <div id="alturaGroup" class="input-box">
             <label for="altura">Altura</label>
             <input id="altura" type="text" pattern="[0-9]+([,.][0-9]+)?" title="Digite um número válido" placeholder=" Metros" required>
           </div>
-          <div class="input-box">
+          <div id="inclinadoGroup" class="input-box">
             <label for="inclinado">Trecho Inclinado</label>
             <input id="inclinado" type="text" pattern="[0-9]+([,.][0-9]+)?" title="Digite um número válido" placeholder=" Metros" required>
           </div>
-          <div class="input-box">
+          <div id="topoGroup" class="input-box">
             <label for="topo">Topo</label>
             <input id="topo" type="text" pattern="[0-9]+([,.][0-9]+)?" title="Digite um número válido" placeholder=" Metros" required>
           </div>
-          <div class="input-box">
-            <label for="tipoTorre">Tipo de Torre</label>
-            <select id="tipoTorre" name="tipoTorre" required>
-                <option value="">Selecione...</option>
-                <option value="Quadrada">Quadrada</option>
-                <option value="Triangular">Triangular</option>
-                <option value="Poste">Poste</option>
-                <option value="Estaiada">Estaiada</option>
-                <option value="Mastro">Mastro</option>
-            </select>
+          <div id="diametroBaseGroup" class="input-box" style="display: none;">
+            <label for="diametroBase">Diâmetro da Base</label>
+            <input id="diametroBase" type="text" pattern="[0-9]+([,.][0-9]+)?" title="Digite um número válido" placeholder=" Metros">
+          </div>
+          <div id="diametroTopoGroup" class="input-box" style="display: none;">
+            <label for="diametroTopo">Diâmetro do Topo</label>
+            <input id="diametroTopo" type="text" pattern="[0-9]+([,.][0-9]+)?" title="Digite um número válido" placeholder=" Metros">
+          </div>
+          <div id="diametroGroup" class="input-box" style="display: none;">
+            <label for="diametro">Diâmetro</label>
+            <input id="diametro" type="text" pattern="[0-9]+([,.][0-9]+)?" title="Digite um número válido" placeholder=" Metros">
           </div>
         </form>
       </div>
@@ -89,5 +100,23 @@
         Doação
       </div>      
     </div>
+
+    <script>
+      function updateForm() {
+        const tipoTorre = document.getElementById('tipoTorre').value;
+        const isPoste = tipoTorre === 'Poste';
+        const isEstaiada = tipoTorre === 'Estaiada';
+        const isMastro = tipoTorre === 'Mastro';
+      
+        // Mostra ou esconde os grupos de campos de acordo com a seleção
+        document.getElementById('baseGroup').style.display = isPoste ? 'none' : (isEstaiada ? '' : (isMastro ? 'none' : ''));
+        document.getElementById('alturaGroup').style.display = isPoste ? 'none' : (isEstaiada ? '' : '');
+        document.getElementById('inclinadoGroup').style.display = isPoste || isEstaiada || isMastro ? 'none' : '';
+        document.getElementById('topoGroup').style.display = isPoste || isEstaiada || isMastro ? 'none' : '';
+        document.getElementById('diametroBaseGroup').style.display = isPoste ? '' : 'none';
+        document.getElementById('diametroTopoGroup').style.display = isPoste ? '' : 'none';
+        document.getElementById('diametroGroup').style.display = isMastro ? '' : 'none';
+      }
+      </script>
   </body>
 </html>

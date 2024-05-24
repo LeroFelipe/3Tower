@@ -236,15 +236,16 @@ document.addEventListener('mousedown', onMouseDown);
 document.addEventListener('mouseup', onMouseUp);
 document.addEventListener('mousemove', onMouseMove);
 
-document.getElementById("buttonCarregar").addEventListener("click", carregarTorre);
-
-//torre = createSqrTower( 1.8, 0.5, 10, 6.5, 0.06, 0.02, 0.03);
+//torre = createSqrTower( 1.8, 0.5, 9, 6.5, 0.06, 0.02, 0.03);
 torre = createTriTower( 1.8, 0.5, 9, 6.5, 0.06, 0.02, 0.03);
 
 scene.add(torre);
 //carregarAntenas();
 //planeXY();
-xyzLines(); 
+//xyzLines(); 
+
+
+document.getElementById("buttonCarregar").addEventListener("click", carregarTorre);
 
 function carregarTorre() {
     // Obter os valores dos campos de entrada
