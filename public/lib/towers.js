@@ -268,7 +268,6 @@ export function createTriTower(b, c, h, h1, raioCanto, raioFace, raioCantoFinal)
         incremento = dist * 2;
     };
 
-    console.log(n, y, h1 - (h/2));
     dif = ((h1-(h/2)) - y) / (n - 1);
     incremento = b + dif;
     y = -h/2;
@@ -282,11 +281,17 @@ export function createTriTower(b, c, h, h1, raioCanto, raioFace, raioCantoFinal)
         var x1 = (b/2) + ((((2*(y + incremento)) + h)*(c-b))/(4*h1));
         var z1 = ((b*raiz3*h1) + ((y + incremento)*(c-b)*raiz3) + ((h*(c-b)*raiz3)/2)) / ( 6 * h1);
 
+        var z0 = -((b*raiz3)/3)- ((((y + incremento)*(c-b) + ((h*(c-b))/2))*raiz3)/(3*h1));
+
         var start = new THREE.Vector3(x1, y + incremento, z1);
         var end = new THREE.Vector3(-x1, y + incremento, z1);
 
-        // FACE A
+        var end1 = new THREE.Vector3(0, y + incremento, z0);
+
+        // TESTE
         cilindro(start, end, raioFace, raioFace);
+        cilindro(start, end1, raioFace, raioFace);
+        cilindro(end, end1, raioFace, raioFace);
 
         y = y + incremento;
 
