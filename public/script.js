@@ -131,7 +131,7 @@ function carregarAntenas(){
         });
     },
     function (xhr) {
-        console.log('Antenas de MW',(xhr.loaded / xhr.total * 100) + '% carregadas');
+        //console.log('Antenas de MW',(xhr.loaded / xhr.total * 100) + '% carregadas');
     },
     function (error) {
         console.error('Erro ao carregar antenas!', error);
@@ -173,7 +173,7 @@ gltfLoader.load(
         });
     },
     function (xhr) {
-        console.log('Antenas de RF',(xhr.loaded / xhr.total * 100) + '% carregadas');
+        //console.log('Antenas de RF',(xhr.loaded / xhr.total * 100) + '% carregadas');
     },
     function (error) {
         console.error('Erro ao carregar antenas!', error);
@@ -242,8 +242,7 @@ torre = createTriTower( 1.8, 0.5, 9, 6.5, 0.06, 0.02, 0.03);
 scene.add(torre);
 //carregarAntenas();
 //planeXY();
-//xyzLines(); 
-
+xyzLines(); 
 
 document.getElementById("buttonCarregar").addEventListener("click", carregarTorre);
 
@@ -276,6 +275,7 @@ function carregarTorre() {
         if (base > 0 && topo > 0 && altura > 0 && inclinado > 0) {
             torre = createTriTower(base, topo, altura, inclinado, 0.06, 0.02, 0.03);
             scene.add(torre);
+            xyzLines();
             //carregarAntenas();
         } else {
             alert('Preencha todos os campos com números positivos.');
