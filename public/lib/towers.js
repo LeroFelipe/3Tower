@@ -241,7 +241,7 @@ export function createTriTower(b, c, h, h1, raioCanto, raioFace, raioCantoFinal)
         [1, 4], [4, 7],
 
         // Canto C
-        //[2, 5], [5, 8]
+        [2, 5], [5, 8]
 
     ];
 
@@ -277,48 +277,70 @@ export function createTriTower(b, c, h, h1, raioCanto, raioFace, raioCantoFinal)
     // Adicionar os cilindros das faces à cena
     while (y + incremento + dif <= (h1 - (h/2)) + 0.01){
 
-        var start, endk, x, z;
+        var start0, start, start1, endk, endk1, endk11, endk12, x, xk, z0, z, zk;
+
+        var z01 = -((b*raiz3)/3)- ((((y + incremento + dif)*(c-b) + ((h*(c-b))/2))*raiz3)/(3*h1));
 
         if (checkbase){
             x = (b/2) + ((((2*y) + h)*(c-b))/(4*h1));
             z = ((b*raiz3*h1) + (y*(c-b)*raiz3) + ((h*(c-b)*raiz3)/2)) / ( 6 * h1);
+            xk = (b/2) + ((((2*(y + ((incremento + dif)/2))) + h)*(c-b))/(4*h1));
+            zk = ((b*raiz3*h1) + ((y + ((incremento + dif)/2))*(c-b)*raiz3) + ((h*(c-b)*raiz3)/2)) / ( 6 * h1); 
+            z0 =  -((b*raiz3)/3)- (((y*(c-b) + ((h*(c-b))/2))*raiz3)/(3*h1));          
 
+            start0 = new THREE.Vector3(0,y,z0);
             start = new THREE.Vector3(x,y,z);
-            endk = new THREE.Vector3(x/2, y + ((incremento+dif)/2), ((b*raiz3*h1) + ((y + ((incremento + dif)/2))*(c-b)*raiz3) + ((h*(c-b)*raiz3)/2)) / ( 6 * h1))
+            start1 = new THREE.Vector3(-x,y,z);
+            endk = new THREE.Vector3(x/2, y + ((incremento+dif)/2), zk);
+            endk1 = new THREE.Vector3(-x/2, y + ((incremento+dif)/2), zk);
+            endk11 = new THREE.Vector3(xk, y + ((incremento+dif)/2), zk);
+            endk12 = new THREE.Vector3(-xk, y + ((incremento+dif)/2), zk);
 
         }else{
             x = (b/2) + ((((2*(y+dif)) + h)*(c-b))/(4*h1));
             z = ((b*raiz3*h1) + ((y+dif)*(c-b)*raiz3) + ((h*(c-b)*raiz3)/2)) / ( 6 * h1);
+            xk = (b/2) + ((((2*(y + ((incremento + dif*2)/2))) + h)*(c-b))/(4*h1));
+            zk = ((b*raiz3*h1) + ((y + ((incremento + dif*2)/2))*(c-b)*raiz3) + ((h*(c-b)*raiz3)/2)) / ( 6 * h1);
+            z0 = -((b*raiz3)/3)- ((((y + dif)*(c-b) + ((h*(c-b))/2))*raiz3)/(3*h1));
 
+            start0 = new THREE.Vector3(0,y+dif,z0);
             start = new THREE.Vector3(x,y+dif,z);
-            endk = new THREE.Vector3(x/2, y + ((incremento+dif*2)/2), ((b*raiz3*h1) + ((y + ((incremento + dif*2)/2))*(c-b)*raiz3) + ((h*(c-b)*raiz3)/2)) / ( 6 * h1))
+            start1 = new THREE.Vector3(-x,y+dif,z);
+            endk = new THREE.Vector3(x/2, y + ((incremento+dif*2)/2), zk);
+            endk1 = new THREE.Vector3(-x/2, y + ((incremento+dif*2)/2), zk);
+            endk11 = new THREE.Vector3(xk, y + ((incremento+dif*2)/2), zk);
+            endk12 = new THREE.Vector3(-xk, y + ((incremento+dif*2)/2), zk);
         }
 
         var x11 = (b/2) + ((((2*(y + incremento)) + h)*(c-b))/(4*h1));
         var x1 = (b/2) + ((((2*(y + incremento + dif)) + h)*(c-b))/(4*h1));
-
-        var xk = x/2;
-
         var z1 = ((b*raiz3*h1) + ((y + incremento + dif )*(c-b)*raiz3) + ((h*(c-b)*raiz3)/2)) / ( 6 * h1);
 
-        var z0 = -((b*raiz3)/3)- ((((y + incremento + dif)*(c-b) + ((h*(c-b))/2))*raiz3)/(3*h1));
-
-        var start1 = new THREE.Vector3(x1, y + incremento + dif, z1);
+        var start2 = new THREE.Vector3(x1, y + incremento + dif, z1);
+        var start3 = new THREE.Vector3(0,y + incremento + dif, z0);
 
         var end1 = new THREE.Vector3(-x1, y + incremento + dif, z1);
         var endA = new THREE.Vector3(0, y + incremento + dif, z1);
-        var end0 = new THREE.Vector3(0, y + incremento + dif, z0);
-
+        var end0 = new THREE.Vector3(0, y + incremento + dif, z01);
+        var end01 = new THREE.Vector3(x1/2, y + incremento + dif, -z1/2)
         
-
         // FACE A
-        cilindro(start1, end1, raioFace, raioFace);
-        cilindro(start, endA, raioFace, raioFace);
-        cilindro(start1, endk, raioFace, raioFace);
+        /*cilindro(start2, end1, raioFace, raioFace); // LINHA RETA
+        cilindro(start, endA, raioFace, raioFace); // LINHA DIAGONAL DIREITA
+        cilindro(start2, endk, raioFace, raioFace); // LINHA 'K' DIREITA
+        cilindro(endk, endk11, raioFace, raioFace); // LINHA 'K' DIREITA RETA
+        cilindro(start1, endA, raioFace, raioFace); // LINHA DIAGONAL ESQUERDA
+        cilindro(end1, endk1, raioFace, raioFace); // LINHA 'K' ESQUERDA
+        cilindro(endk1, endk12, raioFace, raioFace); // LINHA 'K' ESQUERDA RETA*/
 
-        //cilindro(start1, end0, raioFace, raioFace);
+        // FACE B
+        cilindro(start2, end0, raioFace, raioFace);        
+        cilindro(start, end01, raioFace, raioFace);
+        cilindro(start0, end01, raioFace, raioFace);
+        
+        // FACE C
         //cilindro(end1, end0, raioFace, raioFace);
-
+        
         console.log(x1.toFixed(2), (y+incremento+dif).toFixed(2), (incremento + dif).toFixed(2));
 
         y = y + incremento;
