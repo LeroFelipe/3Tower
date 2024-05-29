@@ -46,7 +46,7 @@ body {
     padding: 15px;
     border-radius: 10px;
     background-color: #363636;
-    color: #8f8f8f;    
+    color: #8f8f8f;
 }
 
 #doarcafe {
@@ -57,7 +57,7 @@ body {
     padding: 15px;
     border-radius: 10px;
     background-color: #363636;
-    color: #8f8f8f;    
+    color: #8f8f8f;  
 }
 
 .input-box{
@@ -93,7 +93,6 @@ input{
 }
 
 #buttonCarregar{
-
     width: 40%;
     border: none;
     background-color: #292929;
@@ -107,7 +106,6 @@ input{
 }
 
 #excelFile{
-
     width: 70%;
     border: none;
     background-color: transparent;
@@ -120,7 +118,6 @@ input{
 }
 
 input[type='file']::file-selector-button {
-    /* Seus estilos personalizados aqui */
     background-color: #292929;
     color: #8f8f8f;
     padding: 4px 4px;

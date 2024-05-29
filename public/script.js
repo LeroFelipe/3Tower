@@ -275,7 +275,7 @@ function carregarTorre() {
         if (base > 0 && topo > 0 && altura > 0 && inclinado > 0) {
             torre = createTriTower(base, topo, altura, inclinado, 0.06, 0.02, 0.03);
             scene.add(torre);
-            xyzLines();
+            //xyzLines();
             //carregarAntenas();
         } else {
             alert('Preencha todos os campos com números positivos.');
