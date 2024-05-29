@@ -277,7 +277,7 @@ export function createTriTower(b, c, h, h1, raioCanto, raioFace, raioCantoFinal)
     // Adicionar os cilindros das faces à cena
     while (y + incremento + dif <= (h1 - (h/2)) + 0.01){
 
-        var C, A, B, endk, endk1, endk2, endk3, AA1d2, BB1d2, CC1d2, x, xk, z0, z0k, z, zk;
+        var C, A, B, endk, endk1, endk2, endk3, endk4, endk5, AA1d2, BB1d2, CC1d2, x, xk, z0, z0k, z, zk;
 
         var x11 = (b/2) + ((((2*(y + incremento)) + h)*(c-b))/(4*h1));
         var x1 = (b/2) + ((((2*(y + incremento + dif)) + h)*(c-b))/(4*h1));
@@ -300,6 +300,8 @@ export function createTriTower(b, c, h, h1, raioCanto, raioFace, raioCantoFinal)
             endk1 = new THREE.Vector3(-x/2, y + ((incremento+dif)/2), zk);
             endk2 = new THREE.Vector3(x1/4, y + (incremento+dif)/2,(z0-(z1/2))/2);
             endk3 = new THREE.Vector3(((2*x)+x1)/4, ((2*y)+incremento+dif)/2, ((2*z)-z1)/4);
+            endk4 = new THREE.Vector3(-((2*x)+x1)/4, ((2*y)+incremento+dif)/2, ((2*z)-z1)/4);
+            endk5 = new THREE.Vector3(-x1/4, y + (incremento+dif)/2,(z0-(z1/2))/2);
             AA1d2 = new THREE.Vector3(xk, y + ((incremento+dif)/2), zk);
             BB1d2 = new THREE.Vector3(-xk, y + ((incremento+dif)/2), zk);
             CC1d2 = new THREE.Vector3(0, y + ((incremento+dif)/2), z0k);
@@ -319,6 +321,8 @@ export function createTriTower(b, c, h, h1, raioCanto, raioFace, raioCantoFinal)
             endk1 = new THREE.Vector3(-x/2, y + ((incremento+dif*2)/2), zk);
             endk2 = new THREE.Vector3(x1/4, y + (incremento+dif*2)/2,(z0-(z1/2))/2);
             endk3 = new THREE.Vector3(((2*x)+x1)/4, ((2*y)+incremento+dif*2)/2, ((2*z)-z1)/4);
+            endk4 = new THREE.Vector3(-((2*x)+x1)/4, ((2*y)+incremento+dif*2)/2, ((2*z)-z1)/4);
+            endk5 = new THREE.Vector3(-x1/4, y + (incremento+dif*2)/2,(z0-(z1/2))/2);
             AA1d2 = new THREE.Vector3(xk, y + ((incremento+dif*2)/2), zk);
             BB1d2 = new THREE.Vector3(-xk, y + ((incremento+dif*2)/2), zk);
             CC1d2 = new THREE.Vector3(0, y + ((incremento+dif*2)/2), z0k);
@@ -342,6 +346,15 @@ export function createTriTower(b, c, h, h1, raioCanto, raioFace, raioCantoFinal)
         cilindro(endk1, BB1d2, raioFace, raioFace); // LINHA 'K' ESQUERDA RETA*/
 
         // FACE B
+        cilindro(B1, C1, raioFace, raioFace); // LINHA RETA
+        cilindro(B, B1C1d2, raioFace, raioFace); // LINHA DIAGONAL DIREITA 
+        cilindro(C, B1C1d2, raioFace, raioFace); // LINHA DIAGONAL ESQUERDA
+        cilindro(B1, endk4, raioFace, raioFace); // LINHA 'K' DIREITA
+        cilindro(endk4, BB1d2, raioFace, raioFace); // LINHA 'K' DIREITA RETA
+        cilindro(C1, endk5, raioFace, raioFace); // LINHA 'K' DIREITA
+        cilindro(endk5, CC1d2, raioFace, raioFace); // LINHA 'K' DIREITA RETA 
+
+        // FACE C
         cilindro(A1, C1, raioFace, raioFace); // LINHA RETA     
         cilindro(C, A1C1d2, raioFace, raioFace); // LINHA DIAGONAL DIREITA  
         cilindro(A, A1C1d2, raioFace, raioFace); // LINHA DIAGONAL ESQUERDA  
@@ -349,11 +362,6 @@ export function createTriTower(b, c, h, h1, raioCanto, raioFace, raioCantoFinal)
         cilindro(endk2, CC1d2, raioFace, raioFace); // LINHA 'K' DIREITA RETA
         cilindro(A1, endk3, raioFace, raioFace); // LINHA 'K' ESQUERDA
         cilindro(endk3, AA1d2, raioFace, raioFace); // LINHA 'K' ESQUERDA RETA
-        
-        // FACE C
-        //cilindro(B1, C1, raioFace, raioFace);
-        //cilindro(B, B1C1d2, raioFace, raioFace);
-        //cilindro(C, B1C1d2, raioFace, raioFace);
         
         y = y + incremento;
 

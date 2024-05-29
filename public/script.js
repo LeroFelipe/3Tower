@@ -242,7 +242,7 @@ torre = createTriTower( 1.8, 0.5, 9, 6.5, 0.06, 0.02, 0.03);
 scene.add(torre);
 //carregarAntenas();
 //planeXY();
-xyzLines(); 
+//xyzLines(); 
 
 document.getElementById("buttonCarregar").addEventListener("click", carregarTorre);
 
