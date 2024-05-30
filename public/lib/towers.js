@@ -7,10 +7,6 @@ export function createSqrTower(b, c, h, h1, raioCanto, raioFace, raioCantoFinal)
     var y = -h/2;
     var y2 = h1 - (h/2);
     
-    var raioCanto = 0.06
-    var raioFace = 0.02;
-    var raioCantoFinal = 0.03
-
     var incremento = b;
     var dif;
     var checkbase = true;
@@ -70,18 +66,17 @@ export function createSqrTower(b, c, h, h1, raioCanto, raioFace, raioCantoFinal)
         };     
     };
 
-    for (var n = 0; y + incremento <= (h1 - (h/2)) + 0.01; n++ ){
+    while (y + incremento <= (h1 - (h/2)) + 0.01){
 
         var dist = (b/2) + (((y+incremento)+(h/2))/h1)*((c-b)/2);
 
         y = y + incremento;
 
         incremento = dist * 2;
-    }
+    };
 
-    console.log(n, y, h1 - (h/2));
-    dif = ((h1-(h/2)) - y) / (n - 1);
-    incremento = b + dif;
+    dif = ((h1-(h/2)) - y);
+    incremento = b;
     y = -h/2;
 
     // Adicionar os cilindros das faces à cena
@@ -198,21 +193,18 @@ export function createSqrTower(b, c, h, h1, raioCanto, raioFace, raioCantoFinal)
 
 export function createTriTower(b, c, h, h1, raioCanto, raioFace, raioCantoFinal){
 
-    var y = -h/2;
-    var y2 = h1 - (h/2);
+    let y = -h/2;
+    let y2 = h1 - (h/2);
     
-    var raioCanto = 0.06
-    var raioFace = 0.02;
-    var raioCantoFinal = 0.03
-
-    var incremento = b;
-    var dif;
+    let incremento = b;
+    const increto = ((h/2) - y2) / c;
+    let dif;
 
     const raiz3 = Math.sqrt(3);
-    var checkbase = true;
+    let checkbase = true;
 
     // Definir as posições dos vértices da torre
-    var vertices = [
+    const vertices = [
 
         // BASE
         new THREE.Vector3(b/2, (-h/2), (b * raiz3) / 6), // A
@@ -232,7 +224,7 @@ export function createTriTower(b, c, h, h1, raioCanto, raioFace, raioCantoFinal)
     ];
 
     // Definir as arestas da Torre
-    var edges = [
+    const edges = [
 
         // Canto A
         [0, 3], [3, 6],
@@ -246,12 +238,12 @@ export function createTriTower(b, c, h, h1, raioCanto, raioFace, raioCantoFinal)
     ];
 
     // Adicionar os cilindros dos cantos à cena
-    for (var i = 0; i < edges.length; i++) {
-        var verticesIndex1 = edges[i][0];
-        var verticesIndex2 = edges[i][1];
+    for (let i = 0; i < edges.length; i++) {
+        let verticesIndex1 = edges[i][0];
+        let verticesIndex2 = edges[i][1];
 
-        var start = vertices[verticesIndex1];
-        var end = vertices[verticesIndex2];
+        let start = vertices[verticesIndex1];
+        let end = vertices[verticesIndex2];
 
         if(verticesIndex1 >= 3){
             cilindro(start, end, raioCantoFinal, raioCantoFinal);
@@ -260,10 +252,9 @@ export function createTriTower(b, c, h, h1, raioCanto, raioFace, raioCantoFinal)
         };     
     };
 
-    for (var n = 0; y + incremento <= (h1 - (h/2)) + 0.01; n++ ){
+    while (y + incremento <= (h1 - (h/2)) + 0.01){
 
-        var dist = (b/2) + (((y+incremento)+(h/2))/h1)*((c-b)/2);
-        
+        const dist = (b/2) + (((y+incremento)+(h/2))/h1)*((c-b)/2);
 
         y = y + incremento;
 
@@ -277,13 +268,12 @@ export function createTriTower(b, c, h, h1, raioCanto, raioFace, raioCantoFinal)
     // Adicionar os cilindros das faces à cena
     while (y + incremento + dif <= (h1 - (h/2)) + 0.01){
 
-        var C, A, B, endk, endk1, endk2, endk3, endk4, endk5, AA1d2, BB1d2, CC1d2, x, xk, z0, z0k, z, zk;
+        let C, A, B, endk, endk1, endk2, endk3, endk4, endk5, AA1d2, BB1d2, CC1d2, x, xk, z0, z0k, z, zk;
 
-        var x11 = (b/2) + ((((2*(y + incremento)) + h)*(c-b))/(4*h1));
-        var x1 = (b/2) + ((((2*(y + incremento + dif)) + h)*(c-b))/(4*h1));
-        var z1 = ((b*raiz3*h1) + ((y + incremento + dif )*(c-b)*raiz3) + ((h*(c-b)*raiz3)/2)) / ( 6 * h1);
-
-        var z01 = -((b*raiz3)/3)- ((((y + incremento + dif)*(c-b) + ((h*(c-b))/2))*raiz3)/(3*h1));
+        const x11 = (b/2) + ((((2*(y + incremento)) + h)*(c-b))/(4*h1));
+        const x1 = (b/2) + ((((2*(y + incremento + dif)) + h)*(c-b))/(4*h1));
+        const z1 = ((b*raiz3*h1) + ((y + incremento + dif )*(c-b)*raiz3) + ((h*(c-b)*raiz3)/2)) / ( 6 * h1);
+        const z01 = -((b*raiz3)/3)- ((((y + incremento + dif)*(c-b) + ((h*(c-b))/2))*raiz3)/(3*h1));
 
         if (checkbase){
             x = (b/2) + ((((2*y) + h)*(c-b))/(4*h1));
@@ -328,13 +318,13 @@ export function createTriTower(b, c, h, h1, raioCanto, raioFace, raioCantoFinal)
             CC1d2 = new THREE.Vector3(0, y + ((incremento+dif*2)/2), z0k);
         }
 
-        var A1 = new THREE.Vector3(x1, y + incremento + dif, z1);
-        var B1 = new THREE.Vector3(-x1, y + incremento + dif, z1);
-        var C1 = new THREE.Vector3(0, y + incremento + dif, z01);
+        const A1 = new THREE.Vector3(x1, y + incremento + dif, z1);
+        const B1 = new THREE.Vector3(-x1, y + incremento + dif, z1);
+        const C1 = new THREE.Vector3(0, y + incremento + dif, z01);
         
-        var A1B1d2 = new THREE.Vector3(0, y + incremento + dif, z1);        
-        var A1C1d2 = new THREE.Vector3(x1/2, y + incremento + dif, -z1/2);
-        var B1C1d2 = new THREE.Vector3(-x1/2, y + incremento + dif, -z1/2)
+        const A1B1d2 = new THREE.Vector3(0, y + incremento + dif, z1);        
+        const A1C1d2 = new THREE.Vector3(x1/2, y + incremento + dif, -z1/2);
+        const B1C1d2 = new THREE.Vector3(-x1/2, y + incremento + dif, -z1/2)
         
         // FACE A
         cilindro(A1, B1, raioFace, raioFace); // LINHA RETA
@@ -363,12 +353,22 @@ export function createTriTower(b, c, h, h1, raioCanto, raioFace, raioCantoFinal)
         cilindro(A1, endk3, raioFace, raioFace); // LINHA 'K' ESQUERDA
         cilindro(endk3, AA1d2, raioFace, raioFace); // LINHA 'K' ESQUERDA RETA
         
-        y = y + incremento;
+        y += incremento;
 
         incremento = x11 * 2;
         checkbase = false;
 
-    };      
+    };
+
+    while (y2 + increto <=  h/2 + 0.01){ // Trecho reto '0.01' de tolerância
+
+
+
+
+        y2 += increto;
+        console.log(y2.toFixed(2));
+
+    }; 
 
     return torre;
 
@@ -385,12 +385,12 @@ export function createPoste(b, c, h){
 }
 
 function cilindro(start, end, raioFinal, raio){
-    var edgeVector = end.clone().sub(start);
-    var edgeLength = edgeVector.length();
+    const edgeVector = end.clone().sub(start);
+    const edgeLength = edgeVector.length();
 
-    var cylinderMaterial = new THREE.MeshStandardMaterial({ color: 0xffa500 });
-    var edgeGeometry = new THREE.CylinderGeometry(raio, raioFinal, edgeLength, 16);
-    var edge = new THREE.Mesh(edgeGeometry, cylinderMaterial);
+    const cylinderMaterial = new THREE.MeshStandardMaterial({ color: 0xffa500 });
+    const edgeGeometry = new THREE.CylinderGeometry(raio, raioFinal, edgeLength, 16);
+    const edge = new THREE.Mesh(edgeGeometry, cylinderMaterial);
 
     edge.position.set((start.x + end.x)/2 , (start.y + end.y)/2 , (start.z + end.z)/2 );
 

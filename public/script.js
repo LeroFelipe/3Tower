@@ -236,8 +236,8 @@ document.addEventListener('mousedown', onMouseDown);
 document.addEventListener('mouseup', onMouseUp);
 document.addEventListener('mousemove', onMouseMove);
 
-//torre = createSqrTower( 1.8, 0.5, 9, 6.5, 0.06, 0.02, 0.03);
-torre = createTriTower( 1.8, 0.5, 9, 6.5, 0.06, 0.02, 0.03);
+//torre = createSqrTower( 2, 0.5, 9, 6.5, 0.06, 0.02, 0.03);
+torre = createTriTower( 1.8, 0.5, 9.4, 7, 0.06, 0.02, 0.03);
 
 scene.add(torre);
 //carregarAntenas();
