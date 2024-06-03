@@ -197,7 +197,9 @@ export function createTriTower(b, c, h, h1, raioCanto, raioFace, raioCantoFinal)
     let y2 = h1 - (h/2);
     
     let incremento = b;
-    const increto = ((h/2) - y2) / c;
+    const inc = Math.floor(((h / 2) - y2) / c);
+    const resto = ((h / 2) - y2) % c;
+
     let dif;
 
     const raiz3 = Math.sqrt(3);
@@ -239,11 +241,11 @@ export function createTriTower(b, c, h, h1, raioCanto, raioFace, raioCantoFinal)
 
     // Adicionar os cilindros dos cantos à cena
     for (let i = 0; i < edges.length; i++) {
-        let verticesIndex1 = edges[i][0];
-        let verticesIndex2 = edges[i][1];
+        const verticesIndex1 = edges[i][0];
+        const verticesIndex2 = edges[i][1];
 
-        let start = vertices[verticesIndex1];
-        let end = vertices[verticesIndex2];
+        const start = vertices[verticesIndex1];
+        const end = vertices[verticesIndex2];
 
         if(verticesIndex1 >= 3){
             cilindro(start, end, raioCantoFinal, raioCantoFinal);
@@ -266,7 +268,7 @@ export function createTriTower(b, c, h, h1, raioCanto, raioFace, raioCantoFinal)
     y = -h/2;
 
     // Adicionar os cilindros das faces à cena
-    while (y + incremento + dif <= (h1 - (h/2)) + 0.01){
+    while (y + incremento + dif <= y2 + 0.01){
 
         let C, A, B, endk, endk1, endk2, endk3, endk4, endk5, AA1d2, BB1d2, CC1d2, x, xk, z0, z0k, z, zk;
 
@@ -360,17 +362,16 @@ export function createTriTower(b, c, h, h1, raioCanto, raioFace, raioCantoFinal)
 
     };
 
-    while (y2 + increto <=  h/2 + 0.01){ // Trecho reto '0.01' de tolerância
+    while (y2 + c + (resto/inc) <=  h/2 + 0.01){ // Trecho reto '0.01' de tolerância
+        
+        //FACE A
+        cilindro(new THREE.Vector3(-c/2, y2 + c + (resto/inc), (c * raiz3) / 6), new THREE.Vector3(c/2, y2 + c + (resto/inc), (c * raiz3) / 6), raioFace, raioFace);
 
+        y2 += c + (resto/inc);
+ 
+    };
 
-
-
-        y2 += increto;
-        console.log(y2.toFixed(2));
-
-    }; 
-
-    return torre;
+    return torre
 
 }
 
