@@ -366,6 +366,19 @@ export function createTriTower(b, c, h, h1, raioCanto, raioFace, raioCantoFinal)
         
         //FACE A
         cilindro(new THREE.Vector3(-c/2, y2 + c + (resto/inc), (c * raiz3) / 6), new THREE.Vector3(c/2, y2 + c + (resto/inc), (c * raiz3) / 6), raioFace, raioFace);
+        cilindro(new THREE.Vector3(-c/2, y2, (c * raiz3) / 6), new THREE.Vector3(c/2, y2 + c + (resto/inc), (c * raiz3) / 6), raioFace, raioFace);
+        cilindro(new THREE.Vector3(c/2, y2, (c * raiz3) / 6), new THREE.Vector3(-c/2, y2 + c + (resto/inc), (c * raiz3) / 6), raioFace, raioFace);
+        
+        //FACE B
+        cilindro(new THREE.Vector3(-c/2, y2 + c + (resto/inc), (c * raiz3) / 6), new THREE.Vector3(0, y2 + c + (resto/inc), -((c * raiz3) / 3)), raioFace, raioFace);
+        cilindro(new THREE.Vector3(-c/2, y2, (c * raiz3) / 6), new THREE.Vector3(0, y2 + c + (resto/inc), -((c * raiz3) / 3)), raioFace, raioFace);
+        cilindro(new THREE.Vector3(0, y2, -((c * raiz3) / 3)), new THREE.Vector3(-c/2, y2 + c + (resto/inc), (c * raiz3) / 6), raioFace, raioFace);
+    
+
+        //FACE C
+        cilindro(new THREE.Vector3(c/2, y2 + c + (resto/inc), (c * raiz3) / 6), new THREE.Vector3(0, y2 + c + (resto/inc), -((c * raiz3) / 3)), raioFace, raioFace);
+        cilindro(new THREE.Vector3(c/2, y2, (c * raiz3) / 6), new THREE.Vector3(0, y2 + c + (resto/inc), -((c * raiz3) / 3)), raioFace, raioFace);
+        cilindro(new THREE.Vector3(0, y2, -((c * raiz3) / 3)), new THREE.Vector3(c/2, y2 + c + (resto/inc), (c * raiz3) / 6), raioFace, raioFace);
 
         y2 += c + (resto/inc);
  
