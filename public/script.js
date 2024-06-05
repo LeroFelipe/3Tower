@@ -40,6 +40,12 @@ light.shadow.camera.far = 50; // Distância distante para renderização de somb
 let isDragging = false;
 let previousMousePosition = { x: 0, y: 0 };
 
+// Para lidar com eventos do mouse sobre às antenas
+var raycaster = new THREE.Raycaster();
+var mouse = new THREE.Vector2();
+var INTERSECTED;
+var originalColor;
+
 // Posicionamento da câmera
 camera.position.z = 7;
 
@@ -99,86 +105,86 @@ function carregarAntenas(){
 
     gltfLoader.load(
     './antenas/MWantena.glb',
-    function (gltf) {
-        gltf.scene.traverse(function (child) {
-            if (child.isMesh) {
-                child.castShadow = true; // Permitir que a malha emita sombras
-                child.receiveShadow = true; // Permitir que a malha receba sombras
-                child.material = new THREE.MeshStandardMaterial({ color: 0xffffff});
-            }
-        });
+        function (gltf) {
+            gltf.scene.traverse(function (child) {
+                if (child.isMesh) {
+                    child.castShadow = true;
+                    child.receiveShadow = true;
+                    child.material = new THREE.MeshStandardMaterial({ color: 0xffffff});
+                }
+            });
 
-        var transforms = [
-            { position: { x: 0, y: 0.5, z: 0.75 }, rotation: { x: 0, y: 0, z: 0 }, scale: { x: 1, y: 1, z: 0.5 } },
-            { position: { x: 0, y: 2.8, z: -0.6 }, rotation: { x: 0, y: 180, z: 0 }, scale: { x: 0.9, y: 0.9, z: 0.5 } },
-            { position: { x: 0.6, y: 2, z: 0 }, rotation: { x: 0, y: 90, z: 0 }, scale: { x: 1, y: 1, z: 0.5 } },
-            { position: { x: -0.4, y: 2.5, z: 0.4 }, rotation: { x: 0, y: -45, z: 0 }, scale: { x: 0.6, y: 0.6, z: 0.3 } }
-        ];
+            var transforms = [
+                { position: { x: 0, y: 0.5, z: 0.75 }, rotation: { x: 0, y: 0, z: 0 }, scale: { x: 1, y: 1, z: 0.5 } },
+                { position: { x: 0, y: 2.8, z: -0.6 }, rotation: { x: 0, y: 180, z: 0 }, scale: { x: 0.9, y: 0.9, z: 0.5 } },
+                { position: { x: 0.6, y: 2, z: 0 }, rotation: { x: 0, y: 90, z: 0 }, scale: { x: 1, y: 1, z: 0.5 } },
+                { position: { x: -0.4, y: 2.5, z: 0.4 }, rotation: { x: 0, y: -45, z: 0 }, scale: { x: 0.6, y: 0.6, z: 0.3 } }
+            ];
 
-        transforms.forEach(function (transform) {
-            var newObj = gltf.scene.clone();
-            newObj.position.set(transform.position.x, transform.position.y, transform.position.z);
+            transforms.forEach(function (transform) {
+                var newObj = gltf.scene.clone();
+                newObj.position.set(transform.position.x, transform.position.y, transform.position.z);
 
-            var rotationInRadians = {
-                x: transform.rotation.x * Math.PI / 180,
-                y: transform.rotation.y * Math.PI / 180,
-                z: transform.rotation.z * Math.PI / 180
-            };
-            newObj.rotation.set(rotationInRadians.x, rotationInRadians.y, rotationInRadians.z);
-            newObj.scale.set(transform.scale.x, transform.scale.y, transform.scale.z);
+                var rotationInRadians = {
+                    x: transform.rotation.x * Math.PI / 180,
+                    y: transform.rotation.y * Math.PI / 180,
+                    z: transform.rotation.z * Math.PI / 180
+                };
+                newObj.rotation.set(rotationInRadians.x, rotationInRadians.y, rotationInRadians.z);
+                newObj.scale.set(transform.scale.x, transform.scale.y, transform.scale.z);
 
-            torre.add(newObj);
-        });
-    },
-    function (xhr) {
-        //console.log('Antenas de MW',(xhr.loaded / xhr.total * 100) + '% carregadas');
-    },
-    function (error) {
-        console.error('Erro ao carregar antenas!', error);
-    }
-);
+                torre.add(newObj);
+            });
+        },
+        function (xhr) {
+            //console.log('Antenas de MW',(xhr.loaded / xhr.total * 100) + '% carregadas');
+        },
+        function (error) {
+            console.error('Erro ao carregar antenas!', error);
+        }
+    );
 
-gltfLoader.load(
-    './antenas/RFantena.glb',
-    function (gltf) {
-        gltf.scene.traverse(function (child) {
-            if (child instanceof THREE.Mesh) {
-                child.castShadow = true; // Permitir que a malha emita sombras
-                child.receiveShadow = true; // Permitir que a malha receba sombras
-                child.material = new THREE.MeshStandardMaterial({ color: 0xffffff }); // Vermelho
-            }
-        });
+    gltfLoader.load(
+        './antenas/RFantena.glb',
+        function (gltf) {
+            gltf.scene.traverse(function (child) {
+                if (child instanceof THREE.Mesh) {
+                    child.castShadow = true; // Permitir que a malha emita sombras
+                    child.receiveShadow = true; // Permitir que a malha receba sombras
+                    child.material = new THREE.MeshStandardMaterial({ color: 0xffffff }); // Vermelho
+                }
+            });
 
-        var transforms = [
-            { position: { x: 0.35, y: 3.7, z: 0.35 }, rotation: { x: 5, y: 45, z: 0 }, scale: { x: 0.15, y: 0.8, z: 0.05 } },
-            { position: { x: -0.35, y: 3.7, z: 0.35 }, rotation: { x: 5, y: -45, z: 0 }, scale: { x: 0.15, y: 0.8, z: 0.05 } },
-            { position: { x: -0.35, y: 3.7, z: -0.35 }, rotation: { x: -5, y: 225, z: 0 }, scale: { x: 0.15, y: 0.8, z: 0.05 } },
-            { position: { x: 0.35, y: 3.7, z: -0.35 }, rotation: { x: -5, y: -225, z: 0 }, scale: { x: 0.15, y: 0.8, z: 0.05 } }
-          
-        ];
+            var transforms = [
+                { position: { x: 0.35, y: 3.7, z: 0.35 }, rotation: { x: 5, y: 45, z: 0 }, scale: { x: 0.15, y: 0.8, z: 0.05 } },
+                { position: { x: -0.35, y: 3.7, z: 0.35 }, rotation: { x: 5, y: -45, z: 0 }, scale: { x: 0.15, y: 0.8, z: 0.05 } },
+                { position: { x: -0.35, y: 3.7, z: -0.35 }, rotation: { x: -5, y: 225, z: 0 }, scale: { x: 0.15, y: 0.8, z: 0.05 } },
+                { position: { x: 0.35, y: 3.7, z: -0.35 }, rotation: { x: -5, y: -225, z: 0 }, scale: { x: 0.15, y: 0.8, z: 0.05 } }
+            
+            ];
 
-        transforms.forEach(function (transform) {
-            var newObj = gltf.scene.clone();
-            newObj.position.set(transform.position.x, transform.position.y, transform.position.z);
+            transforms.forEach(function (transform) {
+                var newObj = gltf.scene.clone();
+                newObj.position.set(transform.position.x, transform.position.y, transform.position.z);
 
-            var rotationInRadians = {
-                x: transform.rotation.x * Math.PI / 180,
-                y: transform.rotation.y * Math.PI / 180,
-                z: transform.rotation.z * Math.PI / 180
-            };
-            newObj.rotation.set(rotationInRadians.x, rotationInRadians.y, rotationInRadians.z);
-            newObj.scale.set(transform.scale.x, transform.scale.y, transform.scale.z);
+                var rotationInRadians = {
+                    x: transform.rotation.x * Math.PI / 180,
+                    y: transform.rotation.y * Math.PI / 180,
+                    z: transform.rotation.z * Math.PI / 180
+                };
+                newObj.rotation.set(rotationInRadians.x, rotationInRadians.y, rotationInRadians.z);
+                newObj.scale.set(transform.scale.x, transform.scale.y, transform.scale.z);
 
-            torre.add(newObj);
-        });
-    },
-    function (xhr) {
-        //console.log('Antenas de RF',(xhr.loaded / xhr.total * 100) + '% carregadas');
-    },
-    function (error) {
-        console.error('Erro ao carregar antenas!', error);
-    }
-);
+                torre.add(newObj);
+            });
+        },
+        function (xhr) {
+            //console.log('Antenas de RF',(xhr.loaded / xhr.total * 100) + '% carregadas');
+        },
+        function (error) {
+            console.error('Erro ao carregar antenas!', error);
+        }
+    );
 
 }
 
@@ -209,6 +215,27 @@ function onMouseMove(event) {
         }
         previousMousePosition = { x: event.clientX, y: event.clientY };
     }
+/*
+    // Normalizar as coordenadas do mouse
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+    raycaster.setFromCamera(mouse, camera);
+
+    // Calcular interseções
+    var intersects = raycaster.intersectObjects(torre.children, true);
+
+    if (intersects.length > 0) {
+        if (INTERSECTED != intersects[0].object) {
+            if (INTERSECTED) INTERSECTED.material.color.setHex(originalColor);
+            INTERSECTED = intersects[0].object;
+            originalColor = INTERSECTED.material.color.getHex();
+            INTERSECTED.material.color.setHex(0xff0000); // Cor ao passar o mouse
+        }
+    } else {
+        if (INTERSECTED) INTERSECTED.material.color.setHex(originalColor);
+        INTERSECTED = null;
+    }*/
 }
 
 function onMouseWheel(event) {
@@ -234,10 +261,12 @@ function toRadians(degrees) {
 document.addEventListener('wheel', onMouseWheel);
 document.addEventListener('mousedown', onMouseDown);
 document.addEventListener('mouseup', onMouseUp);
-document.addEventListener('mousemove', onMouseMove);
 
-//torre = createSqrTower( 1.8, 0.5, 9, 6.5, 0.06, 0.02, 0.03);
-torre = createTriTower( 1.8, 0.5, 9, 6.5, 0.06, 0.02, 0.03);
+window.addEventListener('mousemove', onMouseMove, false);
+//document.addEventListener('mousemove', onMouseMove);
+
+torre = createSqrTower( 1.8, 0.5, 9, 6.5, 0.06, 0.02, 0.03);
+//torre = createTriTower( 1.8, 0.5, 9, 6.5, 0.06, 0.02, 0.03);
 
 scene.add(torre);
 //carregarAntenas();
