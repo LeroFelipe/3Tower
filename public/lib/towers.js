@@ -87,82 +87,102 @@ export function createSqrTower(b, c, h, h1, raioCanto, raioFace, raioCantoFinal)
     // Adicionar os cilindros das faces à cena
     while (y + incremento + dif <= y2 + 0.01){
 
-        let A, B, C, D;
+        let A, B, C, D, x, z, k, k1, k2, k3, k4, k5, k6, k7, AA1d2, BB1d2, CC1d2, DD1d2;
 
-        const x0 = (b/2) + ((y+(h/2))/h1)*((c-b)/2);
-        var x = (b/2) + ((y+(h/2))/h1)*((c-b)/2);
-        var z = x;
-
-        var x1 = (b/2) + (((y+incremento)+(h/2))/h1)*((c-b)/2);
-        var z1 = x1;
-
-        var xk = x/2;
-        var zk = (b/2) + (((y+(incremento/2))+(h/2))/h1)*((c-b)/2);
-
-        var xk1 = (b/2) + (((y+(incremento/2))+(h/2))/h1)*((c-b)/2);
-        var zk1 = x/2;
-
-        A = new THREE.Vector3(x, y, z);
-        var end = new THREE.Vector3(-x1, y + incremento, z1);
-        var endk = new THREE.Vector3(0, y + incremento, z1);
+        const x0 = (b/2) + (((y+incremento)+(h/2))/h1)*((c-b)/2);
+        const x1 = (b/2) + (((y+incremento+dif)+(h/2))/h1)*((c-b)/2);
+        const z1 = x1;
         
-        B = new THREE.Vector3(-x, y, z);
-        var end1 = new THREE.Vector3(x1, y + incremento, z1);
-        var endk1 = new THREE.Vector3(-x1, y + incremento, 0);
+        if(checkbase){
+            x = (b/2) + ((y+(h/2))/h1)*((c-b)/2);
+            z = x;
 
-        C = new THREE.Vector3(-x, y, -z);
-        var end2 = new THREE.Vector3(x1, y + incremento, -z1);
-        var endk2 = new THREE.Vector3(0, y + incremento, -z1);
+            A = new THREE.Vector3(x, y, z);
+            B = new THREE.Vector3(-x, y, z);
+            C = new THREE.Vector3(-x, y, -z);
+            D = new THREE.Vector3(x, y, -z);
+            k =  new THREE.Vector3(x/2, y + ((incremento + dif)/2), (z + z1)/2);
+            k1 = new THREE.Vector3(-x/2, y + ((incremento + dif)/2), (z + z1)/2);
+            k2 = new THREE.Vector3(-(x + x1)/2, y + (incremento + dif)/2, z/2);
+            k3 = new THREE.Vector3(-(x + x1)/2, y + (incremento + dif)/2, -z/2);
+            k4 = new THREE.Vector3(-x/2, y + ((incremento + dif)/2), -(z + z1)/2);
+            k5 = new THREE.Vector3(x/2, y + ((incremento + dif)/2), -(z + z1)/2);
+            k6 = new THREE.Vector3((x + x1)/2, y + (incremento + dif)/2, -z/2);
+            k7 = new THREE.Vector3((x + x1)/2, y + (incremento + dif)/2, z/2);
+            AA1d2 = new THREE.Vector3((x + x1)/2, y + ((incremento+dif)/2), (z + z1)/2);
+            BB1d2 = new THREE.Vector3(-(x + x1)/2, y + ((incremento+dif)/2), (z + z1)/2);
+            CC1d2 = new THREE.Vector3(-(x + x1)/2, y + ((incremento+dif)/2), -(z + z1)/2);
+            DD1d2 = new THREE.Vector3((x + x1)/2, y + ((incremento+dif)/2), -(z + z1)/2);
 
-        D = new THREE.Vector3(x, y, -z);
-        var end3 = new THREE.Vector3(-x1, y + incremento, -z1);
-        var endk3 = new THREE.Vector3(x1, y + incremento, 0);
+        }else{
+            x = (b/2) + (((y+dif)+(h/2))/h1)*((c-b)/2);
+            z = x;
 
-        var endMeio = new THREE.Vector3(xk, y + incremento/2, zk);
-        var endMeio1 = new THREE.Vector3(-xk, y + incremento/2, zk);
-        var endMeio2 = new THREE.Vector3(-xk1, y + incremento/2, zk1);
-        var endMeio3 = new THREE.Vector3(-xk1, y + incremento/2, -zk1);
-        var endMeio4 = new THREE.Vector3(-xk, y + incremento/2, -zk);
-        var endMeio5 = new THREE.Vector3(xk, y + incremento/2, -zk);
-        var endMeio6 = new THREE.Vector3(xk1, y + incremento/2, -zk1);
-        var endMeio7 = new THREE.Vector3(xk1, y + incremento/2, zk1);
+            A = new THREE.Vector3(x, y + dif, z);
+            B = new THREE.Vector3(-x, y + dif, z);
+            C = new THREE.Vector3(-x, y + dif, -z);
+            D = new THREE.Vector3(x, y + dif, -z); 
+            k =  new THREE.Vector3(x/2, y + ((incremento + dif*2)/2), (z + z1)/2);      
+            k1 =  new THREE.Vector3(-x/2, y + ((incremento + dif*2)/2), (z + z1)/2);
+            k2 = new THREE.Vector3(-(x + x1)/2, y + (incremento + dif*2)/2, z/2);
+            k3 = new THREE.Vector3(-(x + x1)/2, y + (incremento + dif*2)/2, -z/2);
+            k4 =  new THREE.Vector3(-x/2, y + ((incremento + dif*2)/2), -(z + z1)/2); 
+            k5 =  new THREE.Vector3(x/2, y + ((incremento + dif*2)/2), -(z + z1)/2); 
+            k6 = new THREE.Vector3((x + x1)/2, y + (incremento + dif*2)/2, -z/2); 
+            k7 = new THREE.Vector3((x + x1)/2, y + (incremento + dif*2)/2, z/2);
+            AA1d2 = new THREE.Vector3((x + x1)/2, y + ((incremento+dif*2)/2), (z + z1)/2);   
+            BB1d2 = new THREE.Vector3(-(x + x1)/2, y + ((incremento+dif*2)/2), (z + z1)/2);   
+            CC1d2 = new THREE.Vector3(-(x + x1)/2, y + ((incremento+dif*2)/2), -(z + z1)/2);  
+            DD1d2 = new THREE.Vector3((x + x1)/2, y + ((incremento+dif*2)/2), -(z + z1)/2); 
+
+        }
+        
+        const A1 = new THREE.Vector3(x1, y + incremento + dif, z1);
+        const B1 = new THREE.Vector3(-x1, y + incremento + dif, z1);
+        const C1 = new THREE.Vector3(-x1, y + incremento + dif, -z1);
+        const D1 = new THREE.Vector3(x1, y + incremento + dif, -z1);
+
+        const A1B1d2 = new THREE.Vector3(0, y + incremento + dif, z1);
+        const B1C1d2 = new THREE.Vector3(-x1, y + incremento + dif, 0);
+        const C1D1d2 = new THREE.Vector3(0, y + incremento + dif, -z1);
+        const A1D1d2 = new THREE.Vector3(x1, y + incremento + dif, 0);
 
         // FACE A
-        cilindro(A, endk, raioFace, raioFace); // Barra transversal 'direita'
-        cilindro(B, endk, raioFace, raioFace); // Barra transversal 'esquerda'
-        cilindro(end1, end, raioFace, raioFace); // Barra reta
-        cilindro(end1, endMeio, raioFace, raioFace); // Barra 'K'
-        cilindro(end, endMeio1, raioFace, raioFace); // Barra 'K'
-        cilindro(endMeio, new THREE.Vector3(xk1, y+(incremento/2), zk), raioFace, raioFace); // Barra reta 'K'
-        cilindro(endMeio1, new THREE.Vector3(-xk1, y+(incremento/2), zk), raioFace, raioFace); // Barra reta 'K'
+        cilindro(A1, B1, raioFace, raioFace); // LINHA RETA
+        cilindro(A, A1B1d2, raioFace, raioFace); // LINHA DIAGONAL DIREITA
+        cilindro(B, A1B1d2, raioFace, raioFace); // LINHA DIAGONAL ESQUERDA
+        cilindro(A1, k, raioFace, raioFace); // LINHA 'K' DIREITA
+        cilindro(k, AA1d2, raioFace, raioFace); // LINHA 'K' DIREITA RETA  
+        cilindro(B1, k1, raioFace, raioFace); // LINHA 'K' ESQUERDA
+        cilindro(k1, BB1d2, raioFace, raioFace); // LINHA 'K' ESQUERDA RETA
 
         // FACE B
-        cilindro(B, endk1, raioFace, raioFace); // Barra transversal 'direita'
-        cilindro(C, endk1, raioFace, raioFace); // Barra transversal 'esquerda'
-        cilindro(end, end3, raioFace, raioFace); // Barra reta
-        cilindro(end, endMeio2, raioFace, raioFace); // Barra 'K'
-        cilindro(end3, endMeio3, raioFace, raioFace); // Barra 'K'
-        cilindro(endMeio2, new THREE.Vector3(-xk1, y+(incremento/2), zk), raioFace, raioFace); // Barra reta 'K'
-        cilindro(endMeio3, new THREE.Vector3(-xk1, y+(incremento/2), -zk), raioFace, raioFace); // Barra reta 'K'
+        cilindro(B1, C1, raioFace, raioFace); // LINHA RETA
+        cilindro(B, B1C1d2, raioFace, raioFace); // LINHA DIAGONAL DIREITA
+        cilindro(C, B1C1d2, raioFace, raioFace); // LINHA DIAGONAL ESQUERDA
+        cilindro(B1, k2, raioFace, raioFace); // LINHA 'K' DIREITA
+        cilindro(k2, BB1d2, raioFace, raioFace); // LINHA 'K' DIREITA RETA 
+        cilindro(C1, k3, raioFace, raioFace); // LINHA 'K' ESQUERDA
+        cilindro(k3, CC1d2, raioFace, raioFace); // LINHA 'K' ESQUERDA RETA
 
         // FACE C
-        cilindro(C, endk2, raioFace, raioFace); // Barra transversal 'direita'
-        cilindro(D, endk2, raioFace, raioFace); // Barra transversal 'esquerda'
-        cilindro(end3, end2, raioFace, raioFace); // Barra reta
-        cilindro(end3, endMeio4, raioFace, raioFace); // Barra 'K'
-        cilindro(end2, endMeio5, raioFace, raioFace); // Barra 'K'
-        cilindro(endMeio4, new THREE.Vector3(-xk1, y+(incremento/2), -zk), raioFace, raioFace); // Barra reta 'K'
-        cilindro(endMeio5, new THREE.Vector3(xk1, y+(incremento/2), -zk), raioFace, raioFace); // Barra reta 'K'
+        cilindro(C1, D1, raioFace, raioFace); // LINHA RETA
+        cilindro(C, C1D1d2, raioFace, raioFace); // LINHA DIAGONAL DIREITA
+        cilindro(D, C1D1d2, raioFace, raioFace); // LINHA DIAGONAL ESQUERDA
+        cilindro(C1, k4, raioFace, raioFace); // LINHA 'K' DIREITA
+        cilindro(k4, CC1d2, raioFace, raioFace); // LINHA 'K' DIREITA RETA 
+        cilindro(D1, k5, raioFace, raioFace); // LINHA 'K' ESQUERDA
+        cilindro(k5, DD1d2, raioFace, raioFace); // LINHA 'K' ESQUERDA RETA
 
         // FACE D
-        cilindro(D, endk3, raioFace, raioFace); // Barra transversal 'direita'
-        cilindro(A, endk3, raioFace, raioFace); // Barra transversal 'esquerda'
-        cilindro(end2, end1, raioFace, raioFace); // Barra reta
-        cilindro(end2, endMeio6, raioFace, raioFace); // Barra 'K'
-        cilindro(end1, endMeio7, raioFace, raioFace); // Barra 'K'
-        cilindro(endMeio6, new THREE.Vector3(xk1, y+(incremento/2), -zk), raioFace, raioFace); // Barra reta 'K'
-        cilindro(endMeio7, new THREE.Vector3(xk1, y+(incremento/2), zk), raioFace, raioFace); // Barra reta 'K'
-
+        cilindro(D1, A1, raioFace, raioFace); // LINHA RETA
+        cilindro(D, A1D1d2, raioFace, raioFace); // LINHA DIAGONAL DIREITA
+        cilindro(A, A1D1d2, raioFace, raioFace); // LINHA DIAGONAL ESQUERDA
+        cilindro(D1, k6, raioFace, raioFace); // LINHA 'K' DIREITA
+        cilindro(k6, DD1d2, raioFace, raioFace); // LINHA 'K' DIREITA RETA
+        cilindro(A1, k7, raioFace, raioFace); // LINHA 'K' ESQUERDA
+        cilindro(k7, AA1d2, raioFace, raioFace); // LINHA 'K' ESQUERDA RETA
+        
         y += incremento;
 
         incremento = x0 * 2;
