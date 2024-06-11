@@ -49,6 +49,33 @@ var originalColor;
 // Posicionamento da câmera
 camera.position.z = 7;
 
+class Antena {
+    constructor(modelo, marca, owner, dimensoes, frequencias, model3D) {
+        this.modelo = modelo;
+        this.marca = marca;
+        this.owner = owner;
+        this.dimensoes = dimensoes;
+        this.frequencias = frequencias;
+        this.model3D = model3D;
+    }
+
+    // Método para adicionar o modelo 3D à cena com as transformações necessárias
+    adicionarNaCena(scene, transform) {
+        const newObj = this.model3D.clone();
+        newObj.position.set(transform.position.x, transform.position.y, transform.position.z);
+
+        const rotationInRadians = {
+            x: transform.rotation.x * Math.PI / 180,
+            y: transform.rotation.y * Math.PI / 180,
+            z: transform.rotation.z * Math.PI / 180
+        };
+        newObj.rotation.set(rotationInRadians.x, rotationInRadians.y, rotationInRadians.z);
+        newObj.scale.set(transform.scale.x, transform.scale.y, transform.scale.z);
+
+        torre.add(newObj);
+    }
+}
+
 function planeXY(){
     // Definir as dimensões do plano
     const larguraPlano = 100; // Largura do plano
@@ -104,40 +131,40 @@ function xyzLines(){
 function carregarAntenas(){
 
     gltfLoader.load(
-    './antenas/MWantena.glb',
+        './antenas/MWantena.glb',
         function (gltf) {
             gltf.scene.traverse(function (child) {
                 if (child.isMesh) {
                     child.castShadow = true;
                     child.receiveShadow = true;
-                    child.material = new THREE.MeshStandardMaterial({ color: 0xffffff});
+                    child.material = new THREE.MeshStandardMaterial({ color: 0xffffff });
                 }
             });
 
-            var transforms = [
+            const transforms = [
                 { position: { x: 0, y: 0.5, z: 0.75 }, rotation: { x: 0, y: 0, z: 0 }, scale: { x: 1, y: 1, z: 0.5 } },
                 { position: { x: 0, y: 2.8, z: -0.6 }, rotation: { x: 0, y: 180, z: 0 }, scale: { x: 0.9, y: 0.9, z: 0.5 } },
                 { position: { x: 0.6, y: 2, z: 0 }, rotation: { x: 0, y: 90, z: 0 }, scale: { x: 1, y: 1, z: 0.5 } },
                 { position: { x: -0.4, y: 2.5, z: 0.4 }, rotation: { x: 0, y: -45, z: 0 }, scale: { x: 0.6, y: 0.6, z: 0.3 } }
             ];
 
-            transforms.forEach(function (transform) {
-                var newObj = gltf.scene.clone();
-                newObj.position.set(transform.position.x, transform.position.y, transform.position.z);
+            transforms.forEach(function (transform, index) {
+                const antena = new Antena(
+                    `Modelo ${index + 1}`,   // modelo
+                    'AntenaCorp',            // marca
+                    `Owner ${index + 1}`,    // owner
+                    { altura: 1.5, largura: 0.5 },  // dimensões
+                    [2.4, 5.0],              // frequências
+                    gltf.scene.clone()       // modelo 3D
+                );
 
-                var rotationInRadians = {
-                    x: transform.rotation.x * Math.PI / 180,
-                    y: transform.rotation.y * Math.PI / 180,
-                    z: transform.rotation.z * Math.PI / 180
-                };
-                newObj.rotation.set(rotationInRadians.x, rotationInRadians.y, rotationInRadians.z);
-                newObj.scale.set(transform.scale.x, transform.scale.y, transform.scale.z);
+                antena.adicionarNaCena(torre, transform);
+                console.log(antena);
 
-                torre.add(newObj);
             });
         },
         function (xhr) {
-            //console.log('Antenas de MW',(xhr.loaded / xhr.total * 100) + '% carregadas');
+            console.log('Antenas de MW', (xhr.loaded / xhr.total * 100) + '% carregadas');
         },
         function (error) {
             console.error('Erro ao carregar antenas!', error);
@@ -215,7 +242,7 @@ function onMouseMove(event) {
         }
         previousMousePosition = { x: event.clientX, y: event.clientY };
     }
-/*
+    /*
     // Normalizar as coordenadas do mouse
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
@@ -269,8 +296,8 @@ torre = createSqrTower( 1.8, 0.5, 9, 6.5, 0.06, 0.02, 0.03);
 //torre = createTriTower( 1.8, 0.5, 9, 6.5, 0.06, 0.02, 0.03);
 
 scene.add(torre);
-//carregarAntenas();
-//planeXY();
+carregarAntenas();
+//planeXY();ver
 //xyzLines(); 
 
 document.getElementById("buttonCarregar").addEventListener("click", carregarTorre);
