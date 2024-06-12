@@ -1,6 +1,8 @@
-import * as THREE from 'three';
+import * as THREE from './lib/three.module.js';
 import * as GLTFLoader from './lib/GLTFLoader.js';
 import { createSqrTower, createTriTower} from './lib/towers.js';
+console.log(THREE.REVISION);
+
 
 const windowSize = 0.95;
 export var torre = new THREE.Group();

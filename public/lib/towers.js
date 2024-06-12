@@ -1,5 +1,5 @@
 import * as THREE from './three.module.js';
-import { torre } from '../script.mjs';
+import { torre } from '../script.js';
 
 // Função para criar torre quadrada
 export function createSqrTower(b, c, h, h1, raioCanto, raioFace, raioCantoFinal){
