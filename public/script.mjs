@@ -1,4 +1,4 @@
-import * as THREE from './lib/three.module.js';
+import * as THREE from 'three';
 import * as GLTFLoader from './lib/GLTFLoader.js';
 import { createSqrTower, createTriTower} from './lib/towers.js';
 
@@ -288,9 +288,7 @@ function toRadians(degrees) {
 document.addEventListener('wheel', onMouseWheel);
 document.addEventListener('mousedown', onMouseDown);
 document.addEventListener('mouseup', onMouseUp);
-
-window.addEventListener('mousemove', onMouseMove, false);
-//document.addEventListener('mousemove', onMouseMove);
+document.addEventListener('mousemove', onMouseMove);
 
 torre = createSqrTower( 1.8, 0.5, 9, 6.5, 0.06, 0.02, 0.03);
 //torre = createTriTower( 1.8, 0.5, 9, 6.5, 0.06, 0.02, 0.03);
@@ -324,7 +322,11 @@ document.getElementById("loadButton").addEventListener("click", function() {
 
             for (var i = 1; i < lines.length; i++) {
                 var values = lines[i].split(',');
-            
+
+                if (values.length === 1 && values[0].trim() === '') {
+                    continue;
+                }
+
                 var rowData = {};
                 for (var j = 0; j < headers.length; j++) {
                     // Verificar se values[j] está definido antes de tentar acessar a propriedade trim()

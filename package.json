@@ -9,8 +9,6 @@
   "author": "lérisson",
   "license": "ISC",
   "dependencies": {
-    "debug": "^4.3.4",
-    "three": "^0.163.0",
-    "uuid": "^9.0.1"
+    "three": "^0.163.0"
   }
 }
