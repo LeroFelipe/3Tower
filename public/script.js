@@ -142,9 +142,9 @@ function carregarAntenas(){
             });
 
             const transforms = [
-                { position: { x: 0, y: 0.5, z: 0.75 }, rotation: { x: 0, y: 0, z: 0 }, scale: { x: 1, y: 1, z: 0.5 } },
+                { position: { x: 0, y: 0.5, z: 0.75 }, rotation: { x: 0, y: 0, z: 0 }, scale: { x: 1.2, y: 1.2, z: 0.5 } },
                 { position: { x: 0, y: 2.8, z: -0.6 }, rotation: { x: 0, y: 180, z: 0 }, scale: { x: 0.9, y: 0.9, z: 0.5 } },
-                { position: { x: 0.6, y: 2, z: 0 }, rotation: { x: 0, y: 90, z: 0 }, scale: { x: 1, y: 1, z: 0.5 } },
+                { position: { x: 0.6, y: 2, z: 0 }, rotation: { x: 0, y: 90, z: 0 }, scale: { x: 1.2, y: 1.2, z: 0.5 } },
                 { position: { x: -0.4, y: 2.5, z: 0.4 }, rotation: { x: 0, y: -45, z: 0 }, scale: { x: 0.6, y: 0.6, z: 0.3 } }
             ];
 
@@ -159,12 +159,12 @@ function carregarAntenas(){
                 );
 
                 antena.adicionarNaCena(torre, transform);
-                console.log(antena);
+                //console.log(antena);
 
             });
         },
         function (xhr) {
-            console.log('Antenas de MW', (xhr.loaded / xhr.total * 100) + '% carregadas');
+            //console.log('Antenas de MW', (xhr.loaded / xhr.total * 100) + '% carregadas');
         },
         function (error) {
             console.error('Erro ao carregar antenas!', error);
@@ -297,13 +297,10 @@ torre = createSqrTower( 1.8, 0.5, 9, 6.5, 0.06, 0.02, 0.03);
 
 scene.add(torre);
 carregarAntenas();
-//planeXY();ver
+//planeXY();
 //xyzLines(); 
 
-document.getElementById("buttonCarregar").addEventListener("click", carregarTorre);
-
-function carregarTorre() {
-    // Obter os valores dos campos de entrada
+document.getElementById("loadButton").addEventListener("click", function() {
     var base = parseFloat(document.getElementById("base").value);
     var altura = parseFloat(document.getElementById("altura").value);
     var inclinado = parseFloat(document.getElementById("inclinado").value);
@@ -312,59 +309,95 @@ function carregarTorre() {
     var diametroBase = parseFloat(document.getElementById("diametroBase").value);
     var diametroTopo = parseFloat(document.getElementById("diametroTopo").value);
     var diametro = parseFloat(document.getElementById("diametro").value);
+    var fileInput = document.getElementById('csvFile');
+    var file = fileInput.files[0];
+
+    // Verificar se há um arquivo CSV selecionado
+    if (file) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            var contents = e.target.result;
+            var lines = contents.split('\n');
+
+            var data = [];
+            var headers = lines[0].split(','); // Obter cabeçalhos
+
+            for (var i = 1; i < lines.length; i++) {
+                var values = lines[i].split(',');
+            
+                var rowData = {};
+                for (var j = 0; j < headers.length; j++) {
+                    // Verificar se values[j] está definido antes de tentar acessar a propriedade trim()
+                    var value = values[j] !== undefined ? values[j].trim() : '';
+                    rowData[headers[j].trim()] = value !== '' ? value : null;
+                }
+            
+                data.push(rowData);
+            }
+
+            console.log('Dados do CSV:', data);
+        };
+        reader.readAsText(file);
+    } else {
+        alert('Por favor, selecione um arquivo CSV.');
+    }
+
+    // Verificar os campos comuns a todos os tipos de torres
+    if (base <= 0 || altura <= 0) {
+        alert('Preencha os campos "Base" e "Altura" com números positivos.');
+        return;
+    }
 
     // Limpar a torre anterior, se houver
     if (torre.children.length > 0) {
         torre.remove(...torre.children);
-    }    
+    }
 
     // Verificar os campos de acordo com o tipo de torre selecionado
-    if (tipoTorre === 'Quadrada') {
-        if (base > 0 && topo > 0 && altura > 0 && inclinado > 0) {
+    switch (tipoTorre) {
+        case 'Quadrada':
+            if (topo <= 0 || inclinado <= 0) {
+                alert('Preencha os campos "Topo" e "Inclinado" com números positivos.');
+                return;
+            }
             torre = createSqrTower(base, topo, altura, inclinado, 0.06, 0.02, 0.03);
-            scene.add(torre);
-            //carregarAntenas();
-        } else {
-            alert('Preencha todos os campos com números positivos.');
-        }
-    } else if (tipoTorre === 'Triangular') {
-        if (base > 0 && topo > 0 && altura > 0 && inclinado > 0) {
+            break;
+        case 'Triangular':
+            if (topo <= 0 || inclinado <= 0) {
+                alert('Preencha os campos "Topo" e "Inclinado" com números positivos.');
+                return;
+            }
             torre = createTriTower(base, topo, altura, inclinado, 0.06, 0.02, 0.03);
-            scene.add(torre);
-            //xyzLines();
-            //carregarAntenas();
-        } else {
-            alert('Preencha todos os campos com números positivos.');
-        }
-    } else if (tipoTorre === 'Poste') {
-        if (diametroBase > 0 && diametroTopo > 0) {
+            break;
+        case 'Poste':
+            if (diametroBase <= 0 || diametroTopo <= 0) {
+                alert('Preencha os campos "Diâmetro da Base" e "Diâmetro do Topo" com números positivos.');
+                return;
+            }
             torre = createPoste(diametroBase, diametroTopo);
-            scene.add(torre);
-            //carregarAntenas();
-        } else {
-            alert('Preencha todos os campos com números positivos.');
-        }
-    } else if (tipoTorre === 'Estaiada') {
-        if (base > 0 && altura > 0) {
+            break;
+        case 'Estaiada':
+            if (altura <= 0) {
+                alert('Preencha o campo "Altura" com um número positivo.');
+                return;
+            }
             torre = createEstaiada(base, altura);
-            scene.add(torre);
-            //carregarAntenas();
-        } else {
-            alert('Preencha todos os campos com números positivos.');
-        }
-    } else if (tipoTorre === 'Mastro') {
-        if (diametro > 0 && altura > 0) {
+            break;
+        case 'Mastro':
+            if (diametro <= 0) {
+                alert('Preencha o campo "Diâmetro" com um número positivo.');
+                return;
+            }
             torre = createMastro(diametro, altura);
-            scene.add(torre);
-            //carregarAntenas();
-        } else {
-            alert('Preencha todos os campos com números positivos.');
-        }
-    } else {
-        alert('Selecione um tipo de torre válido.');
+            break;
+        default:
+            alert('Selecione um tipo de torre válido.');
+            return;
     }
-}
 
+    // Adicionar a torre à cena
+    scene.add(torre);
+});  
 
 // Renderização da cena
 function animate() {
