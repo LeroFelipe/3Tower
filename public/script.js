@@ -50,19 +50,20 @@ var originalColor;
 camera.position.z = 7;
 
 class Antena {
-    constructor(operadora, tipo, fabricante, modelo, portadora, altura, comprimento, largura, profundidade, diametro, azimute, tiltMecanico) {
+    constructor(operadora, tipo, fabricante, modelo, portadora, altura, comprimento, largura, profundidade, diametro, azimute, tiltMecanico, status) {
         this.operadora = operadora;
         this.tipo = tipo;
         this.fabricante = fabricante;
         this.modelo = modelo;
         this.portadora = portadora;
-        this.altura = altura;        
+        this.altura = altura;       
         this.comprimento = comprimento;
         this.largura = largura;
         this.profundidade = profundidade;
         this.diametro = diametro;
-        this.azimute = azimute;        
+        this.azimute = azimute;   
         this.tiltMecanico = tiltMecanico;
+        this.status = status;
     }
 }
 
@@ -229,6 +230,30 @@ function carregarAntenas(data) {
                 parseFloat(antenaData['PROFUNDIDADE [m]']) || 0.5
             );
 
+            let corMaterial;
+            switch (antenaData['STATUS']) {
+                case 'existente':
+                    corMaterial = 0xffffff; // Branco
+                    break;
+                case 'a instalar':
+                    corMaterial = 0xff0000; // Vermelho
+                    break;
+                case 'a retirar':
+                    corMaterial = 0xff00ff; // Magenta
+                    break;
+                default:
+                    corMaterial = 0xffffff; // Branco (padrão)
+                    break;
+            }
+
+            newObj.traverse(function (child) {
+                if (child.isMesh) {
+                    child.material = new THREE.MeshStandardMaterial({ color: corMaterial });
+                    child.castShadow = true;
+                    child.receiveShadow = true;
+                }
+            });
+
             // Criar uma instância da classe Antena
             const antena = new Antena(
                 antenaData['OPERADORA'],
@@ -242,12 +267,14 @@ function carregarAntenas(data) {
                 antenaData['PROFUNDIDADE [m]'],
                 antenaData['DIÂMETRO [m]'],
                 antenaData['AZIMUTE'],                
-                antenaData['TILT. MECÂNICO']
+                antenaData['TILT. MECÂNICO'],
+                antenaData['STATUS']
             );
 
             // Associar a antena ao objeto 3D
             newObj.userData = antena;
 
+            console.log(antena);
             torre.add(newObj);
         });
     }).catch(error => {
@@ -367,14 +394,14 @@ document.getElementById("loadButton").addEventListener("click", function() {
                 alert('Preencha os campos "Topo" e "Inclinado" com números positivos.');
                 return;
             }
-            torre = createSqrTower(base, topo, tamanho, inclinado, 0.06, 0.02, 0.03);
+            torre = createSqrTower(base, topo, tamanho, inclinado, 0.12, 0.04, 0.06);
             break;
         case 'Triangular':
             if (topo <= 0 || inclinado <= 0) {
                 alert('Preencha os campos "Topo" e "Inclinado" com números positivos.');
                 return;
             }
-            torre = createTriTower(base, topo, tamanho, inclinado, 0.06, 0.02, 0.03);
+            torre = createTriTower(base, topo, tamanho, inclinado, 0.12, 0.04, 0.06);
             break;
         case 'Poste':
             if (diametroBase <= 0 || diametroTopo <= 0) {
