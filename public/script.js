@@ -9,14 +9,13 @@ export var torre = new THREE.Group();
 let rotateX = 0;
 let rotateY = 0;
 
-var h = 8.5; // para adicionar o terreno em relação a altura da torre 
+let tamanho;
 
 // Configuração da cena, câmera e renderizador
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 const canvas = document.querySelector("canvas.webgl");
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
-const gltfLoader = new GLTFLoader.GLTFLoader();
 
 renderer.setSize(window.innerWidth * windowSize, window.innerHeight * windowSize);
 renderer.setClearColor(0x1e1e1e);
@@ -50,29 +49,19 @@ var originalColor;
 camera.position.z = 7;
 
 class Antena {
-    constructor(modelo, marca, owner, dimensoes, frequencias, model3D) {
+    constructor(operadora, tipo, fabricante, modelo, portadora, altura, comprimento, largura, profundidade, diametro, azimute, tiltMecanico) {
+        this.operadora = operadora;
+        this.tipo = tipo;
+        this.fabricante = fabricante;
         this.modelo = modelo;
-        this.marca = marca;
-        this.owner = owner;
-        this.dimensoes = dimensoes;
-        this.frequencias = frequencias;
-        this.model3D = model3D;
-    }
-
-    // Método para adicionar o modelo 3D à cena com as transformações necessárias
-    adicionarNaCena(scene, transform) {
-        const newObj = this.model3D.clone();
-        newObj.position.set(transform.position.x, transform.position.y, transform.position.z);
-
-        const rotationInRadians = {
-            x: transform.rotation.x * Math.PI / 180,
-            y: transform.rotation.y * Math.PI / 180,
-            z: transform.rotation.z * Math.PI / 180
-        };
-        newObj.rotation.set(rotationInRadians.x, rotationInRadians.y, rotationInRadians.z);
-        newObj.scale.set(transform.scale.x, transform.scale.y, transform.scale.z);
-
-        torre.add(newObj);
+        this.portadora = portadora;
+        this.altura = altura;        
+        this.comprimento = comprimento;
+        this.largura = largura;
+        this.profundidade = profundidade;
+        this.diametro = diametro;
+        this.azimute = azimute;        
+        this.tiltMecanico = tiltMecanico;
     }
 }
 
@@ -128,91 +117,118 @@ function xyzLines(){
     };
 }
 
-function carregarAntenas(){
+function carregarCSV(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const contents = e.target.result;
+            const lines = contents.split('\n');
 
-    gltfLoader.load(
-        './antenas/MWantena.glb',
-        function (gltf) {
-            gltf.scene.traverse(function (child) {
-                if (child.isMesh) {
-                    child.castShadow = true;
-                    child.receiveShadow = true;
-                    child.material = new THREE.MeshStandardMaterial({ color: 0xffffff });
+            const data = [];
+            const headers = lines[0].split(',').map(header => header.trim());
+
+            for (let i = 1; i < lines.length; i++) {
+                const values = lines[i].split(',').map(value => value.trim());
+
+                if (values.length === 1 && values[0] === '') continue;
+
+                const rowData = {};
+                headers.forEach((header, index) => {
+                    rowData[header] = values[index] || null;
+                });
+
+                data.push(rowData);
+            }
+
+            resolve(data);
+        };
+        reader.onerror = function(error) {
+            reject(error);
+        };
+        reader.readAsText(file);
+    });
+}
+
+function carregarAntenas(data) {
+    const gltfLoader = new GLTFLoader.GLTFLoader();
+
+    const carregarModelo = (path) => {
+        return new Promise((resolve, reject) => {
+            gltfLoader.load(
+                path,
+                function (gltf) {
+                    gltf.scene.traverse(function (child) {
+                        if (child.isMesh) {
+                            child.castShadow = true;
+                            child.receiveShadow = true;
+                            child.material = new THREE.MeshStandardMaterial({ color: 0xffffff });
+                        }
+                    });
+                    resolve(gltf);
+                },
+                function (xhr) {
+                    console.log(`${path} ${(xhr.loaded / xhr.total * 100)}% carregado`);
+                },
+                function (error) {
+                    console.error(`Erro ao carregar ${path}!`, error);
+                    reject(error);
                 }
-            });
+            );
+        });
+    };
 
-            const transforms = [
-                { position: { x: 0, y: 0.5, z: 0.75 }, rotation: { x: 0, y: 0, z: 0 }, scale: { x: 1.2, y: 1.2, z: 0.5 } },
-                { position: { x: 0, y: 2.8, z: -0.6 }, rotation: { x: 0, y: 180, z: 0 }, scale: { x: 0.9, y: 0.9, z: 0.5 } },
-                { position: { x: 0.6, y: 2, z: 0 }, rotation: { x: 0, y: 90, z: 0 }, scale: { x: 1.2, y: 1.2, z: 0.5 } },
-                { position: { x: -0.4, y: 2.5, z: 0.4 }, rotation: { x: 0, y: -45, z: 0 }, scale: { x: 0.6, y: 0.6, z: 0.3 } }
-            ];
+    Promise.all([
+        carregarModelo('./antenas/MWantena.glb'),
+        carregarModelo('./antenas/RFantena.glb')
+    ]).then(([MWgltf, RFgltf]) => {
+        data.forEach(antenaData => {
+            let gltf;
+            if (antenaData.TIPO === 'MW') {
+                gltf = MWgltf;
+            } else if (antenaData.TIPO === 'RF') {
+                gltf = RFgltf;
+            }
 
-            transforms.forEach(function (transform, index) {
-                const antena = new Antena(
-                    `Modelo ${index + 1}`,   // modelo
-                    'AntenaCorp',            // marca
-                    `Owner ${index + 1}`,    // owner
-                    { altura: 1.5, largura: 0.5 },  // dimensões
-                    [2.4, 5.0],              // frequências
-                    gltf.scene.clone()       // modelo 3D
-                );
-
-                antena.adicionarNaCena(torre, transform);
-                //console.log(antena);
-
-            });
-        },
-        function (xhr) {
-            //console.log('Antenas de MW', (xhr.loaded / xhr.total * 100) + '% carregadas');
-        },
-        function (error) {
-            console.error('Erro ao carregar antenas!', error);
-        }
-    );
-
-    gltfLoader.load(
-        './antenas/RFantena.glb',
-        function (gltf) {
-            gltf.scene.traverse(function (child) {
-                if (child instanceof THREE.Mesh) {
-                    child.castShadow = true; // Permitir que a malha emita sombras
-                    child.receiveShadow = true; // Permitir que a malha receba sombras
-                    child.material = new THREE.MeshStandardMaterial({ color: 0xffffff }); // Vermelho
-                }
-            });
-
-            var transforms = [
-                { position: { x: 0.35, y: 3.7, z: 0.35 }, rotation: { x: 5, y: 45, z: 0 }, scale: { x: 0.15, y: 0.8, z: 0.05 } },
-                { position: { x: -0.35, y: 3.7, z: 0.35 }, rotation: { x: 5, y: -45, z: 0 }, scale: { x: 0.15, y: 0.8, z: 0.05 } },
-                { position: { x: -0.35, y: 3.7, z: -0.35 }, rotation: { x: -5, y: 225, z: 0 }, scale: { x: 0.15, y: 0.8, z: 0.05 } },
-                { position: { x: 0.35, y: 3.7, z: -0.35 }, rotation: { x: -5, y: -225, z: 0 }, scale: { x: 0.15, y: 0.8, z: 0.05 } }
+            const newObj = gltf.scene.clone();
             
-            ];
+            newObj.position.set(0, parseFloat(antenaData['ALTURA [m]']) - (tamanho/2), 0);
 
-            transforms.forEach(function (transform) {
-                var newObj = gltf.scene.clone();
-                newObj.position.set(transform.position.x, transform.position.y, transform.position.z);
+            const rotationInRadians = {
+                x: 0,
+                y: parseFloat(antenaData['AZIMUTE']) * Math.PI / 180,
+                z: 0
+            };
+            newObj.rotation.set(rotationInRadians.x, rotationInRadians.y, rotationInRadians.z);
+            newObj.scale.set(
+                parseFloat(antenaData['LARGURA [m]']) || parseFloat(antenaData['DIÂMETRO [m]']) || 1,
+                parseFloat(antenaData['COMPRIMENTO [m]']) || parseFloat(antenaData['DIÂMETRO [m]']) || 1,
+                parseFloat(antenaData['PROFUNDIDADE [m]']) || 0.5
+            );
 
-                var rotationInRadians = {
-                    x: transform.rotation.x * Math.PI / 180,
-                    y: transform.rotation.y * Math.PI / 180,
-                    z: transform.rotation.z * Math.PI / 180
-                };
-                newObj.rotation.set(rotationInRadians.x, rotationInRadians.y, rotationInRadians.z);
-                newObj.scale.set(transform.scale.x, transform.scale.y, transform.scale.z);
+            // Criar uma instância da classe Antena
+            const antena = new Antena(
+                antenaData['OPERADORA'],
+                antenaData['TIPO'],
+                antenaData['FABRICANTE'],
+                antenaData['MODELO'],
+                antenaData['PORTADORA [Mhz]'],
+                antenaData['ALTURA [m]'],
+                antenaData['COMPRIMENTO [m]'],
+                antenaData['LARGURA [m]'],                
+                antenaData['PROFUNDIDADE [m]'],
+                antenaData['DIÂMETRO [m]'],
+                antenaData['AZIMUTE'],                
+                antenaData['TILT. MECÂNICO']
+            );
 
-                torre.add(newObj);
-            });
-        },
-        function (xhr) {
-            //console.log('Antenas de RF',(xhr.loaded / xhr.total * 100) + '% carregadas');
-        },
-        function (error) {
-            console.error('Erro ao carregar antenas!', error);
-        }
-    );
+            // Associar a antena ao objeto 3D
+            newObj.userData = antena;
 
+            torre.add(newObj);
+        });
+    }).catch(error => {
+        console.error('Erro ao carregar modelos de antenas:', error);
+    });
 }
 
 function onMouseDown(event) {
@@ -294,13 +310,13 @@ torre = createSqrTower( 1.8, 0.5, 9, 6.5, 0.06, 0.02, 0.03);
 //torre = createTriTower( 1.8, 0.5, 9, 6.5, 0.06, 0.02, 0.03);
 
 scene.add(torre);
-carregarAntenas();
+//carregarAntenas();
 //planeXY();
 //xyzLines(); 
 
 document.getElementById("loadButton").addEventListener("click", function() {
     var base = parseFloat(document.getElementById("base").value);
-    var altura = parseFloat(document.getElementById("altura").value);
+    tamanho = parseFloat(document.getElementById("altura").value);
     var inclinado = parseFloat(document.getElementById("inclinado").value);
     var topo = parseFloat(document.getElementById("topo").value);
     var tipoTorre = document.getElementById("tipoTorre").value;
@@ -309,40 +325,6 @@ document.getElementById("loadButton").addEventListener("click", function() {
     var diametro = parseFloat(document.getElementById("diametro").value);
     var fileInput = document.getElementById('csvFile');
     var file = fileInput.files[0];
-
-    // Verificar se há um arquivo CSV selecionado
-    if (file) {
-        var reader = new FileReader();
-        reader.onload = function(e) {
-            var contents = e.target.result;
-            var lines = contents.split('\n');
-
-            var data = [];
-            var headers = lines[0].split(','); // Obter cabeçalhos
-
-            for (var i = 1; i < lines.length; i++) {
-                var values = lines[i].split(',');
-
-                if (values.length === 1 && values[0].trim() === '') {
-                    continue;
-                }
-
-                var rowData = {};
-                for (var j = 0; j < headers.length; j++) {
-                    // Verificar se values[j] está definido antes de tentar acessar a propriedade trim()
-                    var value = values[j] !== undefined ? values[j].trim() : '';
-                    rowData[headers[j].trim()] = value !== '' ? value : null;
-                }
-            
-                data.push(rowData);
-            }
-
-            console.log('Dados do CSV:', data);
-        };
-        reader.readAsText(file);
-    } else {
-        alert('Por favor, selecione um arquivo CSV.');
-    }
 
     // Verificar os campos comuns a todos os tipos de torres
     if (base <= 0 || altura <= 0) {
@@ -362,14 +344,14 @@ document.getElementById("loadButton").addEventListener("click", function() {
                 alert('Preencha os campos "Topo" e "Inclinado" com números positivos.');
                 return;
             }
-            torre = createSqrTower(base, topo, altura, inclinado, 0.06, 0.02, 0.03);
+            torre = createSqrTower(base, topo, tamanho, inclinado, 0.06, 0.02, 0.03);
             break;
         case 'Triangular':
             if (topo <= 0 || inclinado <= 0) {
                 alert('Preencha os campos "Topo" e "Inclinado" com números positivos.');
                 return;
             }
-            torre = createTriTower(base, topo, altura, inclinado, 0.06, 0.02, 0.03);
+            torre = createTriTower(base, topo, tamanho, inclinado, 0.06, 0.02, 0.03);
             break;
         case 'Poste':
             if (diametroBase <= 0 || diametroTopo <= 0) {
@@ -379,18 +361,18 @@ document.getElementById("loadButton").addEventListener("click", function() {
             torre = createPoste(diametroBase, diametroTopo);
             break;
         case 'Estaiada':
-            if (altura <= 0) {
+            if (tamanho <= 0) {
                 alert('Preencha o campo "Altura" com um número positivo.');
                 return;
             }
-            torre = createEstaiada(base, altura);
+            torre = createEstaiada(base, tamanho);
             break;
         case 'Mastro':
             if (diametro <= 0) {
                 alert('Preencha o campo "Diâmetro" com um número positivo.');
                 return;
             }
-            torre = createMastro(diametro, altura);
+            torre = createMastro(diametro, tamanho);
             break;
         default:
             alert('Selecione um tipo de torre válido.');
@@ -399,6 +381,16 @@ document.getElementById("loadButton").addEventListener("click", function() {
 
     // Adicionar a torre à cena
     scene.add(torre);
+
+    if (file) {
+        carregarCSV(file).then(data => {
+            carregarAntenas(data);
+        }).catch(error => {
+            console.error('Erro ao carregar o arquivo CSV:', error);
+        });
+    } else {
+        console.error('Por favor, selecione um arquivo CSV.');
+    }    
 });  
 
 // Renderização da cena
