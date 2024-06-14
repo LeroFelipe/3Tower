@@ -1,6 +1,6 @@
 import * as THREE from './lib/three.module.js';
 import * as GLTFLoader from './lib/GLTFLoader.js';
-import { createSqrTower, createTriTower} from './lib/towers.js';
+import { createSqrTower, createTriTower, createMastro, createPoste} from './lib/towers.js';
 
 const windowSize = 0.95;
 export var torre = new THREE.Group();
@@ -9,7 +9,8 @@ export var torre = new THREE.Group();
 let rotateX = 0;
 let rotateY = 0;
 
-let tamanho;
+// Variáveir da Torre
+let base, tamanho, inclinado, topo, tipoTorre, diametroBase, diametroTopo, diametro;
 
 // Configuração da cena, câmera e renderizador
 const scene = new THREE.Scene();
@@ -190,12 +191,35 @@ function carregarAntenas(data) {
             }
 
             const newObj = gltf.scene.clone();
-            
-            newObj.position.set(0, parseFloat(antenaData['ALTURA [m]']) - (tamanho/2), 0);
+
+            let posX = 0;
+            let posZ = 0;
+
+            const azimute = parseFloat(antenaData['AZIMUTE']);
+
+            if (azimute <= 45 || azimute > 315) {
+                posX = 0;
+                posZ = topo;
+            } else if (azimute <= 135) {
+                posX = -topo;
+                posZ = 0;
+            } else if (azimute <= 225) {
+                posX = 0;
+                posZ = -topo;
+            } else if (azimute <= 315) {
+                posX = topo;
+                posZ = 0;
+            }
+
+            if (tipoTorre === "Quadrada"){
+                newObj.position.set(posX, parseFloat(antenaData['ALTURA [m]']) - (tamanho/2), posZ);
+            }else{
+                newObj.position.set(0, parseFloat(antenaData['ALTURA [m]']) - (tamanho/2), 0);
+            }
 
             const rotationInRadians = {
                 x: 0,
-                y: parseFloat(antenaData['AZIMUTE']) * Math.PI / 180,
+                y: -parseFloat(antenaData['AZIMUTE']) * Math.PI / 180,
                 z: 0
             };
             newObj.rotation.set(rotationInRadians.x, rotationInRadians.y, rotationInRadians.z);
@@ -306,29 +330,28 @@ document.addEventListener('mousedown', onMouseDown);
 document.addEventListener('mouseup', onMouseUp);
 document.addEventListener('mousemove', onMouseMove);
 
-torre = createSqrTower( 1.8, 0.5, 9, 6.5, 0.06, 0.02, 0.03);
+torre = createSqrTower( 1.8, 0.5, 9, 6.5, 0.12, 0.04, 0.06);
 //torre = createTriTower( 1.8, 0.5, 9, 6.5, 0.06, 0.02, 0.03);
 
 scene.add(torre);
-//carregarAntenas();
 //planeXY();
 //xyzLines(); 
 
 document.getElementById("loadButton").addEventListener("click", function() {
-    var base = parseFloat(document.getElementById("base").value);
-    tamanho = parseFloat(document.getElementById("altura").value);
-    var inclinado = parseFloat(document.getElementById("inclinado").value);
-    var topo = parseFloat(document.getElementById("topo").value);
-    var tipoTorre = document.getElementById("tipoTorre").value;
-    var diametroBase = parseFloat(document.getElementById("diametroBase").value);
-    var diametroTopo = parseFloat(document.getElementById("diametroTopo").value);
-    var diametro = parseFloat(document.getElementById("diametro").value);
-    var fileInput = document.getElementById('csvFile');
-    var file = fileInput.files[0];
+    base = parseFloat(document.getElementById("base").value);
+    tamanho = parseFloat(document.getElementById("tamanho").value);
+    inclinado = parseFloat(document.getElementById("inclinado").value);
+    topo = parseFloat(document.getElementById("topo").value);
+    tipoTorre = document.getElementById("tipoTorre").value;
+    diametroBase = parseFloat(document.getElementById("diametroBase").value);
+    diametroTopo = parseFloat(document.getElementById("diametroTopo").value);
+    diametro = parseFloat(document.getElementById("diametro").value);
+    const fileInput = document.getElementById('csvFile');
+    const file = fileInput.files[0];
 
     // Verificar os campos comuns a todos os tipos de torres
-    if (base <= 0 || altura <= 0) {
-        alert('Preencha os campos "Base" e "Altura" com números positivos.');
+    if (base <= 0 || tamanho <= 0) {
+        alert('Preencha os campos "Base" e "Tamanho" com números positivos.');
         return;
     }
 
@@ -358,11 +381,11 @@ document.getElementById("loadButton").addEventListener("click", function() {
                 alert('Preencha os campos "Diâmetro da Base" e "Diâmetro do Topo" com números positivos.');
                 return;
             }
-            torre = createPoste(diametroBase, diametroTopo);
+            torre = createPoste(diametroBase, diametroTopo, tamanho);
             break;
         case 'Estaiada':
             if (tamanho <= 0) {
-                alert('Preencha o campo "Altura" com um número positivo.');
+                alert('Preencha o campo "Tamanho" com um número positivo.');
                 return;
             }
             torre = createEstaiada(base, tamanho);

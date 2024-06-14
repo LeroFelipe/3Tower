@@ -2,7 +2,7 @@ import * as THREE from './three.module.js';
 import { torre } from '../script.js';
 
 // Função para criar torre quadrada
-export function createSqrTower(b, c, h, h1, raioCanto, raioFace, raioCantoFinal){
+export function createSqrTower(b, c, h, h1, diametroCanto, diametroFace, diametroCantoFinal){
 
     let y = -h/2;
     let y2 = h1 - (h/2);
@@ -65,9 +65,9 @@ export function createSqrTower(b, c, h, h1, raioCanto, raioFace, raioCantoFinal)
         var end = vertices[verticesIndex2];
 
         if(verticesIndex1 >= 4){
-            cilindro(start, end, raioCantoFinal, raioCantoFinal);
+            cilindro(start, end, diametroCantoFinal, diametroCantoFinal);
         }else{
-            cilindro(start, end, raioCanto, raioCantoFinal);
+            cilindro(start, end, diametroCanto, diametroCantoFinal);
         };     
     };
 
@@ -148,40 +148,40 @@ export function createSqrTower(b, c, h, h1, raioCanto, raioFace, raioCantoFinal)
         const A1D1d2 = new THREE.Vector3(x1, y + incremento + dif, 0);
 
         // FACE A
-        cilindro(A1, B1, raioFace, raioFace); // LINHA RETA
-        cilindro(A, A1B1d2, raioFace, raioFace); // LINHA DIAGONAL DIREITA
-        cilindro(B, A1B1d2, raioFace, raioFace); // LINHA DIAGONAL ESQUERDA
-        cilindro(A1, k, raioFace, raioFace); // LINHA 'K' DIREITA
-        cilindro(k, AA1d2, raioFace, raioFace); // LINHA 'K' DIREITA RETA  
-        cilindro(B1, k1, raioFace, raioFace); // LINHA 'K' ESQUERDA
-        cilindro(k1, BB1d2, raioFace, raioFace); // LINHA 'K' ESQUERDA RETA
+        cilindro(A1, B1, diametroFace, diametroFace); // LINHA RETA
+        cilindro(A, A1B1d2, diametroFace, diametroFace); // LINHA DIAGONAL DIREITA
+        cilindro(B, A1B1d2, diametroFace, diametroFace); // LINHA DIAGONAL ESQUERDA
+        cilindro(A1, k, diametroFace, diametroFace); // LINHA 'K' DIREITA
+        cilindro(k, AA1d2, diametroFace, diametroFace); // LINHA 'K' DIREITA RETA  
+        cilindro(B1, k1, diametroFace, diametroFace); // LINHA 'K' ESQUERDA
+        cilindro(k1, BB1d2, diametroFace, diametroFace); // LINHA 'K' ESQUERDA RETA
 
         // FACE B
-        cilindro(B1, C1, raioFace, raioFace); // LINHA RETA
-        cilindro(B, B1C1d2, raioFace, raioFace); // LINHA DIAGONAL DIREITA
-        cilindro(C, B1C1d2, raioFace, raioFace); // LINHA DIAGONAL ESQUERDA
-        cilindro(B1, k2, raioFace, raioFace); // LINHA 'K' DIREITA
-        cilindro(k2, BB1d2, raioFace, raioFace); // LINHA 'K' DIREITA RETA 
-        cilindro(C1, k3, raioFace, raioFace); // LINHA 'K' ESQUERDA
-        cilindro(k3, CC1d2, raioFace, raioFace); // LINHA 'K' ESQUERDA RETA
+        cilindro(B1, C1, diametroFace, diametroFace); // LINHA RETA
+        cilindro(B, B1C1d2, diametroFace, diametroFace); // LINHA DIAGONAL DIREITA
+        cilindro(C, B1C1d2, diametroFace, diametroFace); // LINHA DIAGONAL ESQUERDA
+        cilindro(B1, k2, diametroFace, diametroFace); // LINHA 'K' DIREITA
+        cilindro(k2, BB1d2, diametroFace, diametroFace); // LINHA 'K' DIREITA RETA 
+        cilindro(C1, k3, diametroFace, diametroFace); // LINHA 'K' ESQUERDA
+        cilindro(k3, CC1d2, diametroFace, diametroFace); // LINHA 'K' ESQUERDA RETA
 
         // FACE C
-        cilindro(C1, D1, raioFace, raioFace); // LINHA RETA
-        cilindro(C, C1D1d2, raioFace, raioFace); // LINHA DIAGONAL DIREITA
-        cilindro(D, C1D1d2, raioFace, raioFace); // LINHA DIAGONAL ESQUERDA
-        cilindro(C1, k4, raioFace, raioFace); // LINHA 'K' DIREITA
-        cilindro(k4, CC1d2, raioFace, raioFace); // LINHA 'K' DIREITA RETA 
-        cilindro(D1, k5, raioFace, raioFace); // LINHA 'K' ESQUERDA
-        cilindro(k5, DD1d2, raioFace, raioFace); // LINHA 'K' ESQUERDA RETA
+        cilindro(C1, D1, diametroFace, diametroFace); // LINHA RETA
+        cilindro(C, C1D1d2, diametroFace, diametroFace); // LINHA DIAGONAL DIREITA
+        cilindro(D, C1D1d2, diametroFace, diametroFace); // LINHA DIAGONAL ESQUERDA
+        cilindro(C1, k4, diametroFace, diametroFace); // LINHA 'K' DIREITA
+        cilindro(k4, CC1d2, diametroFace, diametroFace); // LINHA 'K' DIREITA RETA 
+        cilindro(D1, k5, diametroFace, diametroFace); // LINHA 'K' ESQUERDA
+        cilindro(k5, DD1d2, diametroFace, diametroFace); // LINHA 'K' ESQUERDA RETA
 
         // FACE D
-        cilindro(D1, A1, raioFace, raioFace); // LINHA RETA
-        cilindro(D, A1D1d2, raioFace, raioFace); // LINHA DIAGONAL DIREITA
-        cilindro(A, A1D1d2, raioFace, raioFace); // LINHA DIAGONAL ESQUERDA
-        cilindro(D1, k6, raioFace, raioFace); // LINHA 'K' DIREITA
-        cilindro(k6, DD1d2, raioFace, raioFace); // LINHA 'K' DIREITA RETA
-        cilindro(A1, k7, raioFace, raioFace); // LINHA 'K' ESQUERDA
-        cilindro(k7, AA1d2, raioFace, raioFace); // LINHA 'K' ESQUERDA RETA
+        cilindro(D1, A1, diametroFace, diametroFace); // LINHA RETA
+        cilindro(D, A1D1d2, diametroFace, diametroFace); // LINHA DIAGONAL DIREITA
+        cilindro(A, A1D1d2, diametroFace, diametroFace); // LINHA DIAGONAL ESQUERDA
+        cilindro(D1, k6, diametroFace, diametroFace); // LINHA 'K' DIREITA
+        cilindro(k6, DD1d2, diametroFace, diametroFace); // LINHA 'K' DIREITA RETA
+        cilindro(A1, k7, diametroFace, diametroFace); // LINHA 'K' ESQUERDA
+        cilindro(k7, AA1d2, diametroFace, diametroFace); // LINHA 'K' ESQUERDA RETA
         
         y += incremento;
 
@@ -193,24 +193,24 @@ export function createSqrTower(b, c, h, h1, raioCanto, raioFace, raioCantoFinal)
     while (y2 + c + (resto/inc) <=  h/2 + 0.01){ // Trecho reto '0.01' de tolerância
 
         //FACE A
-        cilindro(new THREE.Vector3(-c/2, y2, c/2), new THREE.Vector3(c/2, y2 + c + (resto/inc), c/2), raioFace, raioFace);
-        cilindro(new THREE.Vector3(c/2, y2, c/2), new THREE.Vector3(-c/2, y2 + c + (resto/inc), c/2), raioFace, raioFace);
-        cilindro(new THREE.Vector3(-c/2, y2 + c + (resto/inc), c/2), new THREE.Vector3(c/2, y2 + c + (resto/inc), c/2), raioFace, raioFace);
+        cilindro(new THREE.Vector3(-c/2, y2, c/2), new THREE.Vector3(c/2, y2 + c + (resto/inc), c/2), diametroFace, diametroFace);
+        cilindro(new THREE.Vector3(c/2, y2, c/2), new THREE.Vector3(-c/2, y2 + c + (resto/inc), c/2), diametroFace, diametroFace);
+        cilindro(new THREE.Vector3(-c/2, y2 + c + (resto/inc), c/2), new THREE.Vector3(c/2, y2 + c + (resto/inc), c/2), diametroFace, diametroFace);
 
         //FACE B
-        cilindro(new THREE.Vector3(-c/2, y2, c/2), new THREE.Vector3(-c/2, y2 + c + (resto/inc), -c/2), raioFace, raioFace);
-        cilindro(new THREE.Vector3(-c/2, y2, -c/2), new THREE.Vector3(-c/2, y2 + c + (resto/inc), c/2), raioFace, raioFace);
-        cilindro(new THREE.Vector3(-c/2, y2 + c + (resto/inc), -c/2), new THREE.Vector3(-c/2, y2 + c + (resto/inc), c/2), raioFace, raioFace);
+        cilindro(new THREE.Vector3(-c/2, y2, c/2), new THREE.Vector3(-c/2, y2 + c + (resto/inc), -c/2), diametroFace, diametroFace);
+        cilindro(new THREE.Vector3(-c/2, y2, -c/2), new THREE.Vector3(-c/2, y2 + c + (resto/inc), c/2), diametroFace, diametroFace);
+        cilindro(new THREE.Vector3(-c/2, y2 + c + (resto/inc), -c/2), new THREE.Vector3(-c/2, y2 + c + (resto/inc), c/2), diametroFace, diametroFace);
 
         //FACE C
-        cilindro(new THREE.Vector3(-c/2, y2, -c/2), new THREE.Vector3(c/2, y2 + c + (resto/inc), -c/2), raioFace, raioFace);
-        cilindro(new THREE.Vector3(c/2, y2, -c/2), new THREE.Vector3(-c/2, y2 + c + (resto/inc), -c/2), raioFace, raioFace);
-        cilindro(new THREE.Vector3(c/2, y2 + c + (resto/inc), -c/2), new THREE.Vector3(-c/2, y2 + c + (resto/inc), -c/2), raioFace, raioFace);
+        cilindro(new THREE.Vector3(-c/2, y2, -c/2), new THREE.Vector3(c/2, y2 + c + (resto/inc), -c/2), diametroFace, diametroFace);
+        cilindro(new THREE.Vector3(c/2, y2, -c/2), new THREE.Vector3(-c/2, y2 + c + (resto/inc), -c/2), diametroFace, diametroFace);
+        cilindro(new THREE.Vector3(c/2, y2 + c + (resto/inc), -c/2), new THREE.Vector3(-c/2, y2 + c + (resto/inc), -c/2), diametroFace, diametroFace);
 
         //FACE D
-        cilindro(new THREE.Vector3(c/2, y2, -c/2), new THREE.Vector3(c/2, y2 + c + (resto/inc), c/2), raioFace, raioFace);
-        cilindro(new THREE.Vector3(c/2, y2, c/2), new THREE.Vector3(c/2, y2 + c + (resto/inc), -c/2), raioFace, raioFace);
-        cilindro(new THREE.Vector3(c/2, y2 + c + (resto/inc), c/2), new THREE.Vector3(c/2, y2 + c + (resto/inc), -c/2), raioFace, raioFace);
+        cilindro(new THREE.Vector3(c/2, y2, -c/2), new THREE.Vector3(c/2, y2 + c + (resto/inc), c/2), diametroFace, diametroFace);
+        cilindro(new THREE.Vector3(c/2, y2, c/2), new THREE.Vector3(c/2, y2 + c + (resto/inc), -c/2), diametroFace, diametroFace);
+        cilindro(new THREE.Vector3(c/2, y2 + c + (resto/inc), c/2), new THREE.Vector3(c/2, y2 + c + (resto/inc), -c/2), diametroFace, diametroFace);
 
 
         y2 += c + (resto/inc);
@@ -220,7 +220,7 @@ export function createSqrTower(b, c, h, h1, raioCanto, raioFace, raioCantoFinal)
     return torre;
 }
 
-export function createTriTower(b, c, h, h1, raioCanto, raioFace, raioCantoFinal){
+export function createTriTower(b, c, h, h1, diametroCanto, diametroFace, diametroCantoFinal){
 
     let y = -h/2;
     let y2 = h1 - (h/2);
@@ -277,9 +277,9 @@ export function createTriTower(b, c, h, h1, raioCanto, raioFace, raioCantoFinal)
         const end = vertices[verticesIndex2];
 
         if(verticesIndex1 >= 3){
-            cilindro(start, end, raioCantoFinal, raioCantoFinal);
+            cilindro(start, end, diametroCantoFinal, diametroCantoFinal);
         }else{
-            cilindro(start, end, raioCanto, raioCantoFinal);
+            cilindro(start, end, diametroCanto, diametroCantoFinal);
         };     
     };
 
@@ -358,31 +358,31 @@ export function createTriTower(b, c, h, h1, raioCanto, raioFace, raioCantoFinal)
         const B1C1d2 = new THREE.Vector3(-x1/2, y + incremento + dif, -z1/2)
         
         // FACE A
-        cilindro(A1, B1, raioFace, raioFace); // LINHA RETA
-        cilindro(A, A1B1d2, raioFace, raioFace); // LINHA DIAGONAL DIREITA
-        cilindro(B, A1B1d2, raioFace, raioFace); // LINHA DIAGONAL ESQUERDA
-        cilindro(A1, endk, raioFace, raioFace); // LINHA 'K' DIREITA
-        cilindro(endk, AA1d2, raioFace, raioFace); // LINHA 'K' DIREITA RETA        
-        cilindro(B1, endk1, raioFace, raioFace); // LINHA 'K' ESQUERDA
-        cilindro(endk1, BB1d2, raioFace, raioFace); // LINHA 'K' ESQUERDA RETA*/
+        cilindro(A1, B1, diametroFace, diametroFace); // LINHA RETA
+        cilindro(A, A1B1d2, diametroFace, diametroFace); // LINHA DIAGONAL DIREITA
+        cilindro(B, A1B1d2, diametroFace, diametroFace); // LINHA DIAGONAL ESQUERDA
+        cilindro(A1, endk, diametroFace, diametroFace); // LINHA 'K' DIREITA
+        cilindro(endk, AA1d2, diametroFace, diametroFace); // LINHA 'K' DIREITA RETA        
+        cilindro(B1, endk1, diametroFace, diametroFace); // LINHA 'K' ESQUERDA
+        cilindro(endk1, BB1d2, diametroFace, diametroFace); // LINHA 'K' ESQUERDA RETA*/
 
         // FACE B
-        cilindro(B1, C1, raioFace, raioFace); // LINHA RETA
-        cilindro(B, B1C1d2, raioFace, raioFace); // LINHA DIAGONAL DIREITA 
-        cilindro(C, B1C1d2, raioFace, raioFace); // LINHA DIAGONAL ESQUERDA
-        cilindro(B1, endk4, raioFace, raioFace); // LINHA 'K' DIREITA
-        cilindro(endk4, BB1d2, raioFace, raioFace); // LINHA 'K' DIREITA RETA
-        cilindro(C1, endk5, raioFace, raioFace); // LINHA 'K' DIREITA
-        cilindro(endk5, CC1d2, raioFace, raioFace); // LINHA 'K' DIREITA RETA 
+        cilindro(B1, C1, diametroFace, diametroFace); // LINHA RETA
+        cilindro(B, B1C1d2, diametroFace, diametroFace); // LINHA DIAGONAL DIREITA 
+        cilindro(C, B1C1d2, diametroFace, diametroFace); // LINHA DIAGONAL ESQUERDA
+        cilindro(B1, endk4, diametroFace, diametroFace); // LINHA 'K' DIREITA
+        cilindro(endk4, BB1d2, diametroFace, diametroFace); // LINHA 'K' DIREITA RETA
+        cilindro(C1, endk5, diametroFace, diametroFace); // LINHA 'K' DIREITA
+        cilindro(endk5, CC1d2, diametroFace, diametroFace); // LINHA 'K' DIREITA RETA 
 
         // FACE C
-        cilindro(A1, C1, raioFace, raioFace); // LINHA RETA     
-        cilindro(C, A1C1d2, raioFace, raioFace); // LINHA DIAGONAL DIREITA  
-        cilindro(A, A1C1d2, raioFace, raioFace); // LINHA DIAGONAL ESQUERDA  
-        cilindro(C1, endk2, raioFace, raioFace); // LINHA 'K' DIREITA
-        cilindro(endk2, CC1d2, raioFace, raioFace); // LINHA 'K' DIREITA RETA
-        cilindro(A1, endk3, raioFace, raioFace); // LINHA 'K' ESQUERDA
-        cilindro(endk3, AA1d2, raioFace, raioFace); // LINHA 'K' ESQUERDA RETA
+        cilindro(A1, C1, diametroFace, diametroFace); // LINHA RETA     
+        cilindro(C, A1C1d2, diametroFace, diametroFace); // LINHA DIAGONAL DIREITA  
+        cilindro(A, A1C1d2, diametroFace, diametroFace); // LINHA DIAGONAL ESQUERDA  
+        cilindro(C1, endk2, diametroFace, diametroFace); // LINHA 'K' DIREITA
+        cilindro(endk2, CC1d2, diametroFace, diametroFace); // LINHA 'K' DIREITA RETA
+        cilindro(A1, endk3, diametroFace, diametroFace); // LINHA 'K' ESQUERDA
+        cilindro(endk3, AA1d2, diametroFace, diametroFace); // LINHA 'K' ESQUERDA RETA
         
         y += incremento;
 
@@ -394,45 +394,51 @@ export function createTriTower(b, c, h, h1, raioCanto, raioFace, raioCantoFinal)
     while (y2 + c + (resto/inc) <=  h/2 + 0.01){ // Trecho reto '0.01' de tolerância
         
         //FACE A
-        cilindro(new THREE.Vector3(-c/2, y2 + c + (resto/inc), (c * raiz3) / 6), new THREE.Vector3(c/2, y2 + c + (resto/inc), (c * raiz3) / 6), raioFace, raioFace);
-        cilindro(new THREE.Vector3(-c/2, y2, (c * raiz3) / 6), new THREE.Vector3(c/2, y2 + c + (resto/inc), (c * raiz3) / 6), raioFace, raioFace);
-        cilindro(new THREE.Vector3(c/2, y2, (c * raiz3) / 6), new THREE.Vector3(-c/2, y2 + c + (resto/inc), (c * raiz3) / 6), raioFace, raioFace);
+        cilindro(new THREE.Vector3(-c/2, y2 + c + (resto/inc), (c * raiz3) / 6), new THREE.Vector3(c/2, y2 + c + (resto/inc), (c * raiz3) / 6), diametroFace, diametroFace);
+        cilindro(new THREE.Vector3(-c/2, y2, (c * raiz3) / 6), new THREE.Vector3(c/2, y2 + c + (resto/inc), (c * raiz3) / 6), diametroFace, diametroFace);
+        cilindro(new THREE.Vector3(c/2, y2, (c * raiz3) / 6), new THREE.Vector3(-c/2, y2 + c + (resto/inc), (c * raiz3) / 6), diametroFace, diametroFace);
         
         //FACE B
-        cilindro(new THREE.Vector3(-c/2, y2 + c + (resto/inc), (c * raiz3) / 6), new THREE.Vector3(0, y2 + c + (resto/inc), -((c * raiz3) / 3)), raioFace, raioFace);
-        cilindro(new THREE.Vector3(-c/2, y2, (c * raiz3) / 6), new THREE.Vector3(0, y2 + c + (resto/inc), -((c * raiz3) / 3)), raioFace, raioFace);
-        cilindro(new THREE.Vector3(0, y2, -((c * raiz3) / 3)), new THREE.Vector3(-c/2, y2 + c + (resto/inc), (c * raiz3) / 6), raioFace, raioFace);
+        cilindro(new THREE.Vector3(-c/2, y2 + c + (resto/inc), (c * raiz3) / 6), new THREE.Vector3(0, y2 + c + (resto/inc), -((c * raiz3) / 3)), diametroFace, diametroFace);
+        cilindro(new THREE.Vector3(-c/2, y2, (c * raiz3) / 6), new THREE.Vector3(0, y2 + c + (resto/inc), -((c * raiz3) / 3)), diametroFace, diametroFace);
+        cilindro(new THREE.Vector3(0, y2, -((c * raiz3) / 3)), new THREE.Vector3(-c/2, y2 + c + (resto/inc), (c * raiz3) / 6), diametroFace, diametroFace);
     
 
         //FACE C
-        cilindro(new THREE.Vector3(c/2, y2 + c + (resto/inc), (c * raiz3) / 6), new THREE.Vector3(0, y2 + c + (resto/inc), -((c * raiz3) / 3)), raioFace, raioFace);
-        cilindro(new THREE.Vector3(c/2, y2, (c * raiz3) / 6), new THREE.Vector3(0, y2 + c + (resto/inc), -((c * raiz3) / 3)), raioFace, raioFace);
-        cilindro(new THREE.Vector3(0, y2, -((c * raiz3) / 3)), new THREE.Vector3(c/2, y2 + c + (resto/inc), (c * raiz3) / 6), raioFace, raioFace);
+        cilindro(new THREE.Vector3(c/2, y2 + c + (resto/inc), (c * raiz3) / 6), new THREE.Vector3(0, y2 + c + (resto/inc), -((c * raiz3) / 3)), diametroFace, diametroFace);
+        cilindro(new THREE.Vector3(c/2, y2, (c * raiz3) / 6), new THREE.Vector3(0, y2 + c + (resto/inc), -((c * raiz3) / 3)), diametroFace, diametroFace);
+        cilindro(new THREE.Vector3(0, y2, -((c * raiz3) / 3)), new THREE.Vector3(c/2, y2 + c + (resto/inc), (c * raiz3) / 6), diametroFace, diametroFace);
 
         y2 += c + (resto/inc);
  
     };
 
-    return torre
+    return torre;
 
 }
 
 export function createMastro(raio, h){
 
+    cilindro(new THREE.Vector3(0, -h/2, 0), new THREE.Vector3(0, h/2, 0), raio, raio);
+
+    return torre;
 
 }
 
 export function createPoste(b, c, h){
 
+    cilindro(new THREE.Vector3(0, -h/2, 0), new THREE.Vector3(0, h/2, 0), b, c);
+
+    return torre;
 
 }
 
-function cilindro(start, end, raioFinal, raio){
+function cilindro(start, end, diametroFinal, diametro){
     const edgeVector = end.clone().sub(start);
     const edgeLength = edgeVector.length();
 
     const cylinderMaterial = new THREE.MeshStandardMaterial({ color: 0xffa500 });
-    const edgeGeometry = new THREE.CylinderGeometry(raio, raioFinal, edgeLength, 16);
+    const edgeGeometry = new THREE.CylinderGeometry(diametro/2, diametroFinal/2, edgeLength, 16);
     const edge = new THREE.Mesh(edgeGeometry, cylinderMaterial);
 
     edge.position.set((start.x + end.x)/2 , (start.y + end.y)/2 , (start.z + end.z)/2 );

@@ -34,9 +34,9 @@
             <label for="base">Base</label>
             <input id="base" type="text" pattern="[0-9]+([,.][0-9]+)?" title="Digite um número válido" placeholder=" Metros" required>
           </div>
-          <div id="alturaGroup" class="input-box">
-            <label for="altura">Altura</label>
-            <input id="altura" type="text" pattern="[0-9]+([,.][0-9]+)?" title="Digite um número válido" placeholder=" Metros" required>
+          <div id="tamanhoGroup" class="input-box">
+            <label for="altura">Tamanho</label>
+            <input id="tamanho" type="text" pattern="[0-9]+([,.][0-9]+)?" title="Digite um número válido" placeholder=" Metros" required>
           </div>
           <div id="inclinadoGroup" class="input-box">
             <label for="inclinado">Trecho Inclinado</label>
@@ -110,7 +110,7 @@
       
         // Mostra ou esconde os grupos de campos de acordo com a seleção
         document.getElementById('baseGroup').style.display = isPoste ? 'none' : (isEstaiada ? '' : (isMastro ? 'none' : ''));
-        document.getElementById('alturaGroup').style.display = isPoste ? 'none' : (isEstaiada ? '' : '');
+        document.getElementById('tamanhoGroup').style.display = isPoste ? '' : (isEstaiada ? '' : '');
         document.getElementById('inclinadoGroup').style.display = isPoste || isEstaiada || isMastro ? 'none' : '';
         document.getElementById('topoGroup').style.display = isPoste || isEstaiada || isMastro ? 'none' : '';
         document.getElementById('diametroBaseGroup').style.display = isPoste ? '' : 'none';
