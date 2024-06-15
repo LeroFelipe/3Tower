@@ -295,7 +295,15 @@ function onMouseUp() {
     isDragging = false;
 }
 
+// Definir o material de destaque
+const highlightMaterial = new THREE.MeshStandardMaterial({ color: 0xffff00, emissive: 0x333333 });
+
+// Variável para armazenar a antena atualmente destacada
+let highlightedAntena = null;
+let originalMaterial = null;
+
 function onMouseMove(event) {
+    // Verificar se está arrastando
     if (isDragging) {
         if (event.ctrlKey) {
             // Ajustar a orientação da cena
@@ -313,6 +321,48 @@ function onMouseMove(event) {
         }
         previousMousePosition = { x: event.clientX, y: event.clientY };
     }
+
+    const rect = canvas.getBoundingClientRect();
+    mouse.x = ((event.clientX - rect.left) / canvas.clientWidth) * 2 - 1;
+    mouse.y = - ((event.clientY - rect.top) / canvas.clientHeight) * 2 + 1;
+
+    raycaster.setFromCamera(mouse, camera);
+
+    const intersects = raycaster.intersectObjects(torre.children, true);
+
+    if (intersects.length > 0) {
+        const intersectedObject = intersects[0].object;
+    
+        // Verificar se é uma antena
+        const antena = intersectedObject.userData?.antena;
+    
+        if (antena) {
+            // Se a antena destacada mudou
+            if (highlightedAntena !== intersectedObject) {
+                // Reverter o material da antena anteriormente destacada
+                if (highlightedAntena) {
+                    highlightedAntena.material = originalMaterial;
+                }
+    
+                // Destacar a nova antena
+                highlightedAntena = intersectedObject;
+                originalMaterial = intersectedObject.material;
+                intersectedObject.material = highlightMaterial;
+            }
+        } else {
+            // Se o objeto interseccionado não for uma antena, reverter o material da antena destacada
+            if (highlightedAntena) {
+                highlightedAntena.material = originalMaterial;
+                highlightedAntena = null;
+            }
+        }
+    } else {
+        // Se não houver interseção, reverter o material da antena destacada
+        if (highlightedAntena) {
+            highlightedAntena.material = originalMaterial;
+            highlightedAntena = null;
+        }
+    }
 }
 
 function onDocumentMouseClick(event) {
@@ -320,11 +370,8 @@ function onDocumentMouseClick(event) {
 
     // Calcular as coordenadas do mouse em relação ao canvas
     const rect = canvas.getBoundingClientRect();
-    const mouseX = ((event.clientX - rect.left) / canvas.clientWidth) * 2 - 1;
-    const mouseY = - ((event.clientY - rect.top) / canvas.clientHeight) * 2 + 1;
-
-    mouse.x = mouseX;
-    mouse.y = mouseY;
+    mouse.x = ((event.clientX - rect.left) / canvas.clientWidth) * 2 - 1;
+    mouse.y = - ((event.clientY - rect.top) / canvas.clientHeight) * 2 + 1;
 
     raycaster.setFromCamera(mouse, camera);
 
