@@ -43,8 +43,6 @@ let previousMousePosition = { x: 0, y: 0 };
 // Para lidar com eventos do mouse sobre às antenas
 var raycaster = new THREE.Raycaster();
 var mouse = new THREE.Vector2();
-var INTERSECTED;
-var originalColor;
 
 // Posicionamento da câmera
 camera.position.z = 7;
@@ -189,6 +187,8 @@ function carregarAntenas(data) {
                 gltf = MWgltf;
             } else if (antenaData.TIPO === 'RF') {
                 gltf = RFgltf;
+            }else{
+                return;
             }
 
             const newObj = gltf.scene.clone();
@@ -272,9 +272,13 @@ function carregarAntenas(data) {
             );
 
             // Associar a antena ao objeto 3D
-            newObj.userData = antena;
+            newObj.userData.antena = antena;
+            newObj.traverse(child => {
+                if (child.isMesh) {
+                    child.userData.antena = antena;
+                }
+            });
 
-            console.log(antena);
             torre.add(newObj);
         });
     }).catch(error => {
@@ -309,27 +313,34 @@ function onMouseMove(event) {
         }
         previousMousePosition = { x: event.clientX, y: event.clientY };
     }
-    /*
-    // Normalizar as coordenadas do mouse
-    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+}
+
+function onDocumentMouseClick(event) {
+    event.preventDefault();
+
+    // Calcular as coordenadas do mouse em relação ao canvas
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = ((event.clientX - rect.left) / canvas.clientWidth) * 2 - 1;
+    const mouseY = - ((event.clientY - rect.top) / canvas.clientHeight) * 2 + 1;
+
+    mouse.x = mouseX;
+    mouse.y = mouseY;
 
     raycaster.setFromCamera(mouse, camera);
 
-    // Calcular interseções
-    var intersects = raycaster.intersectObjects(torre.children, true);
+    const intersects = raycaster.intersectObjects(torre.children, true);
 
     if (intersects.length > 0) {
-        if (INTERSECTED != intersects[0].object) {
-            if (INTERSECTED) INTERSECTED.material.color.setHex(originalColor);
-            INTERSECTED = intersects[0].object;
-            originalColor = INTERSECTED.material.color.getHex();
-            INTERSECTED.material.color.setHex(0xff0000); // Cor ao passar o mouse
+        const intersectedObject = intersects[0].object;
+        const antena = intersectedObject.userData.antena; // Acessar os dados da antena
+        if (antena) {
+            console.log('Propriedades da Antena:', antena);
+        } else {
+            console.log('Objeto intersectado não tem dados de antena:', intersectedObject);
         }
     } else {
-        if (INTERSECTED) INTERSECTED.material.color.setHex(originalColor);
-        INTERSECTED = null;
-    }*/
+        console.log('Nenhuma interseção detectada.');
+    }
 }
 
 function onMouseWheel(event) {
@@ -352,10 +363,11 @@ function toRadians(degrees) {
     return degrees * Math.PI / 180;
 }
 
-document.addEventListener('wheel', onMouseWheel);
-document.addEventListener('mousedown', onMouseDown);
-document.addEventListener('mouseup', onMouseUp);
-document.addEventListener('mousemove', onMouseMove);
+canvas.addEventListener('click', onDocumentMouseClick, false);
+canvas.addEventListener('wheel', onMouseWheel);
+canvas.addEventListener('mousedown', onMouseDown);
+canvas.addEventListener('mouseup', onMouseUp);
+canvas.addEventListener('mousemove', onMouseMove);
 
 torre = createSqrTower( 1.8, 0.5, 9, 6.5, 0.12, 0.04, 0.06);
 //torre = createTriTower( 1.8, 0.5, 9, 6.5, 0.06, 0.02, 0.03);
