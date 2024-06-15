@@ -415,19 +415,6 @@ function toRadians(degrees) {
     return degrees * Math.PI / 180;
 }
 
-canvas.addEventListener('click', onDocumentMouseClick, false);
-canvas.addEventListener('wheel', onMouseWheel);
-canvas.addEventListener('mousedown', onMouseDown);
-canvas.addEventListener('mouseup', onMouseUp);
-canvas.addEventListener('mousemove', onMouseMove);
-
-//torre = createSqrTower( 1.8, 0.5, 9, 6.5, 0.12, 0.04, 0.06);
-//torre = createTriTower( 1.8, 0.5, 9, 6.5, 0.06, 0.02, 0.03);
-
-//scene.add(torre);
-//planeXY();
-//xyzLines(); 
-
 document.getElementById("loadButton").addEventListener("click", function() {
     base = parseFloat(document.getElementById("base").value);
     tamanho = parseFloat(document.getElementById("tamanho").value);
@@ -505,9 +492,17 @@ document.getElementById("loadButton").addEventListener("click", function() {
     } else {
         console.error('Por favor, selecione um arquivo CSV.');
     }    
-});  
+}); 
 
-// Renderização da cena
+canvas.addEventListener('click', onDocumentMouseClick, false);
+canvas.addEventListener('wheel', onMouseWheel);
+canvas.addEventListener('mousedown', onMouseDown);
+canvas.addEventListener('mouseup', onMouseUp);
+canvas.addEventListener('mousemove', onMouseMove);
+
+//planeXY();
+//xyzLines();
+
 function animate() {
     requestAnimationFrame(animate);
     renderer.render(scene, camera);
