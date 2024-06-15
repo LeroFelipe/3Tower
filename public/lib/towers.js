@@ -441,11 +441,10 @@ function cilindro(start, end, diametroFinal, diametro){
     const edgeGeometry = new THREE.CylinderGeometry(diametro/2, diametroFinal/2, edgeLength, 16);
     const edge = new THREE.Mesh(edgeGeometry, cylinderMaterial);
 
+     // Posição e Orientação do cilindro
     edge.position.set((start.x + end.x)/2 , (start.y + end.y)/2 , (start.z + end.z)/2 );
-
-    // Calcular a orientação do cilindro
     edge.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), edgeVector.clone().normalize());
-    
+
     edge.castShadow = true; // Permitir que o cilindro emita sombras
     edge.receiveShadow = true; // Permitir que o cilindro receba sombras
 

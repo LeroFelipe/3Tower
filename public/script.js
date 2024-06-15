@@ -47,6 +47,13 @@ var mouse = new THREE.Vector2();
 // Posicionamento da câmera
 camera.position.z = 7;
 
+// Definir o material de destaque
+const highlightMaterial = new THREE.MeshStandardMaterial({ color: 0xffff00, emissive: 0x333333 }); //0x00ffff ciano
+
+// Variável para armazenar a antena atualmente destacada
+let highlightedAntena = null;
+let originalMaterial = null;
+
 class Antena {
     constructor(operadora, tipo, fabricante, modelo, portadora, altura, comprimento, largura, profundidade, diametro, azimute, tiltMecanico, status) {
         this.operadora = operadora;
@@ -231,24 +238,29 @@ function carregarAntenas(data) {
             );
 
             let corMaterial;
+            let emissiveColor;
             switch (antenaData['STATUS']) {
                 case 'existente':
                     corMaterial = 0xffffff; // Branco
+                    emissiveColor = 0x000000;
                     break;
                 case 'a instalar':
-                    corMaterial = 0xff0000; // Vermelho
+                    corMaterial = 0x00ff00;
+                    emissiveColor = 0x000000;
                     break;
                 case 'a retirar':
-                    corMaterial = 0xff00ff; // Magenta
+                    corMaterial = 0x555555;
+                    emissiveColor = 0x333333;
                     break;
                 default:
                     corMaterial = 0xffffff; // Branco (padrão)
+                    emissiveColor = 0x000000;
                     break;
             }
 
             newObj.traverse(function (child) {
                 if (child.isMesh) {
-                    child.material = new THREE.MeshStandardMaterial({ color: corMaterial });
+                    child.material = new THREE.MeshStandardMaterial({ color: corMaterial, emissive: emissiveColor });
                     child.castShadow = true;
                     child.receiveShadow = true;
                 }
@@ -294,13 +306,6 @@ function onMouseDown(event) {
 function onMouseUp() {
     isDragging = false;
 }
-
-// Definir o material de destaque
-const highlightMaterial = new THREE.MeshStandardMaterial({ color: 0xffff00, emissive: 0x333333 });
-
-// Variável para armazenar a antena atualmente destacada
-let highlightedAntena = null;
-let originalMaterial = null;
 
 function onMouseMove(event) {
     // Verificar se está arrastando
@@ -392,12 +397,12 @@ function onDocumentMouseClick(event) {
 
 function onMouseWheel(event) {
 
-    // Verifica se "Ctrl" está pressionado para rotacionar em relação ao eixo X
+    // Verifica se "Shift" está pressionado para rotacionar em relação ao eixo x
     if (event.shiftKey) {
         rotateX += event.deltaY * 0.02; // Ajuste conforme necessário para a velocidade de rotação
         torre.rotation.x = toRadians(rotateX);
     }
-    // Verifica se "Shift" está pressionado para rotacionar em relação ao eixo Y
+    // Verifica se "Alt" está pressionado para rotacionar em relação ao eixo y
     else if (event.altKey) {
         rotateY += event.deltaY * 0.05; // Ajuste conforme necessário para a velocidade de rotação
         torre.rotation.y = toRadians(rotateY);
@@ -416,10 +421,10 @@ canvas.addEventListener('mousedown', onMouseDown);
 canvas.addEventListener('mouseup', onMouseUp);
 canvas.addEventListener('mousemove', onMouseMove);
 
-torre = createSqrTower( 1.8, 0.5, 9, 6.5, 0.12, 0.04, 0.06);
+//torre = createSqrTower( 1.8, 0.5, 9, 6.5, 0.12, 0.04, 0.06);
 //torre = createTriTower( 1.8, 0.5, 9, 6.5, 0.06, 0.02, 0.03);
 
-scene.add(torre);
+//scene.add(torre);
 //planeXY();
 //xyzLines(); 
 
