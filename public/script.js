@@ -415,6 +415,49 @@ function toRadians(degrees) {
     return degrees * Math.PI / 180;
 }
 
+function salvarDados() {
+    localStorage.setItem('tipoTorre', document.getElementById('tipoTorre').value);
+    localStorage.setItem('base', document.getElementById('base').value);
+    localStorage.setItem('tamanho', document.getElementById('tamanho').value);
+    localStorage.setItem('inclinado', document.getElementById('inclinado').value);
+    localStorage.setItem('topo', document.getElementById('topo').value);
+    localStorage.setItem('diametroBase', document.getElementById('diametroBase').value);
+    localStorage.setItem('diametroTopo', document.getElementById('diametroTopo').value);
+    localStorage.setItem('diametro', document.getElementById('diametro').value);
+}
+
+function carregarDados() {
+    if (localStorage.getItem('tipoTorre')) {
+        document.getElementById('tipoTorre').value = localStorage.getItem('tipoTorre');
+    }
+    if (localStorage.getItem('base')) {
+        document.getElementById('base').value = localStorage.getItem('base');
+    }
+    if (localStorage.getItem('tamanho')) {
+        document.getElementById('tamanho').value = localStorage.getItem('tamanho');
+    }
+    if (localStorage.getItem('inclinado')) {
+        document.getElementById('inclinado').value = localStorage.getItem('inclinado');
+    }
+    if (localStorage.getItem('topo')) {
+        document.getElementById('topo').value = localStorage.getItem('topo');
+    }
+    if (localStorage.getItem('diametroBase')) {
+        document.getElementById('diametroBase').value = localStorage.getItem('diametroBase');
+    }
+    if (localStorage.getItem('diametroTopo')) {
+        document.getElementById('diametroTopo').value = localStorage.getItem('diametroTopo');
+    }
+    if (localStorage.getItem('diametro')) {
+        document.getElementById('diametro').value = localStorage.getItem('diametro');
+    }
+}
+
+window.onload = function() {
+    carregarDados();
+    updateForm(); // Chamar novamente após carregar os dados do localStorage
+};
+
 document.getElementById("loadButton").addEventListener("click", function() {
     base = parseFloat(document.getElementById("base").value);
     tamanho = parseFloat(document.getElementById("tamanho").value);
@@ -491,7 +534,9 @@ document.getElementById("loadButton").addEventListener("click", function() {
         });
     } else {
         console.error('Por favor, selecione um arquivo CSV.');
-    }    
+    }   
+    
+    salvarDados();
 }); 
 
 canvas.addEventListener('click', onDocumentMouseClick, false);
