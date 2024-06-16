@@ -455,16 +455,21 @@ function carregarDados() {
 }
 
 document.getElementById("loadButton").addEventListener("click", function() {
-    base = parseFloat(document.getElementById("base").value);
-    tamanho = parseFloat(document.getElementById("tamanho").value);
-    inclinado = parseFloat(document.getElementById("inclinado").value);
-    topo = parseFloat(document.getElementById("topo").value);
+
+    base = parseFloat(document.getElementById("base").value.replace(',', '.'));
+    tamanho = parseFloat(document.getElementById("tamanho").value.replace(',', '.'));
+    inclinado = parseFloat(document.getElementById("inclinado").value.replace(',', '.'));
+    topo = parseFloat(document.getElementById("topo").value.replace(',', '.'));
     tipoTorre = document.getElementById("tipoTorre").value;
-    diametroBase = parseFloat(document.getElementById("diametroBase").value);
-    diametroTopo = parseFloat(document.getElementById("diametroTopo").value);
-    diametro = parseFloat(document.getElementById("diametro").value);
+    diametroBase = parseFloat(document.getElementById("diametroBase").value.replace(',', '.'));
+    diametroTopo = parseFloat(document.getElementById("diametroTopo").value.replace(',', '.'));
+    diametro = parseFloat(document.getElementById("diametro").value.replace(',', '.'));
     const fileInput = document.getElementById('csvFile');
     const file = fileInput.files[0];
+
+    if (!validateFields()) {
+        return;
+    }
 
     // Verificar os campos comuns a todos os tipos de torres
     if (base <= 0 || tamanho <= 0) {
@@ -480,42 +485,22 @@ document.getElementById("loadButton").addEventListener("click", function() {
     // Verificar os campos de acordo com o tipo de torre selecionado
     switch (tipoTorre) {
         case 'Quadrada':
-            if (topo <= 0 || inclinado <= 0) {
-                alert('Preencha os campos "Topo" e "Inclinado" com números positivos.');
-                return;
-            }
             torre = createSqrTower(base, topo, tamanho, inclinado, 0.12, 0.04, 0.06);
             break;
         case 'Triangular':
-            if (topo <= 0 || inclinado <= 0) {
-                alert('Preencha os campos "Topo" e "Inclinado" com números positivos.');
-                return;
-            }
             torre = createTriTower(base, topo, tamanho, inclinado, 0.12, 0.04, 0.06);
             break;
         case 'Poste':
-            if (diametroBase <= 0 || diametroTopo <= 0) {
-                alert('Preencha os campos "Diâmetro da Base" e "Diâmetro do Topo" com números positivos.');
-                return;
-            }
             torre = createPoste(diametroBase, diametroTopo, tamanho);
             break;
         case 'Estaiada':
-            if (tamanho <= 0) {
-                alert('Preencha o campo "Tamanho" com um número positivo.');
-                return;
-            }
             torre = createEstaiada(base, tamanho);
             break;
         case 'Mastro':
-            if (diametro <= 0) {
-                alert('Preencha o campo "Diâmetro" com um número positivo.');
-                return;
-            }
             torre = createMastro(diametro, tamanho);
             break;
         default:
-            alert('Selecione um tipo de torre válido.');
+            alert('Selecione um tipo de torre!');
             return;
     }
 
@@ -538,7 +523,99 @@ document.getElementById("loadButton").addEventListener("click", function() {
     }   
     
     salvarDados();
-}); 
+});
+
+function validateFields() {
+    let isValid = true;
+
+    let tipoTorreError = document.getElementById('tipoTorreError');
+    let baseError = document.getElementById('baseError');
+    let tamanhoError = document.getElementById('tamanhoError');
+    let inclinadoError = document.getElementById('inclinadoError');
+    let topoError = document.getElementById('topoError');
+    let diametroBaseError = document.getElementById('diametroBaseError');
+    let diametroTopoError = document.getElementById('diametroTopoError');
+    let diametroError = document.getElementById('diametroError');
+
+    // Reset error messages
+    tipoTorreError.style.display = 'none';
+    baseError.style.display = 'none';
+    tamanhoError.style.display = 'none';
+    inclinadoError.style.display = 'none';
+    topoError.style.display = 'none';
+    diametroBaseError.style.display = 'none';
+    diametroTopoError.style.display = 'none';
+    diametroError.style.display = 'none';
+
+    if (!tipoTorre) {
+        tipoTorreError.innerText = 'Selecione o tipo de torre.';
+        tipoTorreError.style.display = 'block';
+        isValid = false;
+    }
+
+    if (tipoTorre === 'Quadrada' || tipoTorre === 'Triangular') {
+        if (isNaN(base) || base <= 0) {
+            baseError.innerText = 'Digite um valor válido.';
+            baseError.style.display = 'block';
+            isValid = false;
+        }
+
+        if (isNaN(tamanho) || tamanho <= 0) {
+            tamanhoError.innerText = 'Digite um valor válido.';
+            tamanhoError.style.display = 'block';
+            isValid = false;
+        }
+
+        if (isNaN(inclinado) || inclinado <= 0) {
+            inclinadoError.innerText = 'Digite um valor válido.';
+            inclinadoError.style.display = 'block';
+            isValid = false;
+        }
+
+        if (isNaN(topo) || topo <= 0) {
+            topoError.innerText = 'Digite um valor válido.';
+            topoError.style.display = 'block';
+            isValid = false;
+        }
+    }
+
+    if (tipoTorre === 'Poste') {
+        if (isNaN(tamanho) || tamanho <= 0) {
+            tamanhoError.innerText = 'Digite um valor válido.';
+            tamanhoError.style.display = 'block';
+            isValid = false;
+        }
+
+        if (isNaN(diametroBase) || diametroBase <= 0) {
+            diametroBaseError.innerText = 'Digite um valor válido.';
+            diametroBaseError.style.display = 'block';
+            isValid = false;
+        }
+
+        if (isNaN(diametroTopo) || diametroTopo <= 0) {
+            diametroTopo.innerText = 'Digite um valor válido.';
+            diametroTopoError.style.display = 'block';
+            isValid = false;
+        }
+    }
+
+    if (tipoTorre === 'Mastro') {
+        if (isNaN(tamanho) || tamanho <= 0) {
+            tamanhoError.innerText = 'Digite um valor válido.';
+            tamanhoError.style.display = 'block';
+            isValid = false;
+        }
+
+        if (isNaN(diametro) || diametro <= 0) {
+            diametroError.innerText = 'Digite um valor válido.';
+            diametroError.style.display = 'block';
+            isValid = false;
+        }
+    }
+
+    return isValid;
+
+}
 
 canvas.addEventListener('click', onDocumentMouseClick, false);
 canvas.addEventListener('wheel', onMouseWheel);
@@ -549,7 +626,9 @@ canvas.addEventListener('mousemove', onMouseMove);
 window.onload = function() {
     carregarDados();
     updateForm();
-    document.getElementById("loadButton").click();    
+    if (localStorage.getItem('tipoTorre')){
+        document.getElementById("loadButton").click(); 
+    }       
 };
 
 //planeXY();

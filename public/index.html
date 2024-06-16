@@ -29,34 +29,42 @@
               <option value="Estaiada">Estaiada</option>
               <option value="Mastro">Mastro</option>
             </select>
+            <span id="tipoTorreError" class="error-message"></span>
           </div>
           <div id="baseGroup" class="input-box">
             <label for="base">Base</label>
             <input id="base" type="text" pattern="[0-9]+([,.][0-9]+)?" title="Digite um número válido" placeholder=" Metros" required>
+            <span id="baseError" class="error-message"></span>
           </div>
           <div id="tamanhoGroup" class="input-box">
             <label for="tamanho">Tamanho</label>
             <input id="tamanho" type="text" pattern="[0-9]+([,.][0-9]+)?" title="Digite um número válido" placeholder=" Metros" required>
+            <span id="tamanhoError" class="error-message"></span>
           </div>
           <div id="inclinadoGroup" class="input-box">
             <label for="inclinado">Trecho Inclinado</label>
             <input id="inclinado" type="text" pattern="[0-9]+([,.][0-9]+)?" title="Digite um número válido" placeholder=" Metros" required>
+            <span id="inclinadoError" class="error-message"></span>
           </div>
           <div id="topoGroup" class="input-box">
             <label for="topo">Topo</label>
             <input id="topo" type="text" pattern="[0-9]+([,.][0-9]+)?" title="Digite um número válido" placeholder=" Metros" required>
+            <span id="topoError" class="error-message"></span>
           </div>
           <div id="diametroBaseGroup" class="input-box" style="display: none;">
             <label for="diametroBase">Diâmetro da Base</label>
-            <input id="diametroBase" type="text" pattern="[0-9]+([,.][0-9]+)?" title="Digite um número válido" placeholder=" Metros">
+            <input id="diametroBase" type="text" pattern="[0-9]+([,.][0-9]+)?" title="Digite um número válido" placeholder=" Metros" required>
+            <span id="diametroBaseError" class="error-message"></span>
           </div>
           <div id="diametroTopoGroup" class="input-box" style="display: none;">
             <label for="diametroTopo">Diâmetro do Topo</label>
-            <input id="diametroTopo" type="text" pattern="[0-9]+([,.][0-9]+)?" title="Digite um número válido" placeholder=" Metros">
+            <input id="diametroTopo" type="text" pattern="[0-9]+([,.][0-9]+)?" title="Digite um número válido" placeholder=" Metros" required>
+            <span id="diametroTopoError" class="error-message"></span>
           </div>
           <div id="diametroGroup" class="input-box" style="display: none;">
             <label for="diametro">Diâmetro</label>
-            <input id="diametro" type="text" pattern="[0-9]+([,.][0-9]+)?" title="Digite um número válido" placeholder=" Metros">
+            <input id="diametro" type="text" pattern="[0-9]+([,.][0-9]+)?" title="Digite um número válido" placeholder=" Metros" required>
+            <span id="diametroError" class="error-message"></span>
           </div>
         </form>
       </div>
