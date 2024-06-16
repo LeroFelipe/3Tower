@@ -47,12 +47,10 @@ var mouse = new THREE.Vector2();
 // Posicionamento da câmera
 camera.position.z = 7;
 
-// Definir o material de destaque
-const highlightMaterial = new THREE.MeshStandardMaterial({ color: 0xffff00, emissive: 0x333333 }); //0x00ffff ciano
-
 // Variável para armazenar a antena atualmente destacada
 let highlightedAntena = null;
 let originalMaterial = null;
+const highlightMaterial = new THREE.MeshStandardMaterial({ color: 0xffff00, emissive: 0x333333 });
 
 class Antena {
     constructor(operadora, tipo, fabricante, modelo, portadora, altura, comprimento, largura, profundidade, diametro, azimute, tiltMecanico, status) {
@@ -146,6 +144,9 @@ function carregarCSV(file) {
 
                 data.push(rowData);
             }
+
+            // Salvar dados no local storage
+            localStorage.setItem('csvData', JSON.stringify(data));
 
             resolve(data);
         };
@@ -453,11 +454,6 @@ function carregarDados() {
     }
 }
 
-window.onload = function() {
-    carregarDados();
-    updateForm(); // Chamar novamente após carregar os dados do localStorage
-};
-
 document.getElementById("loadButton").addEventListener("click", function() {
     base = parseFloat(document.getElementById("base").value);
     tamanho = parseFloat(document.getElementById("tamanho").value);
@@ -533,7 +529,12 @@ document.getElementById("loadButton").addEventListener("click", function() {
             console.error('Erro ao carregar o arquivo CSV:', error);
         });
     } else {
-        console.error('Por favor, selecione um arquivo CSV.');
+        const csvData = localStorage.getItem('csvData');
+        if (csvData) {
+            carregarAntenas(JSON.parse(csvData));
+        } else {
+            console.error('Por favor, selecione um arquivo CSV.');
+        }
     }   
     
     salvarDados();
@@ -544,6 +545,12 @@ canvas.addEventListener('wheel', onMouseWheel);
 canvas.addEventListener('mousedown', onMouseDown);
 canvas.addEventListener('mouseup', onMouseUp);
 canvas.addEventListener('mousemove', onMouseMove);
+
+window.onload = function() {
+    carregarDados();
+    updateForm();
+    document.getElementById("loadButton").click();    
+};
 
 //planeXY();
 //xyzLines();
