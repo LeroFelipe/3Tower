@@ -12,6 +12,19 @@ let rotateY = 0;
 // Variáveir da Torre
 let base, tamanho, inclinado, topo, tipoTorre, diametroBase, diametroTopo, diametro;
 
+// Para lidar com eventos de pressionar o botão do mouse
+let isDragging = false;
+let previousMousePosition = { x: 0, y: 0 };
+
+// Para lidar com eventos do mouse sobre às antenas
+let raycaster = new THREE.Raycaster();
+let mouse = new THREE.Vector2();
+
+// Variável para armazenar a antena atualmente destacada
+let highlightedAntena = null;
+let originalMaterial = null;
+const highlightMaterial = new THREE.MeshStandardMaterial({ color: 0xffff00, emissive: 0x333333 });
+
 // Configuração da cena, câmera e renderizador
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -36,26 +49,14 @@ light.shadow.mapSize.height = 1024; // Altura do mapa de sombras
 light.shadow.camera.near = 1; // Distância próxima para renderização de sombra
 light.shadow.camera.far = 50; // Distância distante para renderização de sombra
 
-// Para lidar com eventos de pressionar o botão do mouse
-let isDragging = false;
-let previousMousePosition = { x: 0, y: 0 };
-
-// Para lidar com eventos do mouse sobre às antenas
-var raycaster = new THREE.Raycaster();
-var mouse = new THREE.Vector2();
-
 // Posicionamento da câmera
 camera.position.z = 7;
 
-// Variável para armazenar a antena atualmente destacada
-let highlightedAntena = null;
-let originalMaterial = null;
-const highlightMaterial = new THREE.MeshStandardMaterial({ color: 0xffff00, emissive: 0x333333 });
-
 class Antena {
-    constructor(operadora, tipo, fabricante, modelo, portadora, altura, comprimento, largura, profundidade, diametro, azimute, tiltMecanico, status) {
+    constructor(operadora, tipo, suporte, fabricante, modelo, portadora, altura, comprimento, largura, profundidade, diametro, azimute, tiltMecanico, status) {
         this.operadora = operadora;
         this.tipo = tipo;
+        this.suporte = suporte;
         this.fabricante = fabricante;
         this.modelo = modelo;
         this.portadora = portadora;
@@ -271,6 +272,7 @@ function carregarAntenas(data) {
             const antena = new Antena(
                 antenaData['OPERADORA'],
                 antenaData['TIPO'],
+                antenaData['SUPORTE'],
                 antenaData['FABRICANTE'],
                 antenaData['MODELO'],
                 antenaData['PORTADORA [Mhz]'],
@@ -300,6 +302,7 @@ function carregarAntenas(data) {
 }
 
 function onMouseDown(event) {
+    hidePopup();
     isDragging = true;
     previousMousePosition = { x: event.clientX, y: event.clientY };
 }
@@ -371,7 +374,23 @@ function onMouseMove(event) {
     }
 }
 
-function onDocumentMouseClick(event) {
+function onMouseWheel(event) {
+
+    // Verifica se "Shift" está pressionado para rotacionar em relação ao eixo x
+    if (event.shiftKey) {
+        rotateX += event.deltaY * 0.02; // Ajuste conforme necessário para a velocidade de rotação
+        torre.rotation.x = toRadians(rotateX);
+    }
+    // Verifica se "Alt" está pressionado para rotacionar em relação ao eixo y
+    else if (event.altKey) {
+        rotateY += event.deltaY * 0.05; // Ajuste conforme necessário para a velocidade de rotação
+        torre.rotation.y = toRadians(rotateY);
+    }else{
+        camera.position.z += event.deltaY * 0.005;
+    }
+}
+
+function onCanvasMouseClick(event) {
     event.preventDefault();
 
     // Calcular as coordenadas do mouse em relação ao canvas
@@ -388,6 +407,7 @@ function onDocumentMouseClick(event) {
         const antena = intersectedObject.userData.antena; // Acessar os dados da antena
         if (antena) {
             console.log('Propriedades da Antena:', antena);
+            showPopup(event.clientX, event.clientY, antena);
         } else {
             console.log('Objeto intersectado não tem dados de antena:', intersectedObject);
         }
@@ -396,19 +416,55 @@ function onDocumentMouseClick(event) {
     }
 }
 
-function onMouseWheel(event) {
-
-    // Verifica se "Shift" está pressionado para rotacionar em relação ao eixo x
-    if (event.shiftKey) {
-        rotateX += event.deltaY * 0.02; // Ajuste conforme necessário para a velocidade de rotação
-        torre.rotation.x = toRadians(rotateX);
+function showPopup(x, y, antena) {
+    // Criar ou obter o elemento popup
+    let popup = document.getElementById('popup');
+    if (!popup) {
+        popup = document.createElement('div');
+        popup.id = 'popup';
+        document.body.appendChild(popup);
     }
-    // Verifica se "Alt" está pressionado para rotacionar em relação ao eixo y
-    else if (event.altKey) {
-        rotateY += event.deltaY * 0.05; // Ajuste conforme necessário para a velocidade de rotação
-        torre.rotation.y = toRadians(rotateY);
-    }else{
-        camera.position.z += event.deltaY * 0.005;
+
+    let statusClass = '';
+    if (antena.status === 'a retirar') {
+        statusClass = 'status-a-retirar';
+    } else if (antena.status === 'existente') {
+        statusClass = 'status-existente';
+    } else if (antena.status === 'a instalar') {
+        statusClass = 'status-a-instalar';
+    }
+
+    // Preencher o popup com as propriedades da antena
+    popup.innerHTML = `
+        <strong>Propriedades da Antena:</strong><br>
+        Operadora: ${antena.operadora}<br>
+        Tipo: ${antena.tipo}<br>
+        Suporte: ${antena.suporte}<br>
+        Fabricante: ${antena.fabricante}<br>
+        Modelo: ${antena.modelo}<br>
+        Portadora: ${antena.portadora}<br>
+        Altura: ${antena.altura}<br>
+        Comprimento: ${antena.comprimento}<br>
+        Largura: ${antena.largura}<br>
+        Profundidade: ${antena.profundidade}<br>
+        Diâmetro: ${antena.diametro}<br>
+        Azimute: ${antena.azimute}<br>
+        Tilt Mecânico: ${antena.tiltMecanico}<br>
+        Status: <span class="${statusClass}">${antena.status}</span>
+    `;
+
+    // Posicionar o popup nas coordenadas do mouse
+    popup.style.left = `${x+30}px`;
+    popup.style.top = `${y-33}px`;
+
+    // Tornar o popup visível
+    popup.style.display = 'block';
+}
+
+function hidePopup() {
+    const popup = document.getElementById('popup');
+    if (popup) {
+        popup.style.display = 'none';
     }
 }
 
@@ -453,77 +509,6 @@ function carregarDados() {
         document.getElementById('diametro').value = localStorage.getItem('diametro');
     }
 }
-
-document.getElementById("loadButton").addEventListener("click", function() {
-
-    base = parseFloat(document.getElementById("base").value.replace(',', '.'));
-    tamanho = parseFloat(document.getElementById("tamanho").value.replace(',', '.'));
-    inclinado = parseFloat(document.getElementById("inclinado").value.replace(',', '.'));
-    topo = parseFloat(document.getElementById("topo").value.replace(',', '.'));
-    tipoTorre = document.getElementById("tipoTorre").value;
-    diametroBase = parseFloat(document.getElementById("diametroBase").value.replace(',', '.'));
-    diametroTopo = parseFloat(document.getElementById("diametroTopo").value.replace(',', '.'));
-    diametro = parseFloat(document.getElementById("diametro").value.replace(',', '.'));
-    const fileInput = document.getElementById('csvFile');
-    const file = fileInput.files[0];
-
-    if (!validateFields()) {
-        return;
-    }
-
-    // Verificar os campos comuns a todos os tipos de torres
-    if (base <= 0 || tamanho <= 0) {
-        alert('Preencha os campos "Base" e "Tamanho" com números positivos.');
-        return;
-    }
-
-    // Limpar a torre anterior, se houver
-    if (torre.children.length > 0) {
-        torre.remove(...torre.children);
-    }
-
-    // Verificar os campos de acordo com o tipo de torre selecionado
-    switch (tipoTorre) {
-        case 'Quadrada':
-            torre = createSqrTower(base, topo, tamanho, inclinado, 0.12, 0.04, 0.06);
-            break;
-        case 'Triangular':
-            torre = createTriTower(base, topo, tamanho, inclinado, 0.12, 0.04, 0.06);
-            break;
-        case 'Poste':
-            torre = createPoste(diametroBase, diametroTopo, tamanho);
-            break;
-        case 'Estaiada':
-            torre = createEstaiada(base, tamanho);
-            break;
-        case 'Mastro':
-            torre = createMastro(diametro, tamanho);
-            break;
-        default:
-            alert('Selecione um tipo de torre!');
-            return;
-    }
-
-    // Adicionar a torre à cena
-    scene.add(torre);
-
-    if (file) {
-        carregarCSV(file).then(data => {
-            carregarAntenas(data);
-        }).catch(error => {
-            console.error('Erro ao carregar o arquivo CSV:', error);
-        });
-    } else {
-        const csvData = localStorage.getItem('csvData');
-        if (csvData) {
-            carregarAntenas(JSON.parse(csvData));
-        } else {
-            console.error('Por favor, selecione um arquivo CSV.');
-        }
-    }   
-    
-    salvarDados();
-});
 
 function validateFields() {
     let isValid = true;
@@ -617,7 +602,79 @@ function validateFields() {
 
 }
 
-canvas.addEventListener('click', onDocumentMouseClick, false);
+function onLoadButtonClick() {
+
+    base = parseFloat(document.getElementById("base").value.replace(',', '.'));
+    tamanho = parseFloat(document.getElementById("tamanho").value.replace(',', '.'));
+    inclinado = parseFloat(document.getElementById("inclinado").value.replace(',', '.'));
+    topo = parseFloat(document.getElementById("topo").value.replace(',', '.'));
+    tipoTorre = document.getElementById("tipoTorre").value;
+    diametroBase = parseFloat(document.getElementById("diametroBase").value.replace(',', '.'));
+    diametroTopo = parseFloat(document.getElementById("diametroTopo").value.replace(',', '.'));
+    diametro = parseFloat(document.getElementById("diametro").value.replace(',', '.'));
+    const fileInput = document.getElementById('csvFile');
+    const file = fileInput.files[0];
+
+    if (!validateFields()) {
+        return;
+    }
+
+    // Verificar os campos comuns a todos os tipos de torres
+    if (base <= 0 || tamanho <= 0) {
+        alert('Preencha os campos "Base" e "Tamanho" com números positivos.');
+        return;
+    }
+
+    // Limpar a torre anterior, se houver
+    if (torre.children.length > 0) {
+        torre.remove(...torre.children);
+    }
+
+    // Verificar os campos de acordo com o tipo de torre selecionado
+    switch (tipoTorre) {
+        case 'Quadrada':
+            torre = createSqrTower(base, topo, tamanho, inclinado, 0.12, 0.04, 0.06);
+            break;
+        case 'Triangular':
+            torre = createTriTower(base, topo, tamanho, inclinado, 0.12, 0.04, 0.06);
+            break;
+        case 'Poste':
+            torre = createPoste(diametroBase, diametroTopo, tamanho);
+            break;
+        case 'Estaiada':
+            torre = createEstaiada(base, tamanho);
+            break;
+        case 'Mastro':
+            torre = createMastro(diametro, tamanho);
+            break;
+        default:
+            alert('Selecione um tipo de torre!');
+            return;
+    }
+
+    // Adicionar a torre à cena
+    scene.add(torre);
+
+    if (file) {
+        carregarCSV(file).then(data => {
+            carregarAntenas(data);
+        }).catch(error => {
+            console.error('Erro ao carregar o arquivo CSV:', error);
+        });
+    } else {
+        const csvData = localStorage.getItem('csvData');
+        if (csvData) {
+            carregarAntenas(JSON.parse(csvData));
+        } else {
+            console.error('Por favor, selecione um arquivo CSV.');
+        }
+    }   
+    
+    salvarDados();
+}
+
+document.getElementById("loadButton").addEventListener('click', onLoadButtonClick);
+canvas.addEventListener('click', onCanvasMouseClick, false);
 canvas.addEventListener('wheel', onMouseWheel);
 canvas.addEventListener('mousedown', onMouseDown);
 canvas.addEventListener('mouseup', onMouseUp);

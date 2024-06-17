@@ -117,6 +117,43 @@ input{
     color: #8f8f8f;
 }
 
+#popup{
+    position: absolute;
+    background-color: white;
+    border: 1px solid black;
+    padding: 10px;
+    z-index: 1000;
+    display: none;
+    border-radius: 5px;
+}
+
+#popup:after {
+    content: '';
+    position: absolute;
+    top: 10px; /* Ajustar conforme necessário */
+    left: -20px; /* Ajustar conforme necessário */
+    width: 0;
+    height: 0;
+    border-left: 20px solid transparent;
+    border-right: 0px solid transparent;
+    border-bottom: 20px solid white;
+}
+
+.status-a-retirar {
+    color: red;
+    font-weight: bold;
+}
+
+.status-existente {
+    color: black;
+    font-weight: normal;
+}
+
+.status-a-instalar {
+    color: green;
+    font-weight: bold;
+}
+
 input[type='file']::file-selector-button {
     background-color: #292929;
     color: #8f8f8f;
