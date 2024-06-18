@@ -118,6 +118,7 @@ input{
 }
 
 #popup{
+    width: 190px;
     position: absolute;
     background-color: white;
     border: 1px solid black;
@@ -127,15 +128,27 @@ input{
     border-radius: 5px;
 }
 
-#popup:after {
+.arrow-left:after {
     content: '';
     position: absolute;
-    top: 10px; /* Ajustar conforme necessário */
-    left: -30px; /* Ajustar conforme necessário */
+    top: 10px; /* Ajuste conforme necessário */
+    left: -30px; /* Ajuste para a seta apontar para a esquerda */
     width: 0;
     height: 0;
     border-left: 30px solid transparent;
     border-right: 0px solid transparent;
+    border-bottom: 20px solid white;
+}
+
+.arrow-right:after {
+    content: '';
+    position: absolute;
+    top: 10px; /* Ajuste conforme necessário */
+    right: -30px; /* Ajuste para a seta apontar para a esquerda */
+    width: 0;
+    height: 0;
+    border-left: 0px solid transparent;
+    border-right: 30px solid transparent;
     border-bottom: 20px solid white;
 }
 
@@ -146,7 +159,7 @@ input{
 
 .status-existente {
     color: black;
-    font-weight: bold;
+    font-weight: normal;
 }
 
 .status-a-instalar {

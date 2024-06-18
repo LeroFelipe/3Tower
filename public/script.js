@@ -3,7 +3,7 @@ import * as GLTFLoader from './lib/GLTFLoader.js';
 import { createSqrTower, createTriTower, createMastro, createPoste} from './lib/towers.js';
 
 const windowSize = 0.95;
-export var torre = new THREE.Group();
+export let torre = new THREE.Group();
 
 // Variáveis para controlar a rotação da cena em relação aos eixos X e Y
 let rotateX = 0;
@@ -19,6 +19,7 @@ let previousMousePosition = { x: 0, y: 0 };
 // Para lidar com eventos do mouse sobre às antenas
 let raycaster = new THREE.Raycaster();
 let mouse = new THREE.Vector2();
+let relativePosition;
 
 // Variável para armazenar a antena atualmente destacada
 let highlightedAntena = null;
@@ -92,7 +93,7 @@ function xyzLines(){
         var dashedLine = new THREE.Line(dashedLineGeometry, dashedLineMaterial);
         dashedLine.computeLineDistances(); // Computar distâncias para definir o padrão tracejado
 
-        torre.add(dashedLine);
+        scene.add(dashedLine);
     };
 }
 
@@ -216,7 +217,7 @@ function carregarAntenas(data) {
             let emissiveColor;
             switch (antenaData['STATUS']) {
                 case 'existente':
-                    corMaterial = 0xffffff; // Branco
+                    corMaterial = 0xffffff;
                     emissiveColor = 0x000000;
                     break;
                 case 'a instalar':
@@ -228,7 +229,7 @@ function carregarAntenas(data) {
                     emissiveColor = 0x333333;
                     break;
                 default:
-                    corMaterial = 0xffffff; // Branco (padrão)
+                    corMaterial = 0xffffff;
                     emissiveColor = 0x000000;
                     break;
             }
@@ -257,7 +258,7 @@ function carregarAntenas(data) {
                 antenaData['AZIMUTE'],                
                 antenaData['TILT. MECÂNICO'],
                 antenaData['STATUS']
-            );
+            ); newObj.userData.antena = antena;
 
             // Associar a antena ao objeto 3D
             newObj.userData.antena = antena;
@@ -365,7 +366,7 @@ function onMouseWheel(event) {
     }
 }
 
-function onCanvasMouseClick(event) {
+function onCanvasClick(event) {
     event.preventDefault();
 
     // Calcular as coordenadas do mouse em relação ao canvas
@@ -379,10 +380,13 @@ function onCanvasMouseClick(event) {
 
     if (intersects.length > 0) {
         const intersectedObject = intersects[0].object;
-        const antena = intersectedObject.userData.antena; // Acessar os dados da antena
+        const antena = intersectedObject.userData.antena;
+        const intersectionPoint = intersects[0].point;
         if (antena) {
-            console.log('Propriedades da Antena:', antena);
-            showPopup(event.clientX, event.clientY, antena);
+            //console.log('Propriedades da Antena:', antena);
+            relativePosition = intersectionPoint.clone().sub(torre.position);
+            showPopup(event.clientX, event.clientY, antena);            
+            console.log('Mouse Position relative to Tower:', relativePosition.x);
         } else {
             console.log('Objeto intersectado não tem dados de antena:', intersectedObject);
         }
@@ -411,27 +415,36 @@ function showPopup(x, y, antena) {
 
     // Preencher o popup com as propriedades da antena
     popup.innerHTML = `
-        <strong>Propriedades da Antena:</strong><br>
-        ${antena.operadora ? `Operadora: ${antena.operadora}<br>` : ''}
-        ${antena.tipo ? `Tipo: ${antena.tipo}<br>` : ''}
-        ${antena.suporte ? `Suporte: ${antena.suporte}<br>` : ''}
-        ${antena.fabricante ? `Fabricante: ${antena.fabricante}<br>` : ''}
-        ${antena.modelo ? `Modelo: ${antena.modelo}<br>` : ''}
-        ${antena.portadora ? `Portadora: ${antena.portadora} Mhz<br>` : ''}
-        ${antena.altura ? `Altura: ${antena.altura} m<br>` : ''}
-        ${antena.comprimento ? `Comprimento: ${antena.comprimento} m<br>` : ''}
-        ${antena.largura ? `Largura: ${antena.largura} m<br>` : ''}
-        ${antena.profundidade ? `Profundidade: ${antena.profundidade} m<br>` : ''}
-        ${antena.diametro ? `Diâmetro: ${antena.diametro} m<br>` : ''}
-        ${antena.azimute ? `Azimute: ${antena.azimute}°<br>` : ''}
-        ${antena.tiltMecanico ? `Tilt Mecânico: ${antena.tiltMecanico}°<br>` : ''}
-        ${antena.status ? `Status: <span class="${statusClass}">${antena.status}</span>` : ''}
+        ${antena.operadora ? `<strong>Operadora:</strong> ${antena.operadora}<br>` : ''}
+        ${antena.tipo ? `<strong>Tipo:</strong> ${antena.tipo}<br>` : ''}
+        ${antena.suporte ? `<strong>Suporte:</strong> ${antena.suporte}<br>` : ''}
+        ${antena.fabricante ? `<strong>Fabricante:</strong> ${antena.fabricante}<br>` : ''}
+        ${antena.modelo ? `<strong>Modelo:</strong> ${antena.modelo}<br>` : ''}
+        ${antena.portadora ? `<strong>Portadora:</strong> ${antena.portadora} Mhz<br>` : ''}
+        ${antena.altura ? `<strong>Altura:</strong> ${antena.altura} m<br>` : ''}
+        ${antena.comprimento ? `<strong>Comprimento:</strong> ${antena.comprimento} m<br>` : ''}
+        ${antena.largura ? `<strong>Largura:</strong> ${antena.largura} m<br>` : ''}
+        ${antena.profundidade ? `<strong>Profundidade:</strong> ${antena.profundidade} m<br>` : ''}
+        ${antena.diametro ? `<strong>Diâmetro:</strong> ${antena.diametro} m<br>` : ''}
+        ${antena.azimute ? `<strong>Azimute:</strong> ${antena.azimute}°<br>` : ''}
+        ${antena.tiltMecanico ? `<strong>Tilt Mecânico:</strong> ${antena.tiltMecanico}°<br>` : ''}
+        ${antena.status ? `<strong>Status:</strong> <span class="${statusClass}">${antena.status}</span>` : ''}
     `;
 
-    // Posicionar o popup nas coordenadas do mouse
-    popup.style.left = `${x+35}px`;
-    popup.style.top = `${y-33}px`;
+    popup.classList.remove('arrow-left', 'arrow-right');
 
+    if (relativePosition.x < 0) {
+        console.log('MENOR QUE ZERO');
+        popup.style.left = `${x - 240}px`;
+        popup.classList.add('arrow-right');
+        
+    } else {
+        console.log('MAIOR QUE ZERO');
+        popup.style.left = `${x+35}px`;
+        popup.classList.add('arrow-left');
+    }
+    popup.style.top = `${y - 33}px`;
+    
     // Tornar o popup visível
     popup.style.display = 'block';
 }
@@ -649,7 +662,7 @@ function onLoadButtonClick() {
 }
 
 document.getElementById("loadButton").addEventListener('click', onLoadButtonClick);
-canvas.addEventListener('click', onCanvasMouseClick, false);
+canvas.addEventListener('click', onCanvasClick, false);
 canvas.addEventListener('wheel', onMouseWheel);
 canvas.addEventListener('mousedown', onMouseDown);
 canvas.addEventListener('mouseup', onMouseUp);
@@ -662,6 +675,8 @@ window.onload = function() {
         document.getElementById("loadButton").click(); 
     }       
 };
+
+//xyzLines();
 
 function animate() {
     requestAnimationFrame(animate);
