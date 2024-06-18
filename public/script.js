@@ -71,33 +71,6 @@ class Antena {
     }
 }
 
-function planeXY(){
-    // Definir as dimensões do plano
-    const larguraPlano = 100; // Largura do plano
-    const alturaPlano = 100; // Altura do plano
-
-    // Criar a geometria do plano
-    const planeGeometry = new THREE.PlaneGeometry(larguraPlano, alturaPlano);
-
-    // Criar um material
-    const whiteMaterial = new THREE.MeshPhongMaterial({ color: 0x7CFC00 });
-
-    // Criar o plano usando a geometria e o material
-    const shadowPlane = new THREE.Mesh(planeGeometry, whiteMaterial);
-
-    // Rotacionar o plano para que fique no plano XY
-    shadowPlane.rotation.x = -Math.PI / 2; // Rotação de -90 graus no eixo X
-
-    // Definir a posição do plano (opcional, dependendo da sua cena)
-    shadowPlane.position.set(0, -h/2, 0); // Coloque o plano no centro da cena ou na posição desejada
-
-    // Permitir que o plano receba sombras
-    shadowPlane.receiveShadow = true;
-
-    // Adicionar o plano à cena
-    torre.add(shadowPlane);
-}
-
 function xyzLines(){
     var dashedLines = [
         // Eixo x
@@ -376,6 +349,8 @@ function onMouseMove(event) {
 
 function onMouseWheel(event) {
 
+    hidePopup();
+
     // Verifica se "Shift" está pressionado para rotacionar em relação ao eixo x
     if (event.shiftKey) {
         rotateX += event.deltaY * 0.02; // Ajuste conforme necessário para a velocidade de rotação
@@ -437,24 +412,24 @@ function showPopup(x, y, antena) {
     // Preencher o popup com as propriedades da antena
     popup.innerHTML = `
         <strong>Propriedades da Antena:</strong><br>
-        Operadora: ${antena.operadora}<br>
-        Tipo: ${antena.tipo}<br>
-        Suporte: ${antena.suporte}<br>
-        Fabricante: ${antena.fabricante}<br>
-        Modelo: ${antena.modelo}<br>
-        Portadora: ${antena.portadora}<br>
-        Altura: ${antena.altura}<br>
-        Comprimento: ${antena.comprimento}<br>
-        Largura: ${antena.largura}<br>
-        Profundidade: ${antena.profundidade}<br>
-        Diâmetro: ${antena.diametro}<br>
-        Azimute: ${antena.azimute}<br>
-        Tilt Mecânico: ${antena.tiltMecanico}<br>
-        Status: <span class="${statusClass}">${antena.status}</span>
+        ${antena.operadora ? `Operadora: ${antena.operadora}<br>` : ''}
+        ${antena.tipo ? `Tipo: ${antena.tipo}<br>` : ''}
+        ${antena.suporte ? `Suporte: ${antena.suporte}<br>` : ''}
+        ${antena.fabricante ? `Fabricante: ${antena.fabricante}<br>` : ''}
+        ${antena.modelo ? `Modelo: ${antena.modelo}<br>` : ''}
+        ${antena.portadora ? `Portadora: ${antena.portadora} Mhz<br>` : ''}
+        ${antena.altura ? `Altura: ${antena.altura} m<br>` : ''}
+        ${antena.comprimento ? `Comprimento: ${antena.comprimento} m<br>` : ''}
+        ${antena.largura ? `Largura: ${antena.largura} m<br>` : ''}
+        ${antena.profundidade ? `Profundidade: ${antena.profundidade} m<br>` : ''}
+        ${antena.diametro ? `Diâmetro: ${antena.diametro} m<br>` : ''}
+        ${antena.azimute ? `Azimute: ${antena.azimute}°<br>` : ''}
+        ${antena.tiltMecanico ? `Tilt Mecânico: ${antena.tiltMecanico}°<br>` : ''}
+        ${antena.status ? `Status: <span class="${statusClass}">${antena.status}</span>` : ''}
     `;
 
     // Posicionar o popup nas coordenadas do mouse
-    popup.style.left = `${x+30}px`;
+    popup.style.left = `${x+35}px`;
     popup.style.top = `${y-33}px`;
 
     // Tornar o popup visível
@@ -652,8 +627,8 @@ function onLoadButtonClick() {
             return;
     }
 
-    // Adicionar a torre à cena
     scene.add(torre);
+    //xyzLines();
 
     if (file) {
         carregarCSV(file).then(data => {
@@ -687,9 +662,6 @@ window.onload = function() {
         document.getElementById("loadButton").click(); 
     }       
 };
-
-//planeXY();
-//xyzLines();
 
 function animate() {
     requestAnimationFrame(animate);
