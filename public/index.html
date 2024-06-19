@@ -80,7 +80,7 @@
             <div class="input-box">
               File *csv:
               <label id="custom-file-upload" for="csvFile">
-                <span id="fileNameDisplay">Empty!</span>
+                <span id="fileNameDisplay" title="Empty!">Empty!</span>
               </label>
               <input type="file" id="csvFile" name="csvFile" accept=".csv">
             </div>
@@ -141,14 +141,13 @@
       });
 
       window.addEventListener('focus', () => {
-        console.log('Janela recebeu foco');
         if (inputInFocus) {
           inputInFocus = false;
           if (fileInput.files.length > 0) {
             fileNameDisplay.textContent = fileInput.files[0].name;
-
+            fileNameDisplay.title = fileInput.files[0].name;
+            
             if (validateFields()) {
-              console.log('teste');
               onLoadFile();
             } else {
               fileNameDisplay.textContent = 'Empty!';
