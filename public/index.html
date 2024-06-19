@@ -78,13 +78,13 @@
         <div id="form3">
           <form action="#" method="post">
             <div class="input-box">
-              <label for="csvFile" class="custom-file-upload">
-                <span>File: *csv</span>
+              File *csv:
+              <label id="custom-file-upload" for="csvFile">
+                <span id="fileNameDisplay">Empty!</span>
               </label>
               <input type="file" id="csvFile" name="csvFile" accept=".csv">
             </div>
           </form>
-          <button id="loadButton" type="button" >Carregar</button>
         </div>
     </div>
 
@@ -109,7 +109,6 @@
         </script>      
       </div>      
     </div>
-
     <script>
       function updateForm() {
         const tipoTorre = document.getElementById('tipoTorre').value;
@@ -126,6 +125,39 @@
         document.getElementById('diametroTopoGroup').style.display = isPoste ? '' : 'none';
         document.getElementById('diametroGroup').style.display = isMastro ? '' : 'none';
       }
-      </script>
+    </script>
+
+    <script type="module">
+      import {onLoadFile, validateFields} from '../script.js';
+      const customFile = document.getElementById('custom-file-upload');
+      const fileInput = document.getElementById('csvFile');
+      const fileNameDisplay = document.getElementById('fileNameDisplay');
+      const customFileUpload = document.getElementById('custom-file-upload');
+
+      let inputInFocus = false;
+
+      customFileUpload.addEventListener('click', () => {
+        inputInFocus = true;
+      });
+
+      window.addEventListener('focus', () => {
+        console.log('Janela recebeu foco');
+        if (inputInFocus) {
+          inputInFocus = false;
+          if (fileInput.files.length > 0) {
+            fileNameDisplay.textContent = fileInput.files[0].name;
+
+            if (validateFields()) {
+              console.log('teste');
+              onLoadFile();
+            } else {
+              fileNameDisplay.textContent = 'Empty!';
+            }
+          } else {
+            fileNameDisplay.textContent = 'Empty!';
+          }
+        }
+      });
+    </script>
   </body>
 </html>

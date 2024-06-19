@@ -495,9 +495,18 @@ function carregarDados() {
     }
 }
 
-function validateFields() {
-    let isValid = true;
+export function validateFields() {
 
+    base = parseFloat(document.getElementById("base").value.replace(',', '.'));
+    tamanho = parseFloat(document.getElementById("tamanho").value.replace(',', '.'));
+    inclinado = parseFloat(document.getElementById("inclinado").value.replace(',', '.'));
+    topo = parseFloat(document.getElementById("topo").value.replace(',', '.'));
+    tipoTorre = document.getElementById("tipoTorre").value;
+    diametroBase = parseFloat(document.getElementById("diametroBase").value.replace(',', '.'));
+    diametroTopo = parseFloat(document.getElementById("diametroTopo").value.replace(',', '.'));
+    diametro = parseFloat(document.getElementById("diametro").value.replace(',', '.'));
+
+    let isValid = true;
     let tipoTorreError = document.getElementById('tipoTorreError');
     let baseError = document.getElementById('baseError');
     let tamanhoError = document.getElementById('tamanhoError');
@@ -587,16 +596,8 @@ function validateFields() {
 
 }
 
-function onLoadButtonClick() {
+export function onLoadFile() {
 
-    base = parseFloat(document.getElementById("base").value.replace(',', '.'));
-    tamanho = parseFloat(document.getElementById("tamanho").value.replace(',', '.'));
-    inclinado = parseFloat(document.getElementById("inclinado").value.replace(',', '.'));
-    topo = parseFloat(document.getElementById("topo").value.replace(',', '.'));
-    tipoTorre = document.getElementById("tipoTorre").value;
-    diametroBase = parseFloat(document.getElementById("diametroBase").value.replace(',', '.'));
-    diametroTopo = parseFloat(document.getElementById("diametroTopo").value.replace(',', '.'));
-    diametro = parseFloat(document.getElementById("diametro").value.replace(',', '.'));
     const fileInput = document.getElementById('csvFile');
     const file = fileInput.files[0];
 
@@ -658,7 +659,6 @@ function onLoadButtonClick() {
     salvarDados();
 }
 
-document.getElementById("loadButton").addEventListener('click', onLoadButtonClick);
 canvas.addEventListener('click', onCanvasClick, false);
 canvas.addEventListener('wheel', onMouseWheel);
 canvas.addEventListener('mousedown', onMouseDown);
@@ -667,9 +667,9 @@ canvas.addEventListener('mousemove', onMouseMove);
 
 window.onload = function() {
     carregarDados();
-    updateForm();
+    updateForm();  
     if (localStorage.getItem('tipoTorre')){
-        document.getElementById("loadButton").click(); 
+        onLoadFile(); 
     }       
 };
 
