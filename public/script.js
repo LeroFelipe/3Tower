@@ -386,7 +386,6 @@ function onCanvasClick(event) {
             //console.log('Propriedades da Antena:', antena);
             relativePosition = intersectionPoint.clone().sub(torre.position);
             showPopup(event.clientX, event.clientY, antena);            
-            console.log('Mouse Position relative to Tower:', relativePosition.x);
         } else {
             console.log('Objeto intersectado não tem dados de antena:', intersectedObject);
         }
@@ -434,12 +433,10 @@ function showPopup(x, y, antena) {
     popup.classList.remove('arrow-left', 'arrow-right');
 
     if (relativePosition.x < 0) {
-        console.log('MENOR QUE ZERO');
         popup.style.left = `${x - 240}px`;
         popup.classList.add('arrow-right');
         
     } else {
-        console.log('MAIOR QUE ZERO');
         popup.style.left = `${x+35}px`;
         popup.classList.add('arrow-left');
     }

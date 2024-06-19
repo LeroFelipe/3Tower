@@ -7,6 +7,7 @@
 body {
     display: flex;
     background-color: #1e1e1e;
+    overflow: hidden;
 }
 
 #tower-container {
@@ -16,7 +17,7 @@ body {
 
 #forms {
     position: absolute;
-    width: 220px;
+    width: 140px;
     left: 10px;
     top: 6px;
     overflow-y: auto;
@@ -26,7 +27,7 @@ body {
 #form1, #form2, #form3 {
     margin-top: 6px;
     border: 2px solid #141414;
-    padding: 0 10px 10px 10px;
+    padding: 10px 10px 10px 10px;
     border-radius: 10px;
     background-color: #363636;
     color: #8f8f8f;
@@ -34,14 +35,14 @@ body {
 
 #receita {
     position: absolute;
-    margin-left: 79vw;
+    margin-left: 82vw;
     height: 90%;
     top: 10px;
 }
 
 #gads {
     height: 70%;
-    width: 18vw;
+    width: 15vw;
     border: 2px solid #141414;
     padding: 15px;
     border-radius: 10px;
@@ -52,7 +53,7 @@ body {
 #doarcafe {
     margin-top: 6px;
     height: 25%;
-    width: 18vw;
+    width: 15vw;
     border: 2px solid #141414;
     padding: 15px;
     border-radius: 10px;
@@ -66,13 +67,9 @@ body {
     margin: 10px 0 10px 0;
 }
 
-button{
-    margin-left: 30%;
-
-}
-
-input{
+#form1 input {
     padding-left: 10px;
+    width: 70px;
     margin-top: 5px;
     align-self: flex-start;
     border: none;
@@ -80,10 +77,12 @@ input{
     height: 25px;
     border-radius: 5px;
     color: #8f8f8f;
+
 }
 
+
 #tipoTorre{
-    width: 62%;
+    width: 90%;
     margin-top: 5px;
     background-color: #1e1e1e;
     color: #8f8f8f;
@@ -93,10 +92,10 @@ input{
 }
 
 #loadButton{
-    width: 40%;
+    margin-left: 18px;
     border: none;
     background-color: #292929;
-    padding: 0.62rem;
+    padding: 0.6rem;
     border-radius: 5px;
     cursor: pointer;
     text-decoration: none;
@@ -106,7 +105,7 @@ input{
 }
 
 #csvFile{
-    width: 70%;
+    width: 90%;
     border: none;
     background-color: transparent;
     padding: 0.1rem;
@@ -131,25 +130,25 @@ input{
 .arrow-left:after {
     content: '';
     position: absolute;
-    top: 10px; /* Ajuste conforme necessário */
-    left: -30px; /* Ajuste para a seta apontar para a esquerda */
+    top: 10px;
+    left: -30px;
     width: 0;
     height: 0;
-    border-left: 30px solid transparent;
-    border-right: 0px solid transparent;
-    border-bottom: 20px solid white;
+    border-top: 15px solid transparent;
+    border-bottom: 15px solid transparent;
+    border-right: 30px solid white;
 }
 
 .arrow-right:after {
     content: '';
     position: absolute;
-    top: 10px; /* Ajuste conforme necessário */
-    right: -30px; /* Ajuste para a seta apontar para a esquerda */
+    top: 10px;
+    right: -30px;
     width: 0;
     height: 0;
-    border-left: 0px solid transparent;
-    border-right: 30px solid transparent;
-    border-bottom: 20px solid white;
+    border-top: 15px solid transparent;
+    border-bottom: 15px solid transparent;
+    border-left: 30px solid white;
 }
 
 .status-a-retirar {
@@ -180,7 +179,7 @@ input[type='file']::file-selector-button:hover{
     box-shadow: 1px 1px 6px #000000;
 }
 
-#buttonCarregar:hover{
+#loadButton:hover{
 
     box-shadow: 1px 1px 6px #000000;
 
