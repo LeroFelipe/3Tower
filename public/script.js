@@ -72,7 +72,7 @@ class Antena {
     }
 }
 
-function xyzLines(){
+function xyzLines(obj){
     var dashedLines = [
         // Eixo x
         [new THREE.Vector3(-20, 0, 0), new THREE.Vector3(20, 0, 0)], // x = -1 to x = 1
@@ -93,7 +93,7 @@ function xyzLines(){
         var dashedLine = new THREE.Line(dashedLineGeometry, dashedLineMaterial);
         dashedLine.computeLineDistances(); // Computar distâncias para definir o padrão tracejado
 
-        scene.add(dashedLine);
+        obj.add(dashedLine);
     };
 }
 
@@ -639,7 +639,7 @@ export function onLoadFile() {
     }
 
     scene.add(torre);
-    //xyzLines();
+    //xyzLines(torre);
 
     if (file) {
         carregarCSV(file).then(data => {
@@ -672,8 +672,6 @@ window.onload = function() {
         onLoadFile(); 
     }       
 };
-
-//xyzLines();
 
 function animate() {
     requestAnimationFrame(animate);

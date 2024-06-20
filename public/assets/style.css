@@ -150,11 +150,11 @@ body {
     width: 190px;
     position: absolute;
     background-color: white;
-    border: 1px solid black;
+    border: none;
     padding: 10px;
     z-index: 1000;
     display: none;
-    border-radius: 5px;
+    border-radius: 10px;
 }
 
 .arrow-left:after {
@@ -167,6 +167,7 @@ body {
     border-top: 15px solid transparent;
     border-bottom: 15px solid transparent;
     border-right: 30px solid white;
+
 }
 
 .arrow-right:after {

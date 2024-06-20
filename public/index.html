@@ -110,6 +110,10 @@
       </div>      
     </div>
     <script>
+      tipoTorre.addEventListener('change',() => {
+          fileNameDisplay.textContent = 'Empty!';
+        });
+
       function updateForm() {
         const tipoTorre = document.getElementById('tipoTorre').value;
         const isPoste = tipoTorre === 'Poste';
@@ -146,7 +150,7 @@
           if (fileInput.files.length > 0) {
             fileNameDisplay.textContent = fileInput.files[0].name;
             fileNameDisplay.title = fileInput.files[0].name;
-            
+
             if (validateFields()) {
               onLoadFile();
             } else {
