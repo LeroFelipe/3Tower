@@ -11,6 +11,7 @@ let rotateY = 0;
 
 // Variáveir da Torre
 let base, tamanho, inclinado, topo, tipoTorre, diametroBase, diametroTopo, diametro;
+let initialPosition, initialRotation;
 
 // Para lidar com eventos de pressionar o botão do mouse
 let isDragging = false;
@@ -52,6 +53,7 @@ light.shadow.camera.far = 50; // Distância distante para renderização de somb
 
 // Posicionamento da câmera
 camera.position.z = 7;
+const initialCamPosition = 7;
 
 class Antena {
     constructor(operadora, tipo, suporte, fabricante, modelo, portadora, altura, comprimento, largura, profundidade, diametro, azimute, tiltMecanico, status) {
@@ -215,23 +217,20 @@ function carregarAntenas(data) {
 
             let corMaterial;
             let emissiveColor;
-            switch (antenaData['STATUS']) {
-                case 'existente':
-                    corMaterial = 0xffffff;
-                    emissiveColor = 0x000000;
-                    break;
-                case 'a instalar':
-                    corMaterial = 0x00ff00;
-                    emissiveColor = 0x000000;
-                    break;
-                case 'a retirar':
-                    corMaterial = 0x555555;
-                    emissiveColor = 0x333333;
-                    break;
-                default:
-                    corMaterial = 0xffffff;
-                    emissiveColor = 0x000000;
-                    break;
+            const status = antenaData['STATUS'];
+
+            if (status === 'existente' || status === 'existent') {
+                corMaterial = 0xffffff;
+                emissiveColor = 0x000000;
+            } else if (status === 'a instalar' || status === 'to install') {
+                corMaterial = 0x00ff00;
+                emissiveColor = 0x000000;
+            } else if (status === 'a retirar' || status === 'to remove' || status === 'a remover') {
+                corMaterial = 0x3d0000;
+                emissiveColor = 0x3d3333;
+            } else {
+                corMaterial = 0xffffff;
+                emissiveColor = 0x000000;
             }
 
             newObj.traverse(function (child) {
@@ -404,40 +403,47 @@ function showPopup(x, y, antena) {
     }
 
     let statusClass = '';
-    if (antena.status === 'a retirar') {
+    if (antena.status === 'a retirar' || antena.status === 'to remove') {
         statusClass = 'status-a-retirar';
-    } else if (antena.status === 'existente') {
+    } else if (antena.status === 'existente' || antena.status === 'existent') {
         statusClass = 'status-existente';
-    } else if (antena.status === 'a instalar') {
+    } else if (antena.status === 'a instalar' || antena.status === 'to install') {
         statusClass = 'status-a-instalar';
     }
 
     // Preencher o popup com as propriedades da antena
     popup.innerHTML = `
-        ${antena.operadora ? `<strong>Operadora:</strong> ${antena.operadora}<br>` : ''}
-        ${antena.tipo ? `<strong>Tipo:</strong> ${antena.tipo}<br>` : ''}
-        ${antena.suporte ? `<strong>Suporte:</strong> ${antena.suporte}<br>` : ''}
-        ${antena.fabricante ? `<strong>Fabricante:</strong> ${antena.fabricante}<br>` : ''}
-        ${antena.modelo ? `<strong>Modelo:</strong> ${antena.modelo}<br>` : ''}
-        ${antena.portadora ? `<strong>Portadora:</strong> ${antena.portadora} Mhz<br>` : ''}
-        ${antena.altura ? `<strong>Altura:</strong> ${antena.altura} m<br>` : ''}
-        ${antena.comprimento ? `<strong>Comprimento:</strong> ${antena.comprimento} m<br>` : ''}
-        ${antena.largura ? `<strong>Largura:</strong> ${antena.largura} m<br>` : ''}
-        ${antena.profundidade ? `<strong>Profundidade:</strong> ${antena.profundidade} m<br>` : ''}
-        ${antena.diametro ? `<strong>Diâmetro:</strong> ${antena.diametro} m<br>` : ''}
-        ${antena.azimute ? `<strong>Azimute:</strong> ${antena.azimute}°<br>` : ''}
-        ${antena.tiltMecanico ? `<strong>Tilt Mecânico:</strong> ${antena.tiltMecanico}°<br>` : ''}
-        ${antena.status ? `<strong>Status:</strong> <span class="${statusClass}">${antena.status}</span>` : ''}
+        <strong><u>Antenna Properties:</u></strong><br>
+        ${antena.operadora ? `<strong>Owner:</strong> ${antena.operadora}<br>` : ''}
+        ${antena.tipo ? `<strong>Type:</strong> ${antena.tipo}<br>` : ''}
+        ${antena.fabricante ? `<strong>Manufacturer:</strong> ${antena.fabricante}<br>` : ''}
+        ${antena.modelo ? `<strong>Model:</strong> ${antena.modelo}<br>` : ''}
+        ${antena.portadora ? `<strong>Freq.:</strong> ${antena.portadora} Mhz<br>` : ''}
+        ${antena.altura ? `<strong>Height:</strong> ${antena.altura} m<br>` : ''}
+        ${antena.comprimento ? `<strong>Length:</strong> ${antena.comprimento} m<br>` : ''}
+        ${antena.largura ? `<strong>Width:</strong> ${antena.largura} m<br>` : ''}
+        ${antena.profundidade ? `<strong>Depth:</strong> ${antena.profundidade} m<br>` : ''}
+        ${antena.diametro ? `<strong>Diameter:</strong> ${antena.diametro} m<br>` : ''}
+        ${antena.azimute ? `<strong>Azimuth:</strong> ${antena.azimute}°<br>` : ''}
+        ${antena.tiltMecanico ? `<strong>Mechanical Tilt:</strong> ${antena.tiltMecanico}°<br>` : ''}
+        ${antena.status ? `<strong>Status:</strong> <span class="${statusClass}">${antena.status}<br></span>` : ''}
+        ----------------------------------<br>
+        <strong><u>Support Properties:</u></strong><br>
+        ${antena.suporte ? `<strong>Type:</strong> ${antena.suporte}<br>` : ''}
+        <strong>Length:</strong><br>
+        <strong>Arm Distance:</strong><br>
+        <strong>Diameter:</strong><br>
+        <strong>Status:</strong><br>
     `;
 
     popup.classList.remove('arrow-left', 'arrow-right');
 
     if (relativePosition.x < 0) {
-        popup.style.left = `${x - 240}px`;
+        popup.style.left = `${x - 205}px`;
         popup.classList.add('arrow-right');
         
     } else {
-        popup.style.left = `${x+35}px`;
+        popup.style.left = `${x + 35}px`;
         popup.classList.add('arrow-left');
     }
     popup.style.top = `${y - 33}px`;
@@ -639,6 +645,8 @@ export function onLoadFile() {
     }
 
     scene.add(torre);
+    initialPosition = torre.position.clone();
+    initialRotation = torre.rotation.clone();
     //xyzLines(torre);
 
     if (file) {
@@ -664,6 +672,14 @@ canvas.addEventListener('wheel', onMouseWheel);
 canvas.addEventListener('mousedown', onMouseDown);
 canvas.addEventListener('mouseup', onMouseUp);
 canvas.addEventListener('mousemove', onMouseMove);
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+        hidePopup();
+        torre.position.copy(initialPosition);
+        torre.rotation.copy(initialRotation);
+        camera.position.z = initialCamPosition
+    }
+});
 
 window.onload = function() {
     carregarDados();

@@ -147,7 +147,8 @@ body {
 }
 
 #popup{
-    width: 190px;
+    width: 150px;
+    font-size: 0.8rem;
     position: absolute;
     background-color: white;
     border: none;
