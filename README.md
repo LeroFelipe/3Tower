@@ -2,4 +2,4 @@
 
 ![torre](image.png)
 
-3Tower é uma aplicação web projetada para automatizar e simplificar o desenho e compreensão das disposições e atividades em uma torre de telecomunicações.
+3Tower é uma aplicação web destinada a automatizar e simplificar o planejamento e a visualização das disposições e atividades em torres de telecomunicações
